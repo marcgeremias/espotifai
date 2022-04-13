@@ -1,9 +1,9 @@
 package business;
 
-import persistence.UserDAO;
+import persistence.postgresql.UserSQL;
 
 public class UserManager {
-    private UserDAO userDAO;
+    private UserSQL userDAO;
 
     public UserManager() {
         //

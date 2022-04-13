@@ -4,6 +4,8 @@ public enum Genre {
     ROCK,
     POP,
     RAP,
+    TRAP,
+    DEMBOW,
     DISCO,
     RB,
     SOUL,
@@ -13,5 +15,6 @@ public enum Genre {
     BLUES,
     JAZZ,
     METAL,
-    PUNK
+    PUNK,
+    SWING
 }

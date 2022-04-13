@@ -1,18 +1,66 @@
 package business.entities;
 
 public class Song {
+
+    private int id;
     private String title;
     private String album;
     private Genre genre;
     private String author;
-    private String file;
+    private String imagePath;
+    private int duration;
     private User user;
 
-    public Song(String title, String album, Genre genre, String author, String file) {
+    public Song(int id, String title, String album, Genre genre, String author, String imagePath, int duration, User user) {
+        this.id = id;
         this.title = title;
         this.album = album;
         this.genre = genre;
         this.author = author;
-        this.file = file;
+        this.imagePath = imagePath;
+        this.duration = duration;
+        this.user = user;
+    }
+
+    public Song(String title, String album, Genre genre, String author, String imagePath, int duration, User user){
+        this.title = title;
+        this.album = album;
+        this.genre = genre;
+        this.author = author;
+        this.imagePath = imagePath;
+        this.duration = duration;
+        this.user = user;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public User getUser() {
+        return user.clone();
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }
