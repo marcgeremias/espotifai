@@ -218,12 +218,18 @@ public class LoginView extends JPanel {
         return String.valueOf(passwordField.getPassword());
     }
 
+    /**
+     * Method that shows an error message when the username or email introduced is incorrect
+     */
     public void incorrectUser() {
         incorrectInput.setText("Username or email could not be found");
         userField.setBackground(new Color(220, 60, 25));
         incorrectInput.setVisible(true);
     }
 
+    /**
+     * Method that shows an error message when the password introduced is incorrect
+     */
     public void incorrectPassword() {
         incorrectInput.setText("Wrong password. Try again.");
         userField.setBackground(new Color(76, 76, 76));
@@ -231,7 +237,9 @@ public class LoginView extends JPanel {
         incorrectInput.setVisible(true);
     }
 
-
+    /**
+     * Method called when all credentials are correct, to revert the possible previous incorrect messages
+     */
     public void correctCredentials() {
         userField.setBackground(new Color(76, 76, 76));
         passwordField.setBackground(new Color(76, 76, 76));

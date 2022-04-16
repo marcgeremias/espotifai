@@ -2,7 +2,6 @@ package business;
 
 import business.entities.User;
 import persistence.UserDAO;
-import persistence.postgresql.UserSQL;
 
 public class UserManager {
     private UserDAO userDAO;
@@ -11,6 +10,13 @@ public class UserManager {
         this.userDAO = userDAO;
     }
 
+    /**
+     * Method that checks from the database the username or email and the password
+     * of the Strings introduced in the textFields in the Login View
+     * @param userField the username or email to check
+     * @param passwordField the password to check
+     * @return
+     */
     public int checkUserAndPassword(String userField, String passwordField) {
         User user = null;
         try {
@@ -26,9 +32,11 @@ public class UserManager {
                 // Correct password and validation completed
                 return 1;
             } else {
+                // Incorrect password
                 return 0;
             }
         } else {
+            // Incorrect user
             return -1;
         }
     }

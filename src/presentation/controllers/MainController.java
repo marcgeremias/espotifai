@@ -16,7 +16,6 @@ public class MainController implements ChangeViewListener {
         this.mainView = mainView;
         this.userManager = userManager;
 
-
         LoginView loginView = new LoginView();
         loginController = new LoginController(this, loginView, userManager);
         loginView.registerController(loginController);

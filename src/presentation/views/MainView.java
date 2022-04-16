@@ -33,6 +33,10 @@ public class MainView extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Method to change the view with the one chosen in the card
+     * @param card the name put on the card layout that referes to a specific view
+     */
     public void changeView(String card) {
         cardManager.show(getContentPane(), card);
     }
@@ -43,7 +47,13 @@ public class MainView extends JFrame {
     public void start() {
         setVisible(true);
     }
-    //TODO: passar totes les vistes per inicialitzar-les
+
+    /**
+     * Method that is in charge of connecting the views we want with the CardLayout
+     * @param loginView the Login View class (to put inside the card layout)
+     * @param signUpView the SignUp View class (to put inside the card layout)
+     * @param playerView the Player View class (to put inside the card layout)
+     */
     public void initCardLayout(LoginView loginView, SignUpView signUpView, PlayerView playerView) {
         getContentPane().add(loginView, CARD_LOG_IN);
         getContentPane().add(signUpView, CARD_SIGN_UP);

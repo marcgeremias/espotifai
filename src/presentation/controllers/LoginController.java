@@ -1,27 +1,28 @@
 package presentation.controllers;
 
 import business.UserManager;
-import business.entities.User;
-import persistence.UserDAO;
-import persistence.postgresql.UserSQL;
 import presentation.views.LoginView;
 import presentation.views.MainView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.IllegalFormatCodePointException;
 
 public class LoginController implements ActionListener {
 
     private LoginView loginView;
     private ChangeViewListener listener;
     private UserManager userManager;
+
     public LoginController(ChangeViewListener listener, LoginView loginView, UserManager userManager) {
         this.listener = listener;
         this.loginView = loginView;
         this.userManager = userManager;
     }
 
+    /**
+     * Method of the interface ActionListener that does all the appropriate actions when a button is pressed
+     * @param e the action event
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
