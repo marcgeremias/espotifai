@@ -1,10 +1,13 @@
-package persistance.config;
+package persistence.config;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  * Singleton class for loading database configuration variables
@@ -55,6 +58,16 @@ public class DBConfig {
         this.dbName = data.get("db_name").getAsString();
         this.dbUser = data.get("db_user").getAsString();
         this.dbPassword = data.get("db_password").getAsString();
+    }
+
+    /**
+     * This method will return a new instance of {@link Connection} with the connection opened to the database
+     * configured.
+     * @return instance of {@link Connection} containing the opened connection to the database
+     * @throws SQLException if the connection can't be opened.
+     */
+    public Connection openConnection() throws SQLException {
+        return DriverManager.getConnection(getConnectionURL(),getDbUser(), getDbPassword());
     }
 
     /**
