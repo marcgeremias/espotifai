@@ -1,4 +1,6 @@
 package presentation.views;
 
-public class PlayerView {
+import javax.swing.*;
+
+public class PlayerView extends JPanel {
 }

@@ -1,4 +1,6 @@
 package presentation.views;
 
-public class SignUpView {
+import javax.swing.*;
+
+public class SignUpView extends JPanel {
 }
