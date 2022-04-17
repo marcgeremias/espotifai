@@ -13,11 +13,19 @@ public class MainController implements MainViewListener {
     private LoginController loginController;
     private SingUpController signUpController;
 
+    /**
+     * Constructor initializing the MainController necessari attributes
+     * @param mainView the MainView class
+     * @param userManager the UserManager class
+     */
     public MainController(MainView mainView, UserManager userManager) {
         this.mainView = mainView;
         this.userManager = userManager;
     }
 
+    /**
+     * Method that starts executing the program
+     */
     public void run() {
         // Defining login view and controller
         LoginView loginView = new LoginView(this);

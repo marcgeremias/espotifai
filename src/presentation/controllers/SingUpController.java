@@ -37,6 +37,9 @@ public class SingUpController implements ActionListener {
         }
     }
 
+    /**
+     * Method that performs the actions when the user clicks the join button
+     */
     private void onJoinClick() {
         // We reset the possible previous wrong introduced inputs
         signUpView.resetIncorrectInputs();

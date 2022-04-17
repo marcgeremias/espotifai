@@ -26,6 +26,9 @@ public class SignUpView extends JPanel {
     // Listener of the MainView
     MainViewListener listener;
 
+    /**
+     * Constructor method to set up the view
+     */
     public SignUpView(MainViewListener listener) {
         this.listener = listener;
         usernameField = new PlaceholderTextField();
@@ -56,6 +59,10 @@ public class SignUpView extends JPanel {
         goBackButton.setActionCommand(BTN_GO_BACK);
     }
 
+    /**
+     * Method that configures the left side of the view
+     * @return a panel with all the components of the left side of the view
+     */
     private Component left() {
         JPanel left = new JPanel();
         left.add(goBackButton());
@@ -64,6 +71,10 @@ public class SignUpView extends JPanel {
         return left;
     }
 
+    /**
+     * Method that shows a label to indicate if the user want sto go back to the login view
+     * @return the panel with the label of going back inside
+     */
     private Component goBackText() {
         JLabel goBackText = new JLabel("Log in");
         goBackText.setFont(new Font("arial", Font.BOLD, 16));
@@ -77,6 +88,10 @@ public class SignUpView extends JPanel {
         return panelAux;
     }
 
+    /**
+     * Method that shows a button to indicate if the user wants to go back to the login view
+     * @return the panel with the button of going back inside
+     */
     private Component goBackButton() {
         goBackButton = new JButton();
         goBackButton.setText("<");
@@ -92,6 +107,10 @@ public class SignUpView extends JPanel {
         return panelAuxGoBack;
     }
 
+    /**
+     * Method to configure all the center components and containers of the SignUp view
+     * @return the JPanel with all the center of the SignUp view
+     */
     private Component center() {
         JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
@@ -107,6 +126,10 @@ public class SignUpView extends JPanel {
         return center;
     }
 
+    /**
+     * Method that shows a button to join the platform and finish registering
+     * @return the panel with the button of joining the program inside
+     */
     private Component joinButton() {
         joinButton = new JButton();
         joinButton.setText("JOIN PLATFORM ");
@@ -123,6 +146,10 @@ public class SignUpView extends JPanel {
         return panelAuxJoin;
     }
 
+    /**
+     * Method that shows a label representing a borderline after the logo
+     * @return the panel with the borderline inside
+     */
     private Component borderLine() {
         JLabel borderLine = new JLabel("___________________________________________________");
         borderLine.setFont(new Font("arial", Font.BOLD, 10));
@@ -137,6 +164,10 @@ public class SignUpView extends JPanel {
         return panelAux;
     }
 
+    /**
+     * Method to configure the image of the logo inside the center of the Login view
+     * @return a JPanel with the logo image well configured
+     */
     private Component logoImage() {
         JLabel logoImage = new JLabel();
         logoImage.setSize(176, 64);
@@ -149,6 +180,10 @@ public class SignUpView extends JPanel {
         return logoImagePanel;
     }
 
+    /**
+     * Method that is in charge of the right margins of the window.
+     * @return the container with the panel margin (without opacity)
+     */
     private Component rightMargin() {
         JPanel downMargin = new JPanel();
         downMargin.setOpaque(false);
@@ -158,7 +193,7 @@ public class SignUpView extends JPanel {
     }
 
     /**
-     * Metode that is in charge of the top margins of the window.
+     * Method that is in charge of the top margins of the window.
      * @return the container with the panel margin (without opacity)
      */
     public Container upMargin() {
@@ -170,7 +205,7 @@ public class SignUpView extends JPanel {
     }
 
     /**
-     * Metode that is in charge of the bottom of the window.
+     * Method that is in charge of the bottom of the window.
      * @return the container with the panel (without opacity) and the incorrect input label
      */
     public Container down() {
@@ -181,18 +216,34 @@ public class SignUpView extends JPanel {
         return downMargin;
     }
 
+    /**
+     * Gets the username introduced in the text field
+     * @return the text introduced by the user in the username text field
+     */
     public String getUsernameField() {
         return usernameField.getText();
     }
 
+    /**
+     * Gets the email introduced in the text field
+     * @return the text introduced by the user in the email text field
+     */
     public String getEmailField() {
         return emailField.getText();
     }
 
+    /**
+     * Gets the password introduced in the text field
+     * @return the text introduced by the user in the password field
+     */
     public char[] getPasswordField() {
         return passwordField.getPassword();
     }
 
+    /**
+     * Gets the confirmPassword introduced in the text field
+     * @return the text introduced by the user in the confirmPassword of the password field
+     */
     public char[] getConfirmPasswordField() {
         return confirmPasswordField.getPassword();
     }

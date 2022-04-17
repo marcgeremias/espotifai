@@ -55,6 +55,14 @@ public class UserManager {
         }
     }
 
+    /**
+     * Method that checks all the data provided in the text fields
+     * @param username the username the user provided in the text field
+     * @param email the email the user provided in the text field
+     * @param password the password the user provided in the password field
+     * @param confirmPassword the confirmPassword the user provided in the password field
+     * @return an int indicating what information is wrong or if it's all correct
+     */
     public int checkSignUpIdentification(String username, String email, char[] password, char[] confirmPassword) {
         ArrayList<User> users = null;
         try {
@@ -97,7 +105,11 @@ public class UserManager {
         return CORRECT_CHECKING;
     }
 
-
+    /**
+     * Method that checks if the email provided is a valid email
+     * @param email the email provided by the user
+     * @return true if the email is valid and false if it is not
+     */
     private boolean checkValidEmail(String email) {
         Pattern pattern = Pattern
                 .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -107,6 +119,12 @@ public class UserManager {
         return mather.find();
     }
 
+    /**
+     * Method that checks if the password provided is a valid password
+     * (Min 8 length, 1 UpperCase, 1 LowerCase and 1 number)
+     * @param password the password introduced by the user
+     * @return true if the password is valid and false if it is not
+     */
     private boolean checkPasswordStandards(char[] password) {
         boolean isUpperCase = false;
         boolean isLowerCase = false;

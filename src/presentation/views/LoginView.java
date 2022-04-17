@@ -132,7 +132,7 @@ public class LoginView extends JPanel {
     }
 
     /**
-     * Metode that is in charge of the top margins of the window.
+     * Method that is in charge of the top margins of the window.
      * @return the container with the panel margin (without opacity)
      */
     public Container upMargin() {
@@ -144,7 +144,7 @@ public class LoginView extends JPanel {
     }
 
     /**
-     * Metode that is in charge of the bottom of the window.
+     * Method that is in charge of the bottom of the window.
      * @return the container with the panel (without opacity) and the incorrect input label
      */
     public Container down() {

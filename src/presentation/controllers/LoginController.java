@@ -38,7 +38,7 @@ public class LoginController implements ActionListener {
     }
 
     /**
-     *
+     * Method that performs the actions when the user clicks the login button
      */
     private void onLoginClick() {
         int validationResult = userManager.checkUserAndPassword(loginView.getUserField(), loginView.getPasswordField());

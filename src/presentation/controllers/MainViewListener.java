@@ -34,4 +34,4 @@ public interface MainViewListener {
      */
     Component wrongInputLabel(JLabel inputMessage);
 
-    }
+}
