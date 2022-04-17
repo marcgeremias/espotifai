@@ -10,10 +10,10 @@ import java.awt.event.ActionListener;
 public class LoginController implements ActionListener {
 
     private LoginView loginView;
-    private ChangeViewListener listener;
+    private MainViewListener listener;
     private UserManager userManager;
 
-    public LoginController(ChangeViewListener listener, LoginView loginView, UserManager userManager) {
+    public LoginController(MainViewListener listener, LoginView loginView, UserManager userManager) {
         this.listener = listener;
         this.loginView = loginView;
         this.userManager = userManager;
@@ -30,27 +30,32 @@ public class LoginController implements ActionListener {
                 listener.changeView(MainView.CARD_SIGN_UP);
                 break;
             case LoginView.BTN_LOG_IN:
-                // Show player card if data correct
-                int validationResult = userManager.checkUserAndPassword(loginView.getUserField(), loginView.getPasswordField());
-                if (validationResult == 1) {
-                    // Correct credentials
-                    loginView.correctCredentials();
-                    listener.changeView(MainView.CARD_PLAYER);
-
-                } else {
-                    if (validationResult == 0) {
-                        // Correct Username but not correct password
-                        loginView.incorrectPassword();
-
-                    } else {
-                        // Incorrect Username or Email
-                        loginView.incorrectUser();
-                    }
-                }
-
+                onLoginClick();
                 break;
             default:
                 System.err.println("Unknown action command " + e.getActionCommand());
+        }
+    }
+
+    /**
+     *
+     */
+    private void onLoginClick() {
+        int validationResult = userManager.checkUserAndPassword(loginView.getUserField(), loginView.getPasswordField());
+        if (validationResult == UserManager.CORRECT_CHECKING) {
+            // Correct credentials
+            loginView.correctCredentials();
+            listener.changeView(MainView.CARD_PLAYER);
+
+        } else {
+            if (validationResult == UserManager.WRONG_PASSWORD) {
+                // Correct Username but not correct password
+                loginView.incorrectPassword();
+
+            } else {
+                // Incorrect Username or Email
+                loginView.incorrectUser();
+            }
         }
     }
 }

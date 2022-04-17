@@ -59,4 +59,63 @@ public class MainView extends JFrame {
         getContentPane().add(signUpView, CARD_SIGN_UP);
         getContentPane().add(playerView, CARD_PLAYER);
     }
+
+    /**
+     * Method that configures our custom textField with the class PlaceholderTextField
+     * @param placeHolder the placeholder you want to put in the text field
+     * @return the JPanel with the custom text field configured
+     */
+    public Component textField(String placeHolder, PlaceholderTextField textField) {
+        //Using own textField classes
+        textField.setBorder(BorderFactory.createCompoundBorder(
+                textField.getBorder(),
+                BorderFactory.createEmptyBorder(5, 8, 5, 5)));
+        textField.setColumns(28);
+        textField.setBackground(new Color(76, 76, 76));
+        textField.setForeground(Color.WHITE);
+        textField.setPlaceholder(placeHolder);
+        Font f = textField.getFont();
+        textField.setFont(new Font(f.getName(), f.getStyle(), 12));
+        JPanel auxPanel = new JPanel();
+        auxPanel.setOpaque(false);
+        auxPanel.add(textField);
+
+        return auxPanel;
+    }
+
+    /**
+     * Method that configures our custom PasswordField with the class PlaceholderPasswordField
+     * @param placeHolder the placeholder you want to put in the password field
+     * @return the JPanel with the custom password field configured
+     */
+    public Component passwordField(String placeHolder, PlaceholderPasswordField passField) {
+        //Using own Field classes
+        passField.setBorder(BorderFactory.createCompoundBorder(
+                passField.getBorder(),
+                BorderFactory.createEmptyBorder(5, 8, 5, 5)));
+        passField.setColumns(28);
+        passField.setBackground(new Color(76, 76, 76));
+        passField.setForeground(Color.WHITE);
+        passField.setPlaceholder(placeHolder);
+        passField.setEchoChar('*');
+        Font f = passField.getFont();
+        passField.setFont(new Font(f.getName(), f.getStyle(), 12));
+        JPanel auxPanel = new JPanel();
+        auxPanel.setOpaque(false);
+        auxPanel.add(passField);
+
+        return auxPanel;
+    }
+
+    /**
+     * Method that shows a message when a wrong input is set
+     * @param inputMessage the attribute with the input message to put
+     * @return the input label message hided in a JPanel
+     */
+    public Component wrongInputLabel(JLabel inputMessage) {
+        inputMessage.setFont(new Font("Cascadia Code ExtraLight", Font.PLAIN, 13));
+        inputMessage.setForeground(Color.RED);
+        inputMessage.setVisible(false);
+        return inputMessage;
+    }
 }
