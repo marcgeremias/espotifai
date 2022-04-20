@@ -1,5 +1,7 @@
 package presentation.views;
 
+import presentation.controllers.MainViewListener;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -19,13 +21,21 @@ public class LoginView extends JPanel {
     private PlaceholderTextField userField;
     private PlaceholderPasswordField passwordField;
 
-    // Label tha
+    // Label of the possible incorrect input
     private JLabel incorrectInput;
+
+    // Interface of the MainView
+    private MainViewListener listener;
 
     /**
      * Constructor method to set up the view
      */
-    public LoginView() {
+    public LoginView(MainViewListener listener) {
+        this.listener = listener;
+        userField = new PlaceholderTextField();
+        passwordField = new PlaceholderPasswordField();
+        incorrectInput = new JLabel();
+
         this.setLayout(new BorderLayout());
         this.add(upMargin(), BorderLayout.NORTH);
         this.add(down(), BorderLayout.SOUTH);
@@ -43,20 +53,12 @@ public class LoginView extends JPanel {
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
         center.add(logoImage());
         center.add(createAccountButton());
-        center.add(textField("Username or email"));
-        center.add(passwordField("Password"));
+        center.add(listener.textField("Username or email", userField));
+        center.add(listener.passwordField("Password", passwordField));
         center.add(loginButton());
         center.setOpaque(false);
 
         return center;
-    }
-
-    private Component incorrectInput() {
-        incorrectInput = new JLabel("aa");
-        incorrectInput.setFont(new Font("Cascadia Code ExtraLight", Font.PLAIN, 13));
-        incorrectInput.setForeground(Color.RED);
-        incorrectInput.setVisible(false);
-        return incorrectInput;
     }
 
     /**
@@ -120,17 +122,17 @@ public class LoginView extends JPanel {
      * Method to add the listener to the Login view buttons
      */
     public void registerController(ActionListener controller) {
-        // Listener for Create Account
+        // Action listener for Create Account button
         createAccountButton.addActionListener(controller);
         createAccountButton.setActionCommand(BTN_CREATE_ACCOUNT);
 
-        // Listener for Log In
+        // Action listener for Log In button
         loginButton.addActionListener(controller);
         loginButton.setActionCommand(BTN_LOG_IN);
     }
 
     /**
-     * Metode that is in charge of the top margins of the window.
+     * Method that is in charge of the top margins of the window.
      * @return the container with the panel margin (without opacity)
      */
     public Container upMargin() {
@@ -142,64 +144,15 @@ public class LoginView extends JPanel {
     }
 
     /**
-     * Metode that is in charge of the bottom margins of the window.
-     * @return the container with the panel margin (without opacity)
+     * Method that is in charge of the bottom of the window.
+     * @return the container with the panel (without opacity) and the incorrect input label
      */
     public Container down() {
         JPanel downMargin = new JPanel();
         downMargin.setOpaque(false);
         downMargin.setBorder(BorderFactory.createEmptyBorder(0, 0, 120, 0));
-        downMargin.add(incorrectInput());
+        downMargin.add(listener.wrongInputLabel(incorrectInput));
         return downMargin;
-    }
-
-    /**
-     * Method that configures our custom textField with the class PlaceholderTextField
-     * @param placeHolder the placeholder you want to put in the text field
-     * @return the JPanel with the custom text field configured
-     */
-    public Component textField(String placeHolder) {
-        //Using own textField classes
-        userField = new PlaceholderTextField("");
-        userField.setBorder(BorderFactory.createCompoundBorder(
-                userField.getBorder(),
-                BorderFactory.createEmptyBorder(5, 8, 5, 5)));
-        userField.setColumns(28);
-        userField.setBackground(new Color(76, 76, 76));
-        userField.setForeground(Color.WHITE);
-        userField.setPlaceholder(placeHolder);
-        Font f = userField.getFont();
-        userField.setFont(new Font(f.getName(), f.getStyle(), 12));
-        JPanel auxPanel = new JPanel();
-        auxPanel.setOpaque(false);
-        auxPanel.add(userField);
-
-        return auxPanel;
-    }
-
-    /**
-     * Method that configures our custom PasswordField with the class PlaceholderPasswordField
-     * @param placeHolder the placeholder you want to put in the password field
-     * @return the JPanel with the custom password field configured
-     */
-    public Component passwordField(String placeHolder) {
-        //Using own textField classes
-        passwordField = new PlaceholderPasswordField("");
-        passwordField.setBorder(BorderFactory.createCompoundBorder(
-                passwordField.getBorder(),
-                BorderFactory.createEmptyBorder(5, 8, 5, 5)));
-        passwordField.setColumns(28);
-        passwordField.setBackground(new Color(76, 76, 76));
-        passwordField.setForeground(Color.WHITE);
-        passwordField.setPlaceholder(placeHolder);
-        passwordField.setEchoChar('*');
-        Font f = passwordField.getFont();
-        passwordField.setFont(new Font(f.getName(), f.getStyle(), 12));
-        JPanel auxPanel = new JPanel();
-        auxPanel.setOpaque(false);
-        auxPanel.add(passwordField);
-
-        return auxPanel;
     }
 
     /**
@@ -223,6 +176,7 @@ public class LoginView extends JPanel {
      */
     public void incorrectUser() {
         incorrectInput.setText("Username or email could not be found");
+        passwordField.setBackground(new Color(76, 76, 76));
         userField.setBackground(new Color(220, 60, 25));
         incorrectInput.setVisible(true);
     }
