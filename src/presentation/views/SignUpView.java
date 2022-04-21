@@ -1,10 +1,14 @@
 package presentation.views;
 
 import presentation.controllers.MainViewListener;
+import presentation.views.components.PlaceholderPasswordField;
+import presentation.views.components.PlaceholderTextField;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+
+import static presentation.views.MainView.LOGO_IMAGE_PATH;
 
 public class SignUpView extends JPanel {
 
@@ -171,7 +175,7 @@ public class SignUpView extends JPanel {
     private Component logoImage() {
         JLabel logoImage = new JLabel();
         logoImage.setSize(176, 64);
-        ImageIcon iconLogo = new ImageIcon("images/logo.jpeg");
+        ImageIcon iconLogo = new ImageIcon(LOGO_IMAGE_PATH);
         logoImage.setIcon(new ImageIcon(iconLogo.getImage().getScaledInstance(logoImage.getWidth(), logoImage.getHeight(), Image.SCALE_SMOOTH)));
         JPanel logoImagePanel = new JPanel();
         logoImagePanel.setOpaque(false);

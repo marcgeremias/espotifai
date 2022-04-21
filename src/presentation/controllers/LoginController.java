@@ -42,7 +42,7 @@ public class LoginController implements ActionListener {
      */
     private void onLoginClick() {
         int validationResult = userManager.checkUserAndPassword(loginView.getUserField(), loginView.getPasswordField());
-        if (validationResult == UserManager.CORRECT_CHECKING) {
+        if (validationResult == UserManager.USER_CORRECTLY_ADDED) {
             // Correct credentials
             loginView.correctCredentials();
             listener.changeView(MainView.CARD_PLAYER);
@@ -53,8 +53,13 @@ public class LoginController implements ActionListener {
                 loginView.incorrectPassword();
 
             } else {
-                // Incorrect Username or Email
-                loginView.incorrectUser();
+                if (validationResult == UserManager.WRONG_USER) {
+                    // Incorrect Username or Email
+                    loginView.incorrectUser();
+
+                } else {
+                    loginView.errorAddingUser();
+                }
             }
         }
     }

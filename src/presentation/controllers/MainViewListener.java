@@ -1,7 +1,7 @@
 package presentation.controllers;
 
-import presentation.views.PlaceholderPasswordField;
-import presentation.views.PlaceholderTextField;
+import presentation.views.components.PlaceholderPasswordField;
+import presentation.views.components.PlaceholderTextField;
 
 import javax.swing.*;
 import java.awt.*;
