@@ -1,10 +1,12 @@
 package presentation.views;
 
-import presentation.controllers.StatsController;
+import presentation.controllers.SearchController;
 
+import javax.swing.*;
 import java.awt.event.ActionListener;
 
-public class StatsView extends PlayerView {
+public class SearchView extends JPanel {
+
     public void registerController(ActionListener controller) {
     }
 }

@@ -1,10 +1,11 @@
 package presentation.views;
 
-import presentation.controllers.StatsController;
+import presentation.controllers.HomeController;
 
+import javax.swing.*;
 import java.awt.event.ActionListener;
 
-public class StatsView extends PlayerView {
+public class HomeView extends JPanel {
     public void registerController(ActionListener controller) {
     }
 }

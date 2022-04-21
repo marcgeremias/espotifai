@@ -1,6 +1,9 @@
 package presentation.controllers;
 
+import business.PlaylistManager;
+import business.SongManager;
 import business.UserManager;
+import business.entities.Song;
 import presentation.views.*;
 
 import javax.swing.*;
@@ -10,17 +13,22 @@ public class MainController implements MainViewListener {
 
     private MainView mainView;
     private UserManager userManager;
+    private SongManager songManager;
+    private PlaylistManager playlistManager;
     private LoginController loginController;
     private SingUpController signUpController;
+    private PlayerController playerController;
 
     /**
      * Constructor initializing the MainController necessari attributes
      * @param mainView the MainView class
      * @param userManager the UserManager class
      */
-    public MainController(MainView mainView, UserManager userManager) {
+    public MainController(MainView mainView, UserManager userManager, SongManager songManager, PlaylistManager playlistManager) {
         this.mainView = mainView;
         this.userManager = userManager;
+        this.songManager = songManager;
+        this.playlistManager = playlistManager;
     }
 
     /**
@@ -37,8 +45,14 @@ public class MainController implements MainViewListener {
         signUpController = new SingUpController(this, signUpView, userManager);
         signUpView.registerController(signUpController);
 
+        // Defining player view
+        // PlayerView acts as a 'frame' and there are no buttons or actions associated with this view because it
+        // is formed by other views with their respective controllers therefore it doesn't need to register a controller.
+        PlayerView playerView = new PlayerView();
+        playerController = new PlayerController(this, playerView, userManager, songManager, playlistManager);
+
         // Defining views in the card layout of the JFrame MainView
-        mainView.initCardLayout(loginView, signUpView, new PlayerView());
+        mainView.initCardLayout(loginView, signUpView, playerView);
         mainView.changeView(MainView.CARD_LOG_IN);
     }
 
