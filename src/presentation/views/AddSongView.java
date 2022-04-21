@@ -1,4 +1,12 @@
 package presentation.views;
 
-public class AddSongView extends PlayerView {
+import presentation.controllers.AddSongController;
+
+import javax.swing.*;
+import java.awt.event.ActionListener;
+
+public class AddSongView extends JPanel {
+
+    public void registerController(ActionListener controller) {
+    }
 }

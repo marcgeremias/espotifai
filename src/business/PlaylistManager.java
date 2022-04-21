@@ -1,11 +1,11 @@
 package business;
 
-import persistence.postgresql.PlaylistSQL;
+import persistence.PlaylistDAO;
 
 public class PlaylistManager {
-    private PlaylistSQL playlistDAO;
+    private PlaylistDAO playlistDAO;
 
-    public PlaylistManager() {
-        //
+    public PlaylistManager(PlaylistDAO playlistDAO) {
+        this.playlistDAO = playlistDAO;
     }
 }
