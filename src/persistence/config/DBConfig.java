@@ -16,7 +16,7 @@ public class DBConfig {
 
     private static DBConfig sDBConfig;
 
-    private static final String PATH = "./res/config.json";
+    private static final String PATH = "./res/db_config.json";
     private static final String JDBC_POSTGRES_PROTOCOL = "jdbc:postgresql://";
 
     private String dbHost;

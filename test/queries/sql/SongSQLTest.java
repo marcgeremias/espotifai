@@ -3,12 +3,17 @@ package queries.sql;
 import business.entities.Genre;
 import business.entities.Song;
 import business.entities.User;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.util.IOUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import persistence.UserDAO;
+import persistence.config.APIConfig;
 import persistence.postgresql.SongSQL;
 import persistence.postgresql.UserSQL;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -20,18 +25,31 @@ public class SongSQLTest {
     Indexes must be changed.
      */
 
+    @Deprecated
     @Test
     public void test1CreateSong(){
+        APIConfig api = APIConfig.getInstance();
         ArrayList<Song> songs = getSampleSongs();
         SongSQL sql = new SongSQL();
 
-        for(Song song : songs){
+        IOUtil.ProgressListener progressListener = l -> System.out.println("Here");
+        Song song = new Song(19,"El Nano", "single", Genre.POP, "Melendi","no path", 168, new User("Armand", "test", "test"));
+        try {
+            Assertions.assertTrue(sql.createSong(song, new File("C:\\Users\\ardau\\IdeaProjects\\TEST_DPO_DEVELOPMENT\\res\\Melendi - El Nano (Videoclip Oficial).mp3"), progressListener));
+        } catch (SQLException | DbxException | IOException e) {
+            e.printStackTrace();
+        }
+        /*for(Song song : songs){
             try {
-                Assertions.assertTrue(sql.createSong(song));
+                Assertions.assertTrue(sql.createSong(song, new File("songpath"), progressListener));
             } catch (SQLException e){
                 e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (DbxException e) {
+                e.printStackTrace();
             }
-        }
+        }*/
     }
 
     @Test
@@ -210,9 +228,11 @@ public class SongSQLTest {
         SongSQL sql = new SongSQL();
 
         try {
-            Assertions.assertTrue(sql.deleteSong(17));
-            Assertions.assertNull(sql.getSongByID(17, new UserSQL()));
+            Assertions.assertTrue(sql.deleteSong(23));
+            Assertions.assertNull(sql.getSongByID(23, new UserSQL()));
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (DbxException e) {
             e.printStackTrace();
         }
     }

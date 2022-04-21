@@ -2,7 +2,10 @@ package persistence;
 
 import business.entities.Genre;
 import business.entities.Song;
+import com.dropbox.core.util.IOUtil;
 
+import javax.sound.sampled.AudioInputStream;
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -17,10 +20,12 @@ public interface SongDAO {
      * are generated everytime a song is persisted therefore if we add the same song twice it will be treated
      * as diferent songs.
      * @param song instance of {@link Song} with the values to persist.
+     * @param songFile instance of {@link File} containing the song to upload
+     * @param progressListener listener for the upload progress status
      * @return (1) true if the song is added correctly or (2) false if there is an error.
      * @throws Exception if there is an error accessing the database.
      */
-    boolean createSong(Song song) throws Exception;
+    boolean createSong(Song song, File songFile, IOUtil.ProgressListener progressListener) throws Exception;
 
     /**
      * This method searched the storage system and returns a instance of {@link Song} if the values match.
@@ -115,6 +120,13 @@ public interface SongDAO {
      */
     boolean deleteSong(int songID) throws Exception;
 
+    /**
+     * This method will download a song from the song storage system given its unique identifier.
+     * @param songID unique identifier for the song we wish to download
+     * @return {@link AudioInputStream} instance with the song loaded and ready to be reproduced or null
+     * @throws Exception if the song couldn't be downloaded.
+     */
+    AudioInputStream downloadSong(int songID) throws Exception;
 
 
 }
