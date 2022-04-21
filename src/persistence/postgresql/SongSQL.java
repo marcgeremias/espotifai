@@ -2,17 +2,31 @@ package persistence.postgresql;
 
 import business.entities.Genre;
 import business.entities.Song;
+import com.dropbox.core.DbxDownloader;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.util.IOUtil;
+import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.*;
 import persistence.SongDAO;
 import persistence.UserDAO;
+import persistence.config.APIConfig;
 import persistence.config.DBConstants;
 import persistence.config.DBConfig;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
+
+import static persistence.config.APIConfig.SONGS_ROOT_FOLDER;
 
 /**
  * Public class that implements {@link SongDAO} interface with SQL persistence in the database configured on start-up.
@@ -23,22 +37,26 @@ import java.util.Locale;
  */
 public class SongSQL implements SongDAO {
 
+    private static final String SONG_FORMAT = "mp3";
+
     /**
      * Public method to create a new song in the database. An instance of {@link Song} is passed as a parameter and
      * the values are persisted on the database. Note that all the fields will be edited so it's important to make
      * sure that all important fields are not empty.
      * @param song instance of {@link Song} containing the values to add
+     * @param songFile instance of {@link File} containing the song to upload
+     * @param progressListener listener for the upload progress status
      * @return true (1) if the song has been created correctly or false (2) if the song hasn't been created correctly.
      * @throws SQLException if the query fails to execute or the database connection can't be opened
      */
     @Override
-    public boolean createSong(Song song) throws SQLException {
+    public boolean createSong(Song song, File songFile, IOUtil.ProgressListener progressListener) throws SQLException, DbxException, IOException {
         Connection c = DBConfig.getInstance().openConnection();
 
         String createSongSQL = "INSERT INTO "+ DBConstants.TABLE_SONG +"("+ DBConstants.COL_ID_NICKNAME
                 +", "+ DBConstants.SONG_COL_ALBUM +", "+ DBConstants.SONG_COL_AUTHOR +", "+ DBConstants.SONG_COL_GENRE
                 +", "+ DBConstants.SONG_COL_PATH +", "+ DBConstants.SONG_COL_TITLE +", "+ DBConstants.SONG_COL_DURATION+")"
-                +" VALUES (?, ?, ?, ?, ?, ?, ?)";
+                +" VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "+DBConstants.COL_ID_SONG;
         PreparedStatement createSongSTMT = c.prepareStatement(createSongSQL);
         createSongSTMT.setString(1, song.getUser().getName());
         createSongSTMT.setString(2, song.getAlbum());
@@ -47,10 +65,15 @@ public class SongSQL implements SongDAO {
         createSongSTMT.setString(5, song.getImagePath());
         createSongSTMT.setString(6, song.getTitle());
         createSongSTMT.setInt(7, song.getDuration());
-        int count = createSongSTMT.executeUpdate();
+        ResultSet rs = createSongSTMT.executeQuery();
 
-        c.close();
-        return count > 0;
+        if (rs.next()){
+            c.close();
+            return uploadSong(songFile, rs.getInt(1), progressListener);
+        } else {
+            c.close();
+            return false;
+        }
     }
 
     /**
@@ -263,10 +286,13 @@ public class SongSQL implements SongDAO {
      * @return true (1) if the song has been deleted correctly or false (2) if the songID doesn't match any
      * identifier stored in the database.
      * @throws SQLException if the query fails to execute correctly or the database can't be opened.
+     * @throws DbxException if the file can't be deleted from the API
      */
     @Override
-    public boolean deleteSong(int songID) throws SQLException {
+    public boolean deleteSong(int songID) throws SQLException, DbxException {
         Connection c = DBConfig.getInstance().openConnection();
+
+        if (!deleteSongFile(songID)) return false;
 
         String deleteSongSQL = "DELETE FROM "+DBConstants.TABLE_SONG +" WHERE "+ DBConstants.COL_ID_SONG +" = ?";
         PreparedStatement deleteSongSTMT = c.prepareStatement(deleteSongSQL);
@@ -275,6 +301,60 @@ public class SongSQL implements SongDAO {
 
         c.close();
         return count > 0;
+    }
+
+    /**
+     * This method will download a song from the Dropbox API given the unique identifier of a song
+     * @param songID unique identifier for the song we wish to download
+     * @return {@link AudioInputStream} instance to be reproduced or exception is thrown
+     * @throws DbxException if the API client can't access the song
+     * @throws IOException if the Output stream can't be opened
+     * @throws UnsupportedAudioFileException if the file format is unsupported
+     */
+    @Override
+    public AudioInputStream downloadSong(int songID) throws DbxException, IOException, UnsupportedAudioFileException {
+
+        //This seems like is not following 'Tell, don't ask rule' but it is actually very polite
+        DbxClientV2 client = APIConfig.getInstance().getClient();
+        DbxDownloader<FileMetadata> downloader = client.files().download(SONGS_ROOT_FOLDER+"/"+songID+"."+SONG_FORMAT);
+
+        // This Byte output stream will contain the downloaded song
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        //Method to download the song
+        downloader.download(baos);
+
+        //Convert the ByteOutputStream to an AudioInputStream
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        AudioInputStream ais = AudioSystem.getAudioInputStream(bais);
+
+        //This method is called for the conversion from mp3 to wav and returns the AudioInputStream ready to be reproduced
+        return mp3ToWav(ais);
+    }
+
+    /*
+    Private method to upload a song to the DropboxAPI
+     */
+    private boolean uploadSong(File song, int songID, IOUtil.ProgressListener progressListener) throws DbxException, IOException {
+        InputStream in = new FileInputStream(song);
+        DbxClientV2 client = APIConfig.getInstance().getClient();
+
+        FileMetadata metadata = client.files().uploadBuilder(SONGS_ROOT_FOLDER+"/"+songID+"."+SONG_FORMAT)
+                .withMode(WriteMode.ADD)
+                .withClientModified(new Date(song.lastModified()))
+                .uploadAndFinish(in, progressListener);
+
+        return true;
+    }
+
+    /*
+    Private method to delete a song from the dropbox API
+     */
+    private boolean deleteSongFile(int songID) throws DbxException{
+        DbxClientV2 client = APIConfig.getInstance().getClient();
+        DeleteResult metadata = client.files().deleteV2(SONGS_ROOT_FOLDER+"/"+songID+"."+SONG_FORMAT);
+        // Will only reach here if delete operation is successful
+        return true;
     }
 
     /*
@@ -309,5 +389,18 @@ public class SongSQL implements SongDAO {
 
         c.close();
         return songs.size() > 0 ? songs : null;
+    }
+
+    private AudioInputStream mp3ToWav(AudioInputStream mp3Stream) throws UnsupportedAudioFileException, IOException {
+        AudioFormat sourceFormat = mp3Stream.getFormat();
+        //Converts the current format with the one matching the .wav files
+        AudioFormat convertFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+                sourceFormat.getSampleRate(), 16,
+                sourceFormat.getChannels(),
+                sourceFormat.getChannels() * 2,
+                sourceFormat.getSampleRate(),
+                false);
+        // Returns the new reconstructed input stream
+        return AudioSystem.getAudioInputStream(convertFormat, mp3Stream);
     }
 }
