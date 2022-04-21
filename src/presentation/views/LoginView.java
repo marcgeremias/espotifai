@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+import static presentation.views.MainView.LOGO_IMAGE_PATH;
+
 /**
  * Class that shows the LoginView and extends from JFrame since it's the first view
  */
@@ -68,7 +70,7 @@ public class LoginView extends JPanel {
     private Component logoImage() {
         JLabel logoImage = new JLabel();
         logoImage.setSize(263, 96);
-        ImageIcon iconLogo = new ImageIcon("images/logo.jpeg");
+        ImageIcon iconLogo = new ImageIcon(LOGO_IMAGE_PATH);
         logoImage.setIcon(new ImageIcon(iconLogo.getImage().getScaledInstance(logoImage.getWidth(), logoImage.getHeight(), Image.SCALE_SMOOTH)));
         JPanel logoImagePanel = new JPanel();
         logoImagePanel.setOpaque(false);

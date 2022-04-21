@@ -14,6 +14,7 @@ public class MainView extends JFrame {
     public static final String CARD_LOG_IN = "CARD LOG IN";
     public static final String CARD_SIGN_UP = "CARD SIGN UP";
     public static final String CARD_PLAYER = "CARD PLAYER";
+    public static final String LOGO_IMAGE_PATH = "./res/images/logo.jpeg";
 
     public MainView() {
         cardManager = new CardLayout();
