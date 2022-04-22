@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 public class UserManager {
     private UserDAO userDAO;
+    private String currentUser;
 
     // Defining constants of possible results
     public static final int WRONG_USER = -1;
@@ -23,6 +24,7 @@ public class UserManager {
 
     public UserManager(UserDAO userDAO) {
         this.userDAO = userDAO;
+        this.currentUser = null;
     }
 
     /**
@@ -162,5 +164,13 @@ public class UserManager {
         }
 
         return isDigit && isUpperCase && isLowerCase;
+    }
+
+    public void setCurrentUser(String user) {
+        currentUser = user;
+    }
+
+    public String getCurrentUser() {
+        return currentUser;
     }
 }

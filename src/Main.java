@@ -11,8 +11,9 @@ public class Main {
     public static void main(String[] args) {
         // We use MVC and invokeLater to ensure the view is created in the context of the EDT
         javax.swing.SwingUtilities.invokeLater(() -> {
-            UserManager userManager = new UserManager(new UserSQL());
-            SongManager songManager = new SongManager(new SongSQL());
+            UserSQL userSQL = new UserSQL();
+            UserManager userManager = new UserManager(userSQL);
+            SongManager songManager = new SongManager(new SongSQL(), userSQL);
             PlaylistManager playlistManager = new PlaylistManager(new PlaylistSQL());
             MainView mainView = new MainView();
             MainController mainController = new MainController(mainView, userManager, songManager, playlistManager);

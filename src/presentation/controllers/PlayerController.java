@@ -12,6 +12,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class PlayerController implements PlayerViewListener {
 
@@ -58,8 +59,11 @@ public class PlayerController implements PlayerViewListener {
         libraryController = new LibraryController(this, libraryView, userManager, songManager, playlistManager);
         libraryView.registerController(libraryController);
 
-        AddSongView addSongView = new AddSongView();
-        addSongController = new AddSongController(this, addSongView, userManager, songManager, playlistManager);
+        // TODO: Create method in Manager to get all the authors
+        ArrayList<String> authors = new ArrayList<>();
+        authors.add("EODF"); // TODO: Remove hardcoded data (TESTING PURPOSES)
+        AddSongView addSongView = new AddSongView(authors);
+        addSongController = new AddSongController(this, addSongView, userManager, songManager);
         addSongView.registerController(addSongController);
 
         StatsView statsView = new StatsView();
@@ -84,7 +88,8 @@ public class PlayerController implements PlayerViewListener {
 
         this.playerView.setContents(musicPlaybackView, sideMenuView);
         this.playerView.initCardLayout(homeView, searchView, libraryView, addSongView, statsView, songDetailView, playlistDetailView);
-        this.playerView.changeView(PlayerView.HOME_VIEW);
+        //this.playerView.changeView(PlayerView.HOME_VIEW);
+        this.playerView.changeView(PlayerView.ADD_SONG_VIEW);   // TODO: remove line (TESTING PURPOSES)
     }
 
     @Override
