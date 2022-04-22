@@ -1,6 +1,8 @@
 package presentation.views;
 
 import presentation.controllers.MainViewListener;
+import presentation.views.components.PlaceholderPasswordField;
+import presentation.views.components.PlaceholderTextField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -200,5 +202,14 @@ public class LoginView extends JPanel {
         userField.setBackground(new Color(76, 76, 76));
         passwordField.setBackground(new Color(76, 76, 76));
         incorrectInput.setVisible(false);
+    }
+
+    /**
+     * Method called when all credentials are correct
+     * but the User could not be saved correctly into the databate
+     */
+    public void errorAddingUser() {
+        incorrectInput.setText("ERROR: The User could not be added to the database.");
+        incorrectInput.setVisible(true);
     }
 }
