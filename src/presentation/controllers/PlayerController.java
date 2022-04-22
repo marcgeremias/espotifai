@@ -31,6 +31,7 @@ public class PlayerController implements PlayerViewListener {
     private final StatsController statsController;
     private final SongDetailController songDetailController;
     private final PlaylistDetailController playlistDetailController;
+    private final UserProfileController userProfileController;
     private final MusicPlaybackController musicPlaybackController;
     private final SideMenuController sideMenuController;
 
@@ -75,6 +76,10 @@ public class PlayerController implements PlayerViewListener {
         playlistDetailController = new PlaylistDetailController(this, playlistDetailView, userManager, songManager, playlistManager);
         playlistDetailView.registerController(playlistDetailController);
 
+        UserProfileView userProfileView = new UserProfileView();
+        userProfileController = new UserProfileController(this, userProfileView, userManager, songManager, playlistManager);
+        userProfileView.registerController(userProfileController);
+
         MusicPlaybackView musicPlaybackView = new MusicPlaybackView();
         musicPlaybackController = new MusicPlaybackController(musicPlaybackView, songManager);
         musicPlaybackView.registerController(musicPlaybackController);
@@ -84,9 +89,9 @@ public class PlayerController implements PlayerViewListener {
         sideMenuView.registerController(sideMenuController);
 
         this.playerView.setContents(musicPlaybackView, sideMenuView);
-        this.playerView.initCardLayout(homeView, searchView, libraryView, addSongView, statsView, songDetailView, playlistDetailView);
-        //this.playerView.changeView(PlayerView.HOME_VIEW);
-        this.playerView.changeView(PlayerView.ADD_SONG_VIEW);   // TODO: remove line (TESTING PURPOSES)
+        this.playerView.initCardLayout(homeView, searchView, libraryView, addSongView, statsView,
+                                        songDetailView, playlistDetailView, userProfileView);
+        this.playerView.changeView(PlayerView.HOME_VIEW);
     }
 
     @Override
