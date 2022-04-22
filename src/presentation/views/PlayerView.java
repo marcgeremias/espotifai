@@ -19,6 +19,7 @@ public class PlayerView extends JPanel {
     public static final String STATS_VIEW = "stats_view";
     public static final String SONG_DETAIL_VIEW = "song_detail_view";
     public static final String PLAYLIST_DETAIL_VIEW = "playlist_detail_view";
+    public static final String USER_PROFILE_VIEW = "user_profile_view";
 
     private CardLayout cardManager;
 
@@ -57,7 +58,7 @@ public class PlayerView extends JPanel {
      */
     public void initCardLayout(HomeView homeView, SearchView searchView, LibraryView libraryView,
                                AddSongView addSongView, StatsView statsView, SongDetailView songDetailView,
-                               PlaylistDetailView playlistDetailView){
+                               PlaylistDetailView playlistDetailView, UserProfileView userProfileView){
         centerPane.add(homeView, HOME_VIEW);
         centerPane.add(searchView, SEARCH_VIEW);
         centerPane.add(libraryView, LIBRARY_VIEW);
@@ -65,6 +66,7 @@ public class PlayerView extends JPanel {
         centerPane.add(statsView, STATS_VIEW);
         centerPane.add(songDetailView, SONG_DETAIL_VIEW);
         centerPane.add(playlistDetailView, PLAYLIST_DETAIL_VIEW);
+        centerPane.add(userProfileView, USER_PROFILE_VIEW);
     }
 
     /**
