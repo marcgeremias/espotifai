@@ -44,6 +44,7 @@ public class LoginController implements ActionListener {
         int validationResult = userManager.checkUserAndPassword(loginView.getUserField(), loginView.getPasswordField());
         if (validationResult == UserManager.CORRECT_CHECKING) {
             // Correct credentials
+            userManager.setCurrentUser(loginView.getUserField());
             loginView.correctCredentials();
             listener.changeView(MainView.CARD_PLAYER);
 
