@@ -1,16 +1,23 @@
 package business;
 
+import business.entities.CreateSongException;
 import business.entities.Genre;
 import business.entities.Song;
 import business.entities.User;
 import com.dropbox.core.util.IOUtil;
+import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import persistence.SongDAO;
 import persistence.UserDAO;
 import persistence.postgresql.SongSQL;
 
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class SongManager {
     private SongDAO songDAO;
@@ -71,20 +78,22 @@ public class SongManager {
      * @param path: a String containing the path to the song image
      * @param user: an instance of {@link User} representing the user that adds the song
      */
-    public void addSong(String title, String album, Genre genre, String author, String path, String user) {
+    public void addSong(File file, String title, String album, Genre genre, String author, String path, String user) throws CreateSongException, UnsupportedAudioFileException, IOException {
         // TODO: Is it possible to change user in Song so as it is a String (simplifies implementation)?
-        Song song = new Song(title, album, genre, author, path, 90, new User(user, "a@g.c", "4321"));
-        //Song song = new Song(title, album, genre, author, path, 90, user);    // preferable implementation
-        IOUtil.ProgressListener progressListener = l -> System.out.println("ProgressTest");
+        int duration = 0;
 
-        // TODO: Review SongDAO and SongSQL implementations:
-        // todo: songDAO should only receive and instance Song
-        // todo: songSQL should internally allow to create a song by receiving only an instance of Song
+        // Extract song duration from file
+        AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(file);
+        Map properties = baseFileFormat.properties();
+        duration = (int) ((Long) properties.get("duration") / 1000000);
 
-        try {
-            songDAO.createSong(song, new File(""), progressListener);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (path.isBlank()) {
+            path = "no path";
         }
+
+        Song song = new Song(title, album, genre, author, path, duration, new User(user, "a@g.c", "4321"));
+        //Song song = new Song(title, album, genre, author, path, 90, user);    // preferable implementation
+
+        //songDAO.createSong(song, file);
     }
 }

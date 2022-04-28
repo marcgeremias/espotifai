@@ -1,5 +1,6 @@
 package persistence.postgresql;
 
+import business.entities.CreateSongException;
 import business.entities.Genre;
 import business.entities.Song;
 import com.dropbox.core.DbxDownloader;
@@ -67,13 +68,52 @@ public class SongSQL implements SongDAO {
         createSongSTMT.setInt(7, song.getDuration());
         ResultSet rs = createSongSTMT.executeQuery();
 
-        if (rs.next()){
+        if (rs.next()) {
             c.close();
             return uploadSong(songFile, rs.getInt(1), progressListener);
         } else {
             c.close();
             return false;
         }
+    }
+
+    // todo: TESTING PURPOSES METHOD (KEEP OTHER METHOD)
+    public boolean createSong(Song song, File songFile) throws CreateSongException {
+        try {
+            Connection c = DBConfig.getInstance().openConnection();
+
+            String createSongSQL = "INSERT INTO " + DBConstants.TABLE_SONG + "(" + DBConstants.COL_ID_NICKNAME
+                    + ", " + DBConstants.SONG_COL_ALBUM + ", " + DBConstants.SONG_COL_AUTHOR + ", " + DBConstants.SONG_COL_GENRE
+                    + ", " + DBConstants.SONG_COL_PATH + ", " + DBConstants.SONG_COL_TITLE + ", " + DBConstants.SONG_COL_DURATION + ")"
+                    + " VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING " + DBConstants.COL_ID_SONG;
+            PreparedStatement createSongSTMT = c.prepareStatement(createSongSQL);
+            createSongSTMT.setString(1, song.getUser().getName());
+            createSongSTMT.setString(2, song.getAlbum());
+            createSongSTMT.setString(3, song.getAuthor());
+            createSongSTMT.setString(4, String.valueOf(song.getGenre()));
+            createSongSTMT.setString(5, song.getImagePath());
+            createSongSTMT.setString(6, song.getTitle());
+            createSongSTMT.setInt(7, song.getDuration());
+            ResultSet rs = createSongSTMT.executeQuery();
+
+            if (rs.next()) {
+                c.close();
+                return true;
+            } else {
+                c.close();
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new CreateSongException("Create song error");
+        }
+    }
+
+    /**
+     * Gets all the authors stored in the database.
+     * @return an ArrayList of String containing the names of the different authors
+     */
+    public ArrayList<String> getAuthors() {
+        return null;
     }
 
     /**
