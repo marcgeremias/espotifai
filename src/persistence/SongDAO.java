@@ -1,5 +1,6 @@
 package persistence;
 
+import business.entities.CreateSongException;
 import business.entities.Genre;
 import business.entities.Song;
 import com.dropbox.core.util.IOUtil;
@@ -26,6 +27,8 @@ public interface SongDAO {
      * @throws Exception if there is an error accessing the database.
      */
     boolean createSong(Song song, File songFile, IOUtil.ProgressListener progressListener) throws Exception;
+    //todo: TESTING PURPOSES
+    boolean createSong(Song song, File songFile) throws CreateSongException;
 
     /**
      * This method searched the storage system and returns a instance of {@link Song} if the values match.
@@ -127,6 +130,4 @@ public interface SongDAO {
      * @throws Exception if the song couldn't be downloaded.
      */
     AudioInputStream downloadSong(int songID) throws Exception;
-
-
 }

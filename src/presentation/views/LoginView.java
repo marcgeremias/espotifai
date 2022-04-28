@@ -89,6 +89,7 @@ public class LoginView extends JPanel {
         createAccountButton.setText("Create an account ");
         createAccountButton.setBorder(BorderFactory.createEmptyBorder(4, 90, 4, 90));
         createAccountButton.setBackground(new Color(131, 29, 233));
+        createAccountButton.setOpaque(true);
         createAccountButton.setForeground(Color.WHITE);
         createAccountButton.setFont(new Font("arial", Font.BOLD, 10));
 
@@ -109,6 +110,7 @@ public class LoginView extends JPanel {
         loginButton.setText("Log In ");
         loginButton.setBorder(BorderFactory.createEmptyBorder(4, 10, 4, 10));
         loginButton.setBackground(new Color(94, 182, 72));
+        loginButton.setOpaque(true);
         loginButton.setForeground(Color.WHITE);
         loginButton.setFont(new Font("arial", Font.BOLD, 9));
 

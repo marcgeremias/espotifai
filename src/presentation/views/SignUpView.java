@@ -90,7 +90,7 @@ public class SignUpView extends JPanel {
         return panelAux;
     }
 
-    /**
+    /*
      * Method that shows a button to indicate if the user wants to go back to the login view
      * @return the panel with the button of going back inside
      */
@@ -98,6 +98,7 @@ public class SignUpView extends JPanel {
         goBackButton = new JButton();
         goBackButton.setText("<");
         goBackButton.setBackground(Color.BLACK);
+        goBackButton.setOpaque(true);
         goBackButton.setForeground(Color.WHITE);
         goBackButton.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 25));
 
@@ -137,6 +138,7 @@ public class SignUpView extends JPanel {
         joinButton.setText("JOIN PLATFORM ");
         joinButton.setBorder(BorderFactory.createEmptyBorder(4, 20, 4, 20));
         joinButton.setBackground(new Color(94, 182, 72));
+        joinButton.setOpaque(true);
         joinButton.setForeground(Color.WHITE);
         joinButton.setFont(new Font("arial", Font.BOLD, 10));
 

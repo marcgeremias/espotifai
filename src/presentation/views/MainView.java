@@ -75,6 +75,7 @@ public class MainView extends JFrame {
         textField.setBackground(new Color(76, 76, 76));
         textField.setForeground(Color.WHITE);
         textField.setPlaceholder(placeHolder);
+        textField.setOpaque(true);
         Font f = textField.getFont();
         textField.setFont(new Font(f.getName(), f.getStyle(), 12));
         JPanel auxPanel = new JPanel();
@@ -98,6 +99,7 @@ public class MainView extends JFrame {
         passField.setBackground(new Color(76, 76, 76));
         passField.setForeground(Color.WHITE);
         passField.setPlaceholder(placeHolder);
+        passField.setOpaque(true);
         passField.setEchoChar('*');
         Font f = passField.getFont();
         passField.setFont(new Font(f.getName(), f.getStyle(), 12));
