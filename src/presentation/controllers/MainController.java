@@ -37,6 +37,7 @@ public class MainController implements MainViewListener, MainViewFeatures {
      * Method that starts executing the program
      */
     public void run() {
+
         // Defining login view and controller
         LoginView loginView = new LoginView(this);
         loginController = new LoginController(this, loginView, userManager);
@@ -55,7 +56,12 @@ public class MainController implements MainViewListener, MainViewFeatures {
 
         // Defining views in the card layout of the JFrame MainView
         mainView.initCardLayout(loginView, signUpView, playerView);
-        mainView.changeView(MainView.CARD_LOG_IN);
+
+        //TODO PURO TESTING
+        mainView.changeView(MainView.CARD_PLAYER);
+
+
+        //mainView.changeView(MainView.CARD_LOG_IN);
     }
 
     @Override
