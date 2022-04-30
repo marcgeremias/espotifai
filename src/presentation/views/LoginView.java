@@ -29,13 +29,13 @@ public class LoginView extends JPanel {
     private JLabel incorrectInput;
 
     // Interface of the MainView
-    private MainViewListener listener;
+    private MainViewFeatures features;
 
     /**
      * Constructor method to set up the view
      */
-    public LoginView(MainViewListener listener) {
-        this.listener = listener;
+    public LoginView(MainViewFeatures features) {
+        this.features = features;
         userField = new PlaceholderTextField();
         passwordField = new PlaceholderPasswordField();
         incorrectInput = new JLabel();
@@ -57,8 +57,8 @@ public class LoginView extends JPanel {
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
         center.add(logoImage());
         center.add(createAccountButton());
-        center.add(listener.textField("Username or email", userField));
-        center.add(listener.passwordField("Password", passwordField));
+        center.add(features.textField("Username or email", userField));
+        center.add(features.passwordField("Password", passwordField));
         center.add(loginButton());
         center.setOpaque(false);
 
@@ -155,7 +155,7 @@ public class LoginView extends JPanel {
         JPanel downMargin = new JPanel();
         downMargin.setOpaque(false);
         downMargin.setBorder(BorderFactory.createEmptyBorder(0, 0, 120, 0));
-        downMargin.add(listener.wrongInputLabel(incorrectInput));
+        downMargin.add(features.wrongInputLabel(incorrectInput));
         return downMargin;
     }
 

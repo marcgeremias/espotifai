@@ -1,5 +1,6 @@
 package persistence.postgresql;
 
+import business.Crypt;
 import business.entities.User;
 import persistence.UserDAO;
 import persistence.config.DBConstants;
@@ -35,12 +36,11 @@ public class UserSQL implements UserDAO {
 
         String createUserSQL = "INSERT INTO "+ DBConstants.TABLE_USER +"("+ DBConstants.COL_ID_NICKNAME
                 +", "+ DBConstants.USER_COL_MAIL +", "+ DBConstants.USER_COL_PASSWORD
-                +") VALUES (?, ?, crypt(?, gen_salt(?)))";
+                +") VALUES (?, ?, ?)";
         PreparedStatement createUserSTMT = c.prepareStatement(createUserSQL);
         createUserSTMT.setString(1, user.getName());
         createUserSTMT.setString(2, user.getEmail());
-        createUserSTMT.setString(3, user.getPassword());
-        createUserSTMT.setString(4, ENCRYPTION_TYPE);
+        createUserSTMT.setString(3, Crypt.encode(user.getPassword()));
         int count = createUserSTMT.executeUpdate();
 
         c.close();
