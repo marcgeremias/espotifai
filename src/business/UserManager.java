@@ -42,7 +42,7 @@ public class UserManager {
 
         if (user != null) {
             // Correct User
-            if (user.getPassword().equals(passwordField) /*Desencriptar!!??*/) {
+            if (Crypt.decode(user.getPassword()).equals(passwordField)) {
                 // Correct password and validation completed
                 return CORRECT_CHECKING;
             } else {
