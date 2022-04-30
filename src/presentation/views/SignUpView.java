@@ -25,14 +25,14 @@ public class SignUpView extends JPanel {
     // Label of the possible incorrect input
     private JLabel incorrectInput;
 
-    // Listener of the MainView
-    MainViewListener listener;
+    // Features of the MainView
+    private MainViewFeatures features;
 
     /**
      * Constructor method to set up the view
      */
-    public SignUpView(MainViewListener listener) {
-        this.listener = listener;
+    public SignUpView(MainViewFeatures features) {
+        this.features = features;
         usernameField = new PlaceholderTextField();
         emailField = new PlaceholderTextField();
         passwordField = new PlaceholderPasswordField();
@@ -118,10 +118,10 @@ public class SignUpView extends JPanel {
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
         center.add(logoImage());
         center.add(borderLine());
-        center.add(listener.textField("Email", emailField));
-        center.add(listener.textField("Username", usernameField));
-        center.add(listener.passwordField("Password", passwordField));
-        center.add(listener.passwordField("Confirm Password", confirmPasswordField));
+        center.add(features.textField("Email", emailField));
+        center.add(features.textField("Username", usernameField));
+        center.add(features.passwordField("Password", passwordField));
+        center.add(features.passwordField("Confirm Password", confirmPasswordField));
         center.add(joinButton());
 
         center.setOpaque(false);
@@ -214,7 +214,7 @@ public class SignUpView extends JPanel {
         JPanel downMargin = new JPanel();
         downMargin.setOpaque(false);
         downMargin.setBorder(BorderFactory.createEmptyBorder(0, 0, 120, 0));
-        downMargin.add(listener.wrongInputLabel(incorrectInput));
+        downMargin.add(features.wrongInputLabel(incorrectInput));
         return downMargin;
     }
 

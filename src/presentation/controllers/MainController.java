@@ -6,7 +6,7 @@ import presentation.views.*;
 import javax.swing.*;
 import java.awt.*;
 
-public class MainController implements MainViewListener {
+public class MainController implements MainViewListener, MainViewFeatures {
 
     private MainView mainView;
     private UserManager userManager;
