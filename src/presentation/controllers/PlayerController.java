@@ -90,7 +90,7 @@ public class PlayerController implements PlayerViewListener {
         this.playerView.setContents(musicPlaybackView, sideMenuView);
         this.playerView.initCardLayout(homeView, searchView, libraryView, addSongView, statsView,
                                         songDetailView, playlistDetailView, userProfileView);
-        this.playerView.changeView(PlayerView.HOME_VIEW);
+        this.playerView.changeView(PlayerView.USER_PROFILE_VIEW);
     }
 
     @Override
