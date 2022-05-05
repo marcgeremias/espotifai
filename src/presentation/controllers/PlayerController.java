@@ -71,7 +71,7 @@ public class PlayerController implements PlayerViewListener {
         songDetailController = new SongDetailController(this, songDetailView, userManager, songManager, playlistManager);
         songDetailView.registerController(songDetailController);
 
-        PlaylistDetailView playlistDetailView = new PlaylistDetailView();
+        PlaylistDetailView playlistDetailView = new PlaylistDetailView(this);
         playlistDetailController = new PlaylistDetailController(this, playlistDetailView, userManager, songManager, playlistManager);
         playlistDetailView.registerController(playlistDetailController);
 
