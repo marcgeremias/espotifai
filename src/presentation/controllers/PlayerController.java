@@ -71,7 +71,7 @@ public class PlayerController implements PlayerViewListener {
         songDetailController = new SongDetailController(this, songDetailView, userManager, songManager, playlistManager);
         songDetailView.registerController(songDetailController);
 
-        PlaylistDetailView playlistDetailView = new PlaylistDetailView(this);
+        PlaylistDetailView playlistDetailView = new PlaylistDetailView();
         playlistDetailController = new PlaylistDetailController(this, playlistDetailView, userManager, songManager, playlistManager);
         playlistDetailView.registerController(playlistDetailController);
 
@@ -93,8 +93,7 @@ public class PlayerController implements PlayerViewListener {
 
         //TODO PURO TESTING
         this.playerView.changeView(PlayerView.PLAYLIST_DETAIL_VIEW);
-        //this.playerView.changeView(PlayerView.HOME_VIEW);
-
+        //this.playerView.changeView(PlayerView.USER_PROFILE_VIEW);
     }
 
     @Override
