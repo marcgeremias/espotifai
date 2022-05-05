@@ -2,6 +2,7 @@ package persistence;
 
 import business.entities.CreateSongException;
 import business.entities.Genre;
+import business.entities.ReadAuthorsException;
 import business.entities.Song;
 import com.dropbox.core.util.IOUtil;
 
@@ -29,6 +30,12 @@ public interface SongDAO {
     boolean createSong(Song song, File songFile, IOUtil.ProgressListener progressListener) throws Exception;
     //todo: TESTING PURPOSES
     boolean createSong(Song song, File songFile) throws CreateSongException;
+
+    /**
+     * Gets all the stored authors.
+     * @return an ArrayList of String containing the names of the different authors
+     */
+    ArrayList<String> getAllAuthors() throws ReadAuthorsException;
 
     /**
      * This method searched the storage system and returns a instance of {@link Song} if the values match.
