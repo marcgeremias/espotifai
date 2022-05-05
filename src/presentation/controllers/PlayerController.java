@@ -59,10 +59,7 @@ public class PlayerController implements PlayerViewListener {
         libraryController = new LibraryController(this, libraryView, userManager, songManager, playlistManager);
         libraryView.registerController(libraryController);
 
-        // TODO: Create method in Manager to get all the authors
-        ArrayList<String> authors = new ArrayList<>();
-        authors.add("EODF"); // TODO: Remove hardcoded data (TESTING PURPOSES)
-        AddSongView addSongView = new AddSongView(authors);
+        AddSongView addSongView = new AddSongView(songManager.getAuthors());
         addSongController = new AddSongController(this, addSongView, userManager, songManager);
         addSongView.registerController(addSongController);
 

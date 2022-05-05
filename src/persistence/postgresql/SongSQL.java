@@ -2,6 +2,7 @@ package persistence.postgresql;
 
 import business.entities.CreateSongException;
 import business.entities.Genre;
+import business.entities.ReadAuthorsException;
 import business.entities.Song;
 import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
@@ -104,7 +105,8 @@ public class SongSQL implements SongDAO {
                 return false;
             }
         } catch (SQLException e) {
-            throw new CreateSongException("Create song error");
+            //throw new CreateSongException("Database connection error");
+            throw new CreateSongException(e.getMessage());
         }
     }
 
@@ -112,8 +114,23 @@ public class SongSQL implements SongDAO {
      * Gets all the authors stored in the database.
      * @return an ArrayList of String containing the names of the different authors
      */
-    public ArrayList<String> getAuthors() {
-        return null;
+    public ArrayList<String> getAllAuthors() throws ReadAuthorsException {
+        try {
+            ArrayList<String> authors = new ArrayList<>();
+            String query = "SELECT DISTINCT(" + DBConstants.SONG_COL_AUTHOR + ") FROM " + DBConstants.TABLE_SONG
+                    + " ORDER BY " + DBConstants.SONG_COL_AUTHOR + " ASC";
+            Connection c = DBConfig.getInstance().openConnection();
+            ResultSet result = c.prepareStatement(query).executeQuery();
+
+            while (result.next()) {
+                authors.add(result.getString(1));
+            }
+
+            c.close();
+            return authors.size() > 0 ? authors : null;
+        } catch (SQLException e) {
+            throw new ReadAuthorsException("Database connection error");
+        }
     }
 
     /**

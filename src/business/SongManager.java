@@ -1,9 +1,6 @@
 package business;
 
-import business.entities.CreateSongException;
-import business.entities.Genre;
-import business.entities.Song;
-import business.entities.User;
+import business.entities.*;
 import com.dropbox.core.util.IOUtil;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import persistence.SongDAO;
@@ -22,10 +19,23 @@ import java.util.Map;
 public class SongManager {
     private SongDAO songDAO;
     private UserDAO userDAO;
+    //private ArrayList<String> authors; // get authors from beginning then add when new author?
 
     public SongManager(SongDAO songDAO, UserDAO userDAO) {
         this.songDAO = songDAO;
         this.userDAO = userDAO;
+    }
+
+    /**
+     * Gets all existing authors
+     * @return an ArrayList of String containing the names of the authors
+     */
+    public ArrayList<String> getAuthors() {
+        try {
+            return songDAO.getAllAuthors();
+        } catch (ReadAuthorsException e) {
+            return new ArrayList<>();
+        }
     }
 
     /**
@@ -65,7 +75,16 @@ public class SongManager {
             return false;
         }
 
-        // TODO: Might be a good idea adding an AuthorDAO to be able to have a list of the diferent authors
+        try {
+            ArrayList<String> authors = songDAO.getAllAuthors();
+
+            for (String a : authors) {
+                if (a.equalsIgnoreCase(author)) return false;
+            }
+        } catch (ReadAuthorsException e) {
+            return false;
+        }
+
         return true;
     }
 
@@ -94,6 +113,6 @@ public class SongManager {
         Song song = new Song(title, album, genre, author, path, duration, new User(user, "a@g.c", "4321"));
         //Song song = new Song(title, album, genre, author, path, 90, user);    // preferable implementation
 
-        //songDAO.createSong(song, file);
+        songDAO.createSong(song, file);
     }
 }
