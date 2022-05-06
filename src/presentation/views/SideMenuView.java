@@ -1,5 +1,6 @@
 package presentation.views;
 
+import presentation.views.components.HoverButton;
 import presentation.views.components.JImagePanel;
 
 import javax.swing.*;
@@ -8,7 +9,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class SideMenuView extends JPanel {
-    private static final Color THEME = new Color(0x171616);
 
     private String pathHomeNormal = "res/icons/home.png";
     private String pathHomeHover = "res/icons/home_hover.png";
@@ -16,130 +16,218 @@ public class SideMenuView extends JPanel {
     private String pathSearchHover = "res/icons/search_hover.png";
     private String pathLibraryNormal = "res/icons/library.png";
     private String pathLibraryHover = "res/icons/library_hover.png";
+    private String addMusicNormal = "res/icons/add.png";
+    private String addMusicHover = "res/icons/add_hover.png";
+    private String createPlaylistNormal = "res/icons/create_playlist.png";
+    private String createPlaylistHover = "res/icons/create_playlist_hover.png";
 
     public static final String HOME_BUTTON = "home_button_presses";
     public static final String SEARCH_BUTTON = "search_button_presses";
     public static final String LIBRARY_BUTTON = "library_button_presses";
+    public static final String ADD_MUSIC_BUTTON = "add_music_button_presses";
+    public static final String CREATE_PLAYLIST_BUTTON = "create_playlist_button_presses";
 
     //Main section
-    private JImagePanel homeJbutton;
-    private JImagePanel searchJbutton;
-    private JImagePanel libraryJbutton;
+    private JImagePanel homeJButton;
+    private JImagePanel searchJButton;
+    private JImagePanel libraryJButton;
 
     //Secondary section
-    private JImagePanel addMusicJbutton;
-    private JImagePanel deleteMusicJbutton;
+    private JImagePanel addMusicJButton;
+    private JImagePanel createPlaylistButton;
 
     //Last section
-    private Button logOutJbutton; //HoverButton
+    private HoverButton logOutJbutton; //HoverButton
 
+    /**
+     * Constructor method to set up the view
+     */
     public SideMenuView() {
         configurePanel();
     }
 
+    /**
+     * Method that configures the settings of the side panel
+     */
     private void configurePanel() {
         this.setLayout(new BorderLayout()); // Setting of a Border Layout which structures the whole menu
-        this.add(lateralMenu(), BorderLayout.WEST);
-    }
-
-    private Component lateralMenu() {
-        JPanel bufferJPanel = new JPanel();
-        bufferJPanel.setBackground(Color.BLACK);
-        bufferJPanel.add(mainSection());
-        bufferJPanel.add(playlistSection());
-        bufferJPanel.add(logOutSection());
-
-        return bufferJPanel;
-    }
-
-    private Component mainSection() {
-        JPanel menu = new JPanel();
-
-        menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
-        menu.add(homeOption());
-        menu.add(searchOption());
-        menu.add(libraryOption());
-
-        menu.setOpaque(false);
-        return menu;
+        this.add(bufferMenu(), BorderLayout.CENTER);
     }
 
     /**
-     * Metode que s'encarrega dels marges entre les opcions de la Main Section
-     * @return el contenidor amb el panell del marge (sense opacitat)
+     * Method that creates a buffer panel that structures the elements of the side panel of the view
+     * @return A panel containing all the elements of the side menu
      */
-    public static Container margin() {
-        JPanel upMargin = new JPanel();
-        upMargin.setOpaque(false);
-        upMargin.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+    private Component bufferMenu(){
+        JPanel actualPanel = new JPanel(new BorderLayout());
+        actualPanel.setBackground(Color.BLACK);
 
-        return upMargin;
+        actualPanel.add(mainSection(), BorderLayout.NORTH);
+        actualPanel.add(center(), BorderLayout.CENTER);
+        actualPanel.add(logOutSection(), BorderLayout.SOUTH);
+
+        actualPanel.setOpaque(false);
+        return actualPanel;
     }
 
-    private Component homeOption() {
-        homeJbutton = new JImagePanel(pathHomeNormal, pathHomeHover, null);
-        homeJbutton.setPreferredSize(new Dimension(84,20));
-        homeJbutton.setOpaque(false);
+    /**
+     * Method that specifies all the elements that are located in the center of the panel
+     * @return A panel with the components of the center of the panel
+     */
+    private Component center(){
+        JPanel center = new JPanel();
+        center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+        center.setBackground(Color.BLACK);
 
-        JPanel home = new JPanel();
+        center.add(middleSection());
+        center.add(playlistSection());
+
+        center.setOpaque(false);
+        return center;
+    }
+
+    /**
+     * Method that structures the three options of the top of the side menu
+     * @return A panel containing the top section elements of the side menu
+     */
+    private Component mainSection() {
+        JPanel home = new JPanel(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
         home.setBackground(Color.BLACK);
+
+        homeJButton = new JImagePanel(pathHomeNormal, pathHomeHover, null);
+        homeJButton.setPreferredSize(new Dimension(120,30));
+        homeJButton.setOpaque(false);
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        constraints.insets = new Insets(10,0,8,0);
+        home.add (homeJButton, constraints);
+
+        searchJButton = new JImagePanel(pathSearchNormal, pathSearchHover, null);
+        searchJButton.setPreferredSize(new Dimension(95, 25));
+        searchJButton.setOpaque(false);
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        home.add (searchJButton, constraints);
+
+        libraryJButton = new JImagePanel(pathLibraryNormal, pathLibraryHover, null);
+        libraryJButton.setPreferredSize(new Dimension(100,25));
+        libraryJButton.setOpaque(false);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        home.add (libraryJButton, constraints);
+
         home.setOpaque(true);
-        home.add(margin());
-        home.add(homeJbutton);
+        home.setBorder(BorderFactory.createEmptyBorder(10, 4, 6, 6));
 
         return home;
     }
 
-    private Component searchOption(){
-        searchJbutton = new JImagePanel(pathSearchNormal, pathSearchHover, null);
-        searchJbutton.setPreferredSize(new Dimension(70, 20));
-        searchJbutton.setOpaque(false);
+    /**
+     * Method that structures the middle section of the side menu
+     * @return A panel containing the top section elements of the side menu
+     */
+    private Component middleSection() {
+        JPanel additionPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        additionPanel.setBackground(Color.BLACK);
 
-        JPanel search = new JPanel();
-        search.setBackground(Color.BLACK);
-        search.setOpaque(true);
-        search.add(margin());
-        search.add(searchJbutton);
+        addMusicJButton = new JImagePanel(addMusicNormal, addMusicHover, null);
+        addMusicJButton.setPreferredSize(new Dimension(120,35));
+        addMusicJButton.setOpaque(false);
 
-        return search;
-    }
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        additionPanel.add (addMusicJButton, constraints);
 
-    private Component libraryOption(){
-        libraryJbutton = new JImagePanel(pathLibraryNormal, pathLibraryHover, null);
-        libraryJbutton.setPreferredSize(new Dimension(74,20));
-        libraryJbutton.setOpaque(false);
+        createPlaylistButton = new JImagePanel(createPlaylistNormal, createPlaylistHover, null);
+        createPlaylistButton.setPreferredSize(new Dimension(140,35));
+        createPlaylistButton.setOpaque(false);
 
-        JPanel library = new JPanel();
-        library.setBackground(Color.BLACK);
-        library.setOpaque(true);
-        library.add(margin());
-        library.add(libraryJbutton);
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        constraints.insets = new Insets(8,20,8,0);
+        additionPanel.add (createPlaylistButton, constraints);
 
-        return library;
+        additionPanel.setOpaque(true);
+        additionPanel.setBorder(BorderFactory.createEmptyBorder(20, 4, 6, 6));
+
+        return additionPanel;
     }
 
     private Component playlistSection() {
-        JPanel playlists = new JPanel();
+        JPanel playlistJPanel = new JPanel();
+        playlistJPanel.setLayout(new BoxLayout(playlistJPanel, BoxLayout.Y_AXIS));
+        playlistJPanel.setBackground(Color.BLACK);
+        playlistJPanel.setOpaque(true);
 
-        return playlists;
+        for (int i = 0; i < 12; i++) {
+            Label label = new Label("ULAAA");
+            label.setForeground(Color.BLACK);
+            playlistJPanel.add(label);
+        }
+
+        return playlistJPanel;
     }
 
+    /**
+     * Method that structures the bottom section of the side menu
+     * @return A panel containing the botttom section elements of the side menu
+     */
     private Component logOutSection() {
-
         JPanel logOutPanel = new JPanel();
+        logOutPanel.setBackground(Color.BLACK);
+        logOutPanel.setOpaque(true);
+
+        logOutJbutton = new HoverButton(Color.RED, Color.BLACK, "Log Out");
+        logOutJbutton.setBackground(Color.BLACK);
+        logOutJbutton.setForeground(Color.LIGHT_GRAY);
+
+        // Letter Settings
+        logOutJbutton.setFont(new Font("Apple Casual", Font.BOLD, 10));
+
+        // Border Settings
+        logOutJbutton.setBorderPainted(true);
+        logOutJbutton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
+        logOutJbutton.setPreferredSize(new Dimension(100,25));
+
+        logOutPanel.setBorder(BorderFactory.createEmptyBorder(20, 4, 20, 6));
+        logOutPanel.add(logOutJbutton);
 
         return logOutPanel;
     }
 
+    /**
+     * Method to add the listener to the SideMenu view buttons
+     */
     public void registerController (ActionListener listener){
-        homeJbutton.setActionCommand(HOME_BUTTON);
-        homeJbutton.addActionListener(listener);
+        homeJButton.setActionCommand(HOME_BUTTON);
+        homeJButton.addActionListener(listener);
 
-        searchJbutton.setActionCommand(SEARCH_BUTTON);
-        searchJbutton.addActionListener(listener);
+        searchJButton.setActionCommand(SEARCH_BUTTON);
+        searchJButton.addActionListener(listener);
 
-        libraryJbutton.setActionCommand(LIBRARY_BUTTON);
-        libraryJbutton.addActionListener(listener);
+        libraryJButton.setActionCommand(LIBRARY_BUTTON);
+        libraryJButton.addActionListener(listener);
+
+        addMusicJButton.setActionCommand(ADD_MUSIC_BUTTON);
+        addMusicJButton.addActionListener(listener);
+
+        createPlaylistButton.setActionCommand(CREATE_PLAYLIST_BUTTON);
+        createPlaylistButton.addActionListener(listener);
     }
 
 }
