@@ -1,18 +1,14 @@
 package business;
 
 import business.entities.*;
-import com.dropbox.core.util.IOUtil;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import persistence.SongDAO;
 import persistence.UserDAO;
-import persistence.postgresql.SongSQL;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -33,7 +29,7 @@ public class SongManager {
     public ArrayList<String> getAuthors() {
         try {
             return songDAO.getAllAuthors();
-        } catch (ReadAuthorsException e) {
+        } catch (SongDAOException e) {
             return new ArrayList<>();
         }
     }
@@ -81,7 +77,7 @@ public class SongManager {
             for (String a : authors) {
                 if (a.equalsIgnoreCase(author)) return false;
             }
-        } catch (ReadAuthorsException e) {
+        } catch (SongDAOException e) {
             return false;
         }
 
@@ -97,7 +93,7 @@ public class SongManager {
      * @param path: a String containing the path to the song image
      * @param user: an instance of {@link User} representing the user that adds the song
      */
-    public void addSong(File file, String title, String album, Genre genre, String author, String path, String user) throws CreateSongException, UnsupportedAudioFileException, IOException {
+    public void addSong(File file, String title, String album, Genre genre, String author, String path, String user) throws SongDAOException, UnsupportedAudioFileException, IOException {
         // TODO: Is it possible to change user in Song so as it is a String (simplifies implementation)?
         int duration = 0;
 
