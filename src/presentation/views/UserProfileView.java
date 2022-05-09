@@ -232,7 +232,7 @@ public class UserProfileView extends JPanel {
      */
     private Component createPaymentMethods() {
         paymentMethods = new HoverButton(Color.LIGHT_GRAY, Color.DARK_GRAY, "Payment Methods                                >");
-        paymentMethods.setBackground(Color.BLACK);
+        paymentMethods.setBackground(Color.DARK_GRAY);
         paymentMethods.setForeground(Color.WHITE);
         // Letter Settings
         paymentMethods.setFont(new Font("Apple Casual", Font.BOLD, 15));
@@ -256,7 +256,7 @@ public class UserProfileView extends JPanel {
      */
     private Component createManageSubscriptions() {
         manageSuscriptions = new HoverButton(Color.LIGHT_GRAY, Color.DARK_GRAY, "Manage Subscriptions                                >");
-        manageSuscriptions.setBackground(Color.BLACK);
+        manageSuscriptions.setBackground(Color.DARK_GRAY);
         manageSuscriptions.setForeground(Color.WHITE);
         // Letter Settings
         manageSuscriptions.setFont(new Font("Apple Casual", Font.BOLD, 15));
