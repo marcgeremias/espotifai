@@ -11,7 +11,7 @@ import presentation.views.components.PlaceholderTextField;
 import javax.swing.*;
 import java.awt.*;
 
-public class MainController implements MainViewListener, MainViewFeatures {
+public class MainController implements MainViewListener {
 
     private MainView mainView;
     private UserManager userManager;
@@ -39,12 +39,12 @@ public class MainController implements MainViewListener, MainViewFeatures {
     public void run() {
 
         // Defining login view and controller
-        LoginView loginView = new LoginView(this);
+        LoginView loginView = new LoginView();
         loginController = new LoginController(this, loginView, userManager);
         loginView.registerController(loginController);
 
         // Defining signup view and controller
-        SignUpView signUpView = new SignUpView(this);
+        SignUpView signUpView = new SignUpView();
         signUpController = new SingUpController(this, signUpView, userManager);
         signUpView.registerController(signUpController);
 
@@ -64,21 +64,5 @@ public class MainController implements MainViewListener, MainViewFeatures {
     @Override
     public void changeView(String card) {
         mainView.changeView(card);
-    }
-
-
-    @Override
-    public Component passwordField(String placeHolder, PlaceholderPasswordField passField) {
-        return mainView.passwordField(placeHolder, passField);
-    }
-
-    @Override
-    public Component textField(String placeHolder, PlaceholderTextField textField) {
-        return mainView.textField(placeHolder, textField);
-    }
-
-    @Override
-    public Component wrongInputLabel(JLabel inputMessage) {
-        return mainView.wrongInputLabel(inputMessage);
     }
 }

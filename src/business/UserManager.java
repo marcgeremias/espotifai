@@ -2,6 +2,7 @@ package business;
 
 import business.entities.User;
 import persistence.UserDAO;
+import persistence.UserDAOException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class UserManager {
     private UserDAO userDAO;
-    private User currentUser;
+    private String currentUser;
 
     // Defining constants of possible results
     public static final int WRONG_USER = -1;
@@ -23,11 +24,12 @@ public class UserManager {
 
     public UserManager(UserDAO userDAO) {
         this.userDAO = userDAO;
+        this.currentUser = null;
     }
 
-    public User getCurrentUser() {
+    /*public User getCurrentUser() {
         return currentUser;
-    }
+    }*/
 
     /**
      * Method that checks from the database the username or email and the password
@@ -41,7 +43,7 @@ public class UserManager {
         try {
             user = userDAO.validateUser(userField);
 
-        } catch (Exception ex) {
+        } catch (UserDAOException ex) {
             ex.printStackTrace();
         }
 
@@ -73,7 +75,7 @@ public class UserManager {
         try {
             users = userDAO.getAllUsers();
 
-        } catch (Exception ex) {
+        } catch (UserDAOException ex) {
             ex.printStackTrace();
         }
 
@@ -115,7 +117,7 @@ public class UserManager {
             } else {
                 return ERROR_CREATING_USER;
             }
-        } catch (Exception e) {
+        } catch (UserDAOException e) {
             return ERROR_CREATING_USER;
         }
 
@@ -166,5 +168,13 @@ public class UserManager {
         }
 
         return isDigit && isUpperCase && isLowerCase;
+    }
+
+    public void setCurrentUser(String user) {
+        currentUser = user;
+    }
+
+    public String getCurrentUser() {
+        return currentUser;
     }
 }

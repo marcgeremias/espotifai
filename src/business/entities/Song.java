@@ -9,9 +9,10 @@ public class Song {
     private String author;
     private String imagePath;
     private int duration;
-    private User user;
+    private String user;
 
-    public Song(int id, String title, String album, Genre genre, String author, String imagePath, int duration, User user) {
+    // TODO: change user to string
+    public Song(int id, String title, String album, Genre genre, String author, String imagePath, int duration, String user) {
         this.id = id;
         this.title = title;
         this.album = album;
@@ -22,7 +23,7 @@ public class Song {
         this.user = user;
     }
 
-    public Song(String title, String album, Genre genre, String author, String imagePath, int duration, User user){
+    public Song(String title, String album, Genre genre, String author, String imagePath, int duration, String user){
         this.title = title;
         this.album = album;
         this.genre = genre;
@@ -56,8 +57,8 @@ public class Song {
         return imagePath;
     }
 
-    public User getUser() {
-        return user.clone();
+    public String getUser() {
+        return user;
     }
 
     public int getDuration() {

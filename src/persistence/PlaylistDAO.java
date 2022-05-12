@@ -18,7 +18,7 @@ public interface PlaylistDAO {
      * @return (1) true if the playlist is created correctly or (2) false if it fails to persist.
      * @throws Exception if there is an error storing the data.
      */
-    boolean createPlaylist(Playlist playlist) throws Exception;
+    boolean createPlaylist(Playlist playlist) throws PlaylistDAOException;
 
     /**
      * This method will search the system for a playlist stored with the matching identifier given in parameters.
@@ -28,7 +28,7 @@ public interface PlaylistDAO {
      * @return (1) instance of {@link Playlist} or (2) <b>null</b>.
      * @throws Exception if there is an error storing the data.
      */
-    Playlist getPlaylistByID(int playlistID, UserDAO userDAO, SongDAO songDAO) throws Exception;
+    Playlist getPlaylistByID(int playlistID, UserDAO userDAO, SongDAO songDAO) throws PlaylistDAOException;
 
     /**
      * This method will return all playlists stored in the system.
@@ -37,7 +37,7 @@ public interface PlaylistDAO {
      * @return (1) List of {@link Playlist} or <b>null</b>
      * @throws Exception if there is an error storing the data.
      */
-    ArrayList<Playlist> getAllPlaylists(UserDAO userDAO, SongDAO songDAO) throws Exception;
+    ArrayList<Playlist> getAllPlaylists(UserDAO userDAO, SongDAO songDAO) throws PlaylistDAOException;
 
     /**
      * This method will search all the matches in the storage system given the title of the album. If the title
@@ -53,7 +53,7 @@ public interface PlaylistDAO {
      * @return (1) List of {@link Playlist} or <b>null</b>
      * @throws Exception if there is an error storing the data.
      */
-    ArrayList<Playlist> getPlaylistsByTitle(String title, UserDAO userDAO, SongDAO songDAO) throws Exception;
+    ArrayList<Playlist> getPlaylistsByTitle(String title, UserDAO userDAO, SongDAO songDAO) throws PlaylistDAOException;
 
     /**
      * This method will create a link between a song and a playlist. <b>Note</b> that the same song can be added
@@ -64,7 +64,7 @@ public interface PlaylistDAO {
      * @return (1) true if the song is added correctly to the playlist, (2) false otherwise
      * @throws Exception if there is an error storing the data.
      */
-    boolean addSongToPlaylist(int playlistID, int songID) throws Exception;
+    boolean addSongToPlaylist(int playlistID, int songID) throws PlaylistDAOException;
 
     /**
      * This method will delete the link between the song and the playlist given its unique identifiers.
@@ -73,7 +73,7 @@ public interface PlaylistDAO {
      * @return (1) true if the song is deleted correctly from the playlist, (2) false otherwise.
      * @throws Exception if there is an error storing the data.
      */
-    boolean deleteSongFromPlaylist(int playlistID, int songID) throws Exception;
+    boolean deleteSongFromPlaylist(int playlistID, int songID) throws PlaylistDAOException;
 
     /**
      * This method will replace the existing playlist with the new values. <b>Note</b> that ALL values will
@@ -82,7 +82,7 @@ public interface PlaylistDAO {
      * @return (1) true if the playlist is updated correctly, (2) false otherwise.
      * @throws Exception if there is an error storing the data.
      */
-    boolean updatePlaylist(Playlist playlist) throws Exception;
+    boolean updatePlaylist(Playlist playlist) throws PlaylistDAOException;
 
     /**
      * This method will delete the playlist from the storage system given its unique identifier.
@@ -90,6 +90,6 @@ public interface PlaylistDAO {
      * @return (1) true if the playlist is deleted correctly, (2) false otherwise.
      * @throws Exception if there is an error storing the data.
      */
-    boolean deletePlaylist(int playlistID) throws Exception;
+    boolean deletePlaylist(int playlistID) throws PlaylistDAOException;
 
 }

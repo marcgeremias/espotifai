@@ -1,8 +1,8 @@
 package presentation.views;
 
 import presentation.controllers.MainViewListener;
-import presentation.views.components.PlaceholderPasswordField;
-import presentation.views.components.PlaceholderTextField;
+import presentation.views.components.*;
+import presentation.views.components.TextField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,14 +28,10 @@ public class LoginView extends JPanel {
     // Label of the possible incorrect input
     private JLabel incorrectInput;
 
-    // Interface of the MainView
-    private MainViewFeatures features;
-
     /**
      * Constructor method to set up the view
      */
-    public LoginView(MainViewFeatures features) {
-        this.features = features;
+    public LoginView() {
         userField = new PlaceholderTextField();
         passwordField = new PlaceholderPasswordField();
         incorrectInput = new JLabel();
@@ -57,8 +53,8 @@ public class LoginView extends JPanel {
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
         center.add(logoImage());
         center.add(createAccountButton());
-        center.add(features.textField("Username or email", userField));
-        center.add(features.passwordField("Password", passwordField));
+        center.add(new TextField("Username or email", userField));
+        center.add(new PasswordField("Password", passwordField));
         center.add(loginButton());
         center.setOpaque(false);
 
@@ -91,6 +87,7 @@ public class LoginView extends JPanel {
         createAccountButton.setText("Create an account ");
         createAccountButton.setBorder(BorderFactory.createEmptyBorder(4, 90, 4, 90));
         createAccountButton.setBackground(new Color(131, 29, 233));
+        createAccountButton.setOpaque(true);
         createAccountButton.setForeground(Color.WHITE);
         createAccountButton.setFont(new Font("arial", Font.BOLD, 10));
 
@@ -111,6 +108,7 @@ public class LoginView extends JPanel {
         loginButton.setText("Log In ");
         loginButton.setBorder(BorderFactory.createEmptyBorder(4, 10, 4, 10));
         loginButton.setBackground(new Color(94, 182, 72));
+        loginButton.setOpaque(true);
         loginButton.setForeground(Color.WHITE);
         loginButton.setFont(new Font("arial", Font.BOLD, 9));
 
@@ -155,7 +153,7 @@ public class LoginView extends JPanel {
         JPanel downMargin = new JPanel();
         downMargin.setOpaque(false);
         downMargin.setBorder(BorderFactory.createEmptyBorder(0, 0, 120, 0));
-        downMargin.add(features.wrongInputLabel(incorrectInput));
+        downMargin.add(WrongInputLabel.wrongInputLabel(incorrectInput));
         return downMargin;
     }
 

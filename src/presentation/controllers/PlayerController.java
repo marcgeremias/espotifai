@@ -12,6 +12,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class PlayerController implements PlayerViewListener {
 
@@ -59,8 +60,8 @@ public class PlayerController implements PlayerViewListener {
         libraryController = new LibraryController(this, libraryView, userManager, songManager, playlistManager);
         libraryView.registerController(libraryController);
 
-        AddSongView addSongView = new AddSongView();
-        addSongController = new AddSongController(this, addSongView, userManager, songManager, playlistManager);
+        AddSongView addSongView = new AddSongView(songManager.getAuthors());
+        addSongController = new AddSongController(this, addSongView, userManager, songManager);
         addSongView.registerController(addSongController);
 
         StatsView statsView = new StatsView();
@@ -91,8 +92,9 @@ public class PlayerController implements PlayerViewListener {
         this.playerView.initCardLayout(homeView, searchView, libraryView, addSongView, statsView,
                                         songDetailView, playlistDetailView, userProfileView);
 
-
-        this.playerView.changeView(PlayerView.USER_PROFILE_VIEW);
+        //this.playerView.changeView(PlayerView.HOME_VIEW);   // default view
+        //this.playerView.changeView(PlayerView.USER_PROFILE_VIEW);
+        this.playerView.changeView(PlayerView.ADD_SONG_VIEW);
     }
 
     @Override

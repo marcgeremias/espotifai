@@ -21,6 +21,8 @@ public class PlayerView extends JPanel {
     public static final String PLAYLIST_DETAIL_VIEW = "playlist_detail_view";
     public static final String USER_PROFILE_VIEW = "user_profile_view";
 
+    public static final Color CENTER_BACKGROUND_COLOR = new Color(35, 35, 35);
+
     private CardLayout cardManager;
 
     private JPanel centerPane;
