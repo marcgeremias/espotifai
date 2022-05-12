@@ -1,6 +1,8 @@
 package presentation.views;
 
 import presentation.controllers.MainViewListener;
+import presentation.views.components.*;
+import presentation.views.components.TextField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,14 +28,10 @@ public class LoginView extends JPanel {
     // Label of the possible incorrect input
     private JLabel incorrectInput;
 
-    // Interface of the MainView
-    private MainViewListener listener;
-
     /**
      * Constructor method to set up the view
      */
-    public LoginView(MainViewListener listener) {
-        this.listener = listener;
+    public LoginView() {
         userField = new PlaceholderTextField();
         passwordField = new PlaceholderPasswordField();
         incorrectInput = new JLabel();
@@ -55,8 +53,8 @@ public class LoginView extends JPanel {
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
         center.add(logoImage());
         center.add(createAccountButton());
-        center.add(listener.textField("Username or email", userField));
-        center.add(listener.passwordField("Password", passwordField));
+        center.add(new TextField("Username or email", userField));
+        center.add(new PasswordField("Password", passwordField));
         center.add(loginButton());
         center.setOpaque(false);
 
@@ -155,7 +153,7 @@ public class LoginView extends JPanel {
         JPanel downMargin = new JPanel();
         downMargin.setOpaque(false);
         downMargin.setBorder(BorderFactory.createEmptyBorder(0, 0, 120, 0));
-        downMargin.add(listener.wrongInputLabel(incorrectInput));
+        downMargin.add(WrongInputLabel.wrongInputLabel(incorrectInput));
         return downMargin;
     }
 
@@ -202,5 +200,14 @@ public class LoginView extends JPanel {
         userField.setBackground(new Color(76, 76, 76));
         passwordField.setBackground(new Color(76, 76, 76));
         incorrectInput.setVisible(false);
+    }
+
+    /**
+     * Method called when all credentials are correct
+     * but the User could not be saved correctly into the databate
+     */
+    public void errorAddingUser() {
+        incorrectInput.setText("ERROR: The User could not be added to the database.");
+        incorrectInput.setVisible(true);
     }
 }

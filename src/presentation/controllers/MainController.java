@@ -5,6 +5,8 @@ import business.SongManager;
 import business.UserManager;
 import business.entities.Song;
 import presentation.views.*;
+import presentation.views.components.PlaceholderPasswordField;
+import presentation.views.components.PlaceholderTextField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,13 +37,14 @@ public class MainController implements MainViewListener {
      * Method that starts executing the program
      */
     public void run() {
+
         // Defining login view and controller
-        LoginView loginView = new LoginView(this);
+        LoginView loginView = new LoginView();
         loginController = new LoginController(this, loginView, userManager);
         loginView.registerController(loginController);
 
         // Defining signup view and controller
-        SignUpView signUpView = new SignUpView(this);
+        SignUpView signUpView = new SignUpView();
         signUpController = new SingUpController(this, signUpView, userManager);
         signUpView.registerController(signUpController);
 
@@ -53,27 +56,13 @@ public class MainController implements MainViewListener {
 
         // Defining views in the card layout of the JFrame MainView
         mainView.initCardLayout(loginView, signUpView, playerView);
+
+
         mainView.changeView(MainView.CARD_LOG_IN);
     }
 
     @Override
     public void changeView(String card) {
         mainView.changeView(card);
-    }
-
-
-    @Override
-    public Component passwordField(String placeHolder, PlaceholderPasswordField passField) {
-        return mainView.passwordField(placeHolder, passField);
-    }
-
-    @Override
-    public Component textField(String placeHolder, PlaceholderTextField textField) {
-        return mainView.textField(placeHolder, textField);
-    }
-
-    @Override
-    public Component wrongInputLabel(JLabel inputMessage) {
-        return mainView.wrongInputLabel(inputMessage);
     }
 }

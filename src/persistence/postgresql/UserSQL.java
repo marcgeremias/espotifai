@@ -1,5 +1,6 @@
 package persistence.postgresql;
 
+import business.Crypt;
 import business.entities.User;
 import persistence.UserDAOException;
 import persistence.UserDAO;
@@ -35,15 +36,14 @@ public class UserSQL implements UserDAO {
         try {
             Connection c = DBConfig.getInstance().openConnection();
 
-            String createUserSQL = "INSERT INTO " + DBConstants.TABLE_USER + "(" + DBConstants.COL_ID_NICKNAME
-                    + ", " + DBConstants.USER_COL_MAIL + ", " + DBConstants.USER_COL_PASSWORD
-                    + ") VALUES (?, ?, crypt(?, gen_salt(?)))";
-            PreparedStatement createUserSTMT = c.prepareStatement(createUserSQL);
-            createUserSTMT.setString(1, user.getName());
-            createUserSTMT.setString(2, user.getEmail());
-            createUserSTMT.setString(3, user.getPassword());
-            createUserSTMT.setString(4, ENCRYPTION_TYPE);
-            int count = createUserSTMT.executeUpdate();
+        String createUserSQL = "INSERT INTO "+ DBConstants.TABLE_USER +"("+ DBConstants.COL_ID_NICKNAME
+                +", "+ DBConstants.USER_COL_MAIL +", "+ DBConstants.USER_COL_PASSWORD
+                +") VALUES (?, ?, ?)";
+        PreparedStatement createUserSTMT = c.prepareStatement(createUserSQL);
+        createUserSTMT.setString(1, user.getName());
+        createUserSTMT.setString(2, user.getEmail());
+        createUserSTMT.setString(3, Crypt.encode(user.getPassword()));
+        int count = createUserSTMT.executeUpdate();
 
             c.close();
             return count > 0;

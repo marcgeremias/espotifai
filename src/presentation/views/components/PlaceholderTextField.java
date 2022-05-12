@@ -1,4 +1,4 @@
-package presentation.views;
+package presentation.views.components;
 
 import javax.swing.*;
 import javax.swing.text.Document;
