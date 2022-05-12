@@ -1,11 +1,12 @@
 package business;
 
+import persistence.SongDAO;
 import persistence.postgresql.SongSQL;
 
 public class SongManager {
-    private SongSQL songDAO;
+    private SongDAO songDAO;
 
-    public SongManager() {
-        //
+    public SongManager(SongDAO songDAO) {
+        this.songDAO = songDAO;
     }
 }

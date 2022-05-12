@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 public class UserManager {
     private UserDAO userDAO;
+    private User currentUser;
 
     // Defining constants of possible results
     public static final int WRONG_USER = -1;
@@ -20,9 +21,12 @@ public class UserManager {
     public static final int WRONG_CONFIRM_PASSWORD = 4;
     public static final int ERROR_CREATING_USER = 5;
 
-
     public UserManager(UserDAO userDAO) {
         this.userDAO = userDAO;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
     }
 
     /**
