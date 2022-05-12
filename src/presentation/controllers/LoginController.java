@@ -46,6 +46,7 @@ public class LoginController implements ActionListener {
             // Correct credentials
             userManager.setCurrentUser(loginView.getUserField());
             loginView.correctCredentials();
+            loginView.clearFields();
             listener.changeView(MainView.CARD_PLAYER);
 
         } else {

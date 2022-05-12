@@ -21,7 +21,7 @@ public class PlayerController implements PlayerViewListener {
     private MainViewListener listener;
 
     // Is this legal?
-    User userLoggedIn;
+    private UserManager userManager;
 
     // Pane controllers
     private final HomeController homeController;
@@ -47,6 +47,7 @@ public class PlayerController implements PlayerViewListener {
                             SongManager songManager, PlaylistManager playlistManager) {
         this.listener = listener;
         this.playerView = playerView;
+        this.userManager = userManager;
 
         HomeView homeView = new HomeView();
         homeController = new HomeController(this, homeView, userManager, songManager, playlistManager);
@@ -104,6 +105,7 @@ public class PlayerController implements PlayerViewListener {
 
     @Override
     public void logout() {
+        userManager.logOutUser();
         listener.changeView(MainView.CARD_LOG_IN);
     }
 }
