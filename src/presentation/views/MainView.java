@@ -1,6 +1,7 @@
 package presentation.views;
 
-import presentation.controllers.SingUpController;
+import presentation.views.components.PlaceholderPasswordField;
+import presentation.views.components.PlaceholderTextField;
 
 import javax.swing.*;
 import java.awt.*;

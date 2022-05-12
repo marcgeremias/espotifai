@@ -5,11 +5,13 @@ import business.SongManager;
 import business.UserManager;
 import business.entities.Song;
 import presentation.views.*;
+import presentation.views.components.PlaceholderPasswordField;
+import presentation.views.components.PlaceholderTextField;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class MainController implements MainViewListener {
+public class MainController implements MainViewListener, MainViewFeatures {
 
     private MainView mainView;
     private UserManager userManager;

@@ -15,10 +15,11 @@ public class UserManager {
     // Defining constants of possible results
     public static final int WRONG_USER = -1;
     public static final int WRONG_PASSWORD = 0;
-    public static final int CORRECT_CHECKING = 1;
+    public static final int USER_CORRECTLY_ADDED = 1;
     public static final int WRONG_USERNAME = 2;
     public static final int WRONG_EMAIL = 3;
     public static final int WRONG_CONFIRM_PASSWORD = 4;
+    public static final int ERROR_CREATING_USER = 5;
 
     public UserManager(UserDAO userDAO) {
         this.userDAO = userDAO;
@@ -46,10 +47,9 @@ public class UserManager {
 
         if (user != null) {
             // Correct User
-            if (user.getPassword().equals(passwordField) /*Desencriptar!!??*/) {
+            if (Crypt.decode(user.getPassword()).equals(passwordField)) {
                 // Correct password and validation completed
-                currentUser = user;
-                return CORRECT_CHECKING;
+                return USER_CORRECTLY_ADDED;
             } else {
                 // Incorrect password
                 return WRONG_PASSWORD;
@@ -107,7 +107,18 @@ public class UserManager {
             return WRONG_CONFIRM_PASSWORD;
         }
 
-        return CORRECT_CHECKING;
+        // All the data introduced is valid, so we must save the user into the database
+        User newUser = new User(username, email, String.valueOf(password));
+        try {
+            if (userDAO.createUser(newUser)) {
+                return USER_CORRECTLY_ADDED;
+            } else {
+                return ERROR_CREATING_USER;
+            }
+        } catch (Exception e) {
+            return ERROR_CREATING_USER;
+        }
+
     }
 
     /**
