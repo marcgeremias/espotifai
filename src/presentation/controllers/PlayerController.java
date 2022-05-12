@@ -91,9 +91,8 @@ public class PlayerController implements PlayerViewListener {
         this.playerView.initCardLayout(homeView, searchView, libraryView, addSongView, statsView,
                                         songDetailView, playlistDetailView, userProfileView);
 
-        //TODO PURO TESTING
-        this.playerView.changeView(PlayerView.PLAYLIST_DETAIL_VIEW);
-        //this.playerView.changeView(PlayerView.USER_PROFILE_VIEW);
+
+        this.playerView.changeView(PlayerView.USER_PROFILE_VIEW);
     }
 
     @Override

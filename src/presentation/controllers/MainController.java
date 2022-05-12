@@ -55,11 +55,8 @@ public class MainController implements MainViewListener {
         // Defining views in the card layout of the JFrame MainView
         mainView.initCardLayout(loginView, signUpView, playerView);
 
-        //TODO PURO TESTING
-        mainView.changeView(MainView.CARD_PLAYER);
 
-
-        //mainView.changeView(MainView.CARD_LOG_IN);
+        mainView.changeView(MainView.CARD_LOG_IN);
     }
 
     @Override
