@@ -1,9 +1,9 @@
 package persistence.postgresql;
 
-import business.entities.SongDAOException;
+import persistence.SongDAOException;
 import business.entities.Genre;
 import business.entities.Song;
-import business.entities.UserDAOException;
+import persistence.UserDAOException;
 import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
@@ -59,7 +59,7 @@ public class SongSQL implements SongDAO {
                     + ", " + DBConstants.SONG_COL_PATH + ", " + DBConstants.SONG_COL_TITLE + ", " + DBConstants.SONG_COL_DURATION + ")"
                     + " VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING " + DBConstants.COL_ID_SONG;
             PreparedStatement createSongSTMT = c.prepareStatement(createSongSQL);
-            createSongSTMT.setString(1, song.getUser().getName());
+            createSongSTMT.setString(1, song.getUser());
             createSongSTMT.setString(2, song.getAlbum());
             createSongSTMT.setString(3, song.getAuthor());
             createSongSTMT.setString(4, String.valueOf(song.getGenre()));
@@ -110,12 +110,11 @@ public class SongSQL implements SongDAO {
      * This method will return one instance of the class {@link Song} if the identifier provided matches with any
      * value stored in the database.
      * @param songID identifier of the song
-     * @param userDAO instance of {@link UserDAO} interface to reconstruct the song with its owner included
      * @return instance of {@link Song} with the values retrieved from the database
      * @throws SongDAOException if the query fails to execute correctly or the database connection can't be opened.
      */
     @Override
-    public Song getSongByID(int songID, UserDAO userDAO) throws SongDAOException {
+    public Song getSongByID(int songID) throws SongDAOException {
         try {
             Connection c = DBConfig.getInstance().openConnection();
 
@@ -126,12 +125,12 @@ public class SongSQL implements SongDAO {
 
             Song song = null;
             if (rs.next()) {
-                song = getSongFromResultSet(rs, userDAO);
+                song = getSongFromResultSet(rs);
             }
 
             c.close();
             return song;
-        } catch (SQLException | UserDAOException e) {
+        } catch (SQLException e) {
             throw  new SongDAOException(e.getMessage());
         }
     }
@@ -139,13 +138,12 @@ public class SongSQL implements SongDAO {
     /**
      * This method will query the database and return all the songs that match the given parameter.
      * @param playlistID identifier to query the songs
-     * @param userDAO DataAccessObject to reconstruct {@link Song} instance
      * @return List of Songs with all the data from the database
      * @throws SongDAOException if the query fails to execute correctly or the database connection
      * can't be opened.
      */
     @Override
-    public ArrayList<Song> getSongsByPlaylistID(int playlistID, UserDAO userDAO) throws SongDAOException {
+    public ArrayList<Song> getSongsByPlaylistID(int playlistID) throws SongDAOException {
         try {
             Connection c = DBConfig.getInstance().openConnection();
             ArrayList<Song> songs = new ArrayList<>();
@@ -155,7 +153,7 @@ public class SongSQL implements SongDAO {
                     + " AND ps." + DBConstants.COL_ID_PLAYLIST + " = ?";
             PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
             selectSongsSTMT.setInt(1, playlistID);
-            return getSongs(userDAO, c, songs, selectSongsSTMT);
+            return getSongs(c, songs, selectSongsSTMT);
         } catch (SQLException e) {
             throw new SongDAOException(e.getMessage());
         }
@@ -164,13 +162,12 @@ public class SongSQL implements SongDAO {
     /**
      * This method will query the database and return all the songs that match the given parameter.
      * @param userID identifier to query the songs
-     * @param userDAO DataAccessObject to reconstruct {@link Song} instance
      * @return List of Songs with all the data from the database
      * @throws SongDAOException if the query fails to execute correctly or the database connection
      * can't be opened.
      */
     @Override
-    public ArrayList<Song> getSongsByUserID(String userID, UserDAO userDAO) throws SongDAOException {
+    public ArrayList<Song> getSongsByUserID(String userID) throws SongDAOException {
         try {
             Connection c = DBConfig.getInstance().openConnection();
             ArrayList<Song> songs = new ArrayList<>();
@@ -180,7 +177,7 @@ public class SongSQL implements SongDAO {
 
             PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
             selectSongsSTMT.setString(1, userID);
-            return getSongs(userDAO, c, songs, selectSongsSTMT);
+            return getSongs(c, songs, selectSongsSTMT);
         } catch (SQLException e) {
             throw new SongDAOException(e.getMessage());
         }
@@ -189,13 +186,12 @@ public class SongSQL implements SongDAO {
     /**
      * This method will query the database and return all the songs that match the given parameter.
      * @param authorName identifier to query the songs
-     * @param userDAO DataAccessObject to reconstruct {@link Song} instance
      * @return List of Songs with all the data from the database
      * @throws SongDAOException if the query fails to execute correctly or the database connection
      * can't be opened.
      */
     @Override
-    public ArrayList<Song> getSongsByAuthorName(String authorName, UserDAO userDAO) throws SongDAOException {
+    public ArrayList<Song> getSongsByAuthorName(String authorName) throws SongDAOException {
         try {
             Connection c = DBConfig.getInstance().openConnection();
             ArrayList<Song> songs = new ArrayList<>();
@@ -205,7 +201,7 @@ public class SongSQL implements SongDAO {
 
             PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
             selectSongsSTMT.setString(1, authorName);
-            return getSongs(userDAO, c, songs, selectSongsSTMT);
+            return getSongs(c, songs, selectSongsSTMT);
         } catch (SQLException e) {
             throw new SongDAOException(e.getMessage());
         }
@@ -214,13 +210,12 @@ public class SongSQL implements SongDAO {
     /**
      * This method will query the database and return all the songs that match the given parameter.
      * @param title identifier to query the songs
-     * @param userDAO DataAccessObject to reconstruct {@link Song} instance
      * @return List of Songs with all the data from the database
      * @throws SongDAOException if the query fails to execute correctly or the database connection
      * can't be opened.
      */
     @Override
-    public ArrayList<Song> getSongsByTitle(String title, UserDAO userDAO) throws SongDAOException {
+    public ArrayList<Song> getSongsByTitle(String title) throws SongDAOException {
         try {
             Connection c = DBConfig.getInstance().openConnection();
             ArrayList<Song> songs = new ArrayList<>();
@@ -230,7 +225,7 @@ public class SongSQL implements SongDAO {
 
             PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
             selectSongsSTMT.setString(1, title);
-            return getSongs(userDAO, c, songs, selectSongsSTMT);
+            return getSongs(c, songs, selectSongsSTMT);
         } catch (SQLException e) {
             throw new SongDAOException(e.getMessage());
         }
@@ -239,13 +234,12 @@ public class SongSQL implements SongDAO {
     /**
      * This method will query the database and return all the songs that match the given parameter.
      * @param album identifier to query the songs
-     * @param userDAO DataAccessObject to reconstruct {@link Song} instance
      * @return List of Songs with all the data from the database
      * @throws SongDAOException if the query fails to execute correctly or the database connection
      * can't be opened.
      */
     @Override
-    public ArrayList<Song> getSongsByAlbum(String album, UserDAO userDAO) throws SongDAOException {
+    public ArrayList<Song> getSongsByAlbum(String album) throws SongDAOException {
         try {
             Connection c = DBConfig.getInstance().openConnection();
             ArrayList<Song> songs = new ArrayList<>();
@@ -255,7 +249,7 @@ public class SongSQL implements SongDAO {
 
             PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
             selectSongsSTMT.setString(1, album);
-            return getSongs(userDAO, c, songs, selectSongsSTMT);
+            return getSongs(c, songs, selectSongsSTMT);
         } catch (SQLException e) {
             throw new SongDAOException(e.getMessage());
         }
@@ -264,13 +258,12 @@ public class SongSQL implements SongDAO {
     /**
      * This method will query the database and return all the songs that match the given parameter.
      * @param genre identifier to query the songs
-     * @param userDAO DataAccessObject to reconstruct {@link Song} instance
      * @return List of Songs with all the data from the database
      * @throws SongDAOException if the query fails to execute correctly or the database connection
      * can't be opened.
      */
     @Override
-    public ArrayList<Song> getSongsByGenre(Genre genre, UserDAO userDAO) throws SongDAOException {
+    public ArrayList<Song> getSongsByGenre(Genre genre) throws SongDAOException {
         try {
             Connection c = DBConfig.getInstance().openConnection();
             ArrayList<Song> songs = new ArrayList<>();
@@ -280,7 +273,7 @@ public class SongSQL implements SongDAO {
 
             PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
             selectSongsSTMT.setString(1, String.valueOf(genre));
-            return getSongs(userDAO, c, songs, selectSongsSTMT);
+            return getSongs(c, songs, selectSongsSTMT);
         } catch (SQLException e) {
             throw new SongDAOException(e.getMessage());
         }
@@ -290,12 +283,11 @@ public class SongSQL implements SongDAO {
      * This method will return all the songs that match their title, author name, album name or genre type with the
      * key String given in the function parameters.
      * @param key String key containing the value to search.
-     * @param userDAO DataAccessObject to reconstruct {@link Song} instance
      * @return List of {@link Song} if the query finds matches or null if the query doesn't find any matching song.
      * @throws SongDAOException if the query fails to execute correctly or the database connection can't be opened.
      */
     @Override
-    public ArrayList<Song> getSongsByKeyword(String key, UserDAO userDAO) throws SongDAOException {
+    public ArrayList<Song> getSongsByKeyword(String key) throws SongDAOException {
         try {
             Connection c = DBConfig.getInstance().openConnection();
             ArrayList<Song> songs = new ArrayList<>();
@@ -309,7 +301,7 @@ public class SongSQL implements SongDAO {
             selectSongsSTMT.setString(2, "%" + key + "%");
             selectSongsSTMT.setString(3, "%" + key + "%");
             selectSongsSTMT.setString(4, "%" + key + "%");
-            return getSongs(userDAO, c, songs, selectSongsSTMT);
+            return getSongs(c, songs, selectSongsSTMT);
         } catch (SQLException e) {
             throw new SongDAOException(e.getMessage());
         }
@@ -434,7 +426,7 @@ public class SongSQL implements SongDAO {
     /*
     Private method the abstract execution on the main query functions
      */
-    private Song getSongFromResultSet(ResultSet rs, UserDAO userDAO) throws UserDAOException, SQLException {
+    private Song getSongFromResultSet(ResultSet rs) throws SQLException {
         /*
         |   Col 1   |   Col 2   |   Col 3   |   Col 4   |   Col 5   |   Col 6   |   Col 7   |   Col 8   |   Col 9   |
         |  id_song  |  title    | duration  |   path    |(not used) |   genre   |   author  |   album   |   id_user |
@@ -442,23 +434,19 @@ public class SongSQL implements SongDAO {
         return new Song(
                 rs.getInt(1), rs.getString(2), rs.getString(8),
                 Genre.valueOf(rs.getString(6).toUpperCase(Locale.ROOT)), rs.getString(7),
-                rs.getString(4), rs.getInt(3), userDAO.getUserByID(rs.getString(9))
+                rs.getString(4), rs.getInt(3), rs.getString(9)
         );
     }
 
     /*
     Function abstracted from repeated code
      */
-    private ArrayList<Song> getSongs(UserDAO userDAO, Connection c, ArrayList<Song> songs, PreparedStatement selectSongsSTMT) throws SQLException {
+    private ArrayList<Song> getSongs(Connection c, ArrayList<Song> songs, PreparedStatement selectSongsSTMT) throws SQLException {
         ResultSet rs = selectSongsSTMT.executeQuery();
 
-        try {
-            while(rs.next()){
-                Song song = getSongFromResultSet(rs, userDAO);
-                songs.add(song);
-            }
-        } catch (Exception e){
-            throw new SQLException(e.getMessage());
+        while(rs.next()) {
+            Song song = getSongFromResultSet(rs);
+            songs.add(song);
         }
 
         c.close();

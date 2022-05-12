@@ -1,7 +1,6 @@
 package persistence;
 
 import business.entities.User;
-import business.entities.UserDAOException;
 
 import java.util.ArrayList;
 

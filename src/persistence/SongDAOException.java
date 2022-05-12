@@ -1,4 +1,4 @@
-package business.entities;
+package persistence;
 
 public class SongDAOException extends Exception {
     public SongDAOException(String message) {

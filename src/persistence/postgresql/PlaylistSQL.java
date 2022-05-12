@@ -1,9 +1,7 @@
 package persistence.postgresql;
 
 import business.entities.*;
-import persistence.PlaylistDAO;
-import persistence.SongDAO;
-import persistence.UserDAO;
+import persistence.*;
 import persistence.config.DBConstants;
 import persistence.config.DBConfig;
 
@@ -78,7 +76,7 @@ public class PlaylistSQL implements PlaylistDAO {
                             rs1.getInt(1), // == playlistID
                             rs1.getString(2),
                             userDAO.getUserByID(rs1.getString(3)),
-                            songDAO.getSongsByPlaylistID(playlistID, userDAO)
+                            songDAO.getSongsByPlaylistID(playlistID)
                     );
                 } catch (SongDAOException | UserDAOException e) {
             /*
@@ -265,7 +263,7 @@ public class PlaylistSQL implements PlaylistDAO {
                         rs1.getInt(1), // == playlistID
                         rs1.getString(2),
                         userDAO.getUserByID(rs1.getString(3)),
-                        songDAO.getSongsByPlaylistID(rs1.getInt(1), userDAO)
+                        songDAO.getSongsByPlaylistID(rs1.getInt(1))
                 );
                 playlists.add(playlist);
             }

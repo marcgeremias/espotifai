@@ -3,6 +3,7 @@ package business;
 import business.entities.*;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import persistence.SongDAO;
+import persistence.SongDAOException;
 import persistence.UserDAO;
 
 import javax.sound.sampled.AudioFileFormat;
@@ -46,7 +47,7 @@ public class SongManager {
         }
 
         try {
-            ArrayList<Song> existingSongs = songDAO.getSongsByAlbum(album, userDAO);
+            ArrayList<Song> existingSongs = songDAO.getSongsByAlbum(album);
 
             for (Song existingSong : existingSongs) {
                 if (existingSong.getTitle().equalsIgnoreCase(title)) {
@@ -94,20 +95,16 @@ public class SongManager {
      * @param user: an instance of {@link User} representing the user that adds the song
      */
     public void addSong(File file, String title, String album, Genre genre, String author, String path, String user) throws SongDAOException, UnsupportedAudioFileException, IOException {
-        // TODO: Is it possible to change user in Song so as it is a String (simplifies implementation)?
-        int duration = 0;
-
         // Extract song duration from file
         AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(file);
         Map properties = baseFileFormat.properties();
-        duration = (int) ((Long) properties.get("duration") / 1000000);
+        int duration = (int) ((Long) properties.get("duration") / 1000000);
 
         if (path.isBlank()) {
             path = "no path";
         }
 
-        Song song = new Song(title, album, genre, author, path, duration, new User(user, "a@g.c", "4321"));
-        //Song song = new Song(title, album, genre, author, path, 90, user);    // preferable implementation
+        Song song = new Song(title, album, genre, author, path, duration, user);
 
         songDAO.createSong(song, file);
     }
