@@ -177,4 +177,11 @@ public class UserManager {
     public String getCurrentUser() {
         return currentUser;
     }
+
+    /**
+     * Method that deletes the current user from RAM
+     */
+    public void logOutUser(){
+        this.currentUser = null;
+    }
 }

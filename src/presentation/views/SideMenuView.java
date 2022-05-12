@@ -26,6 +26,7 @@ public class SideMenuView extends JPanel {
     public static final String LIBRARY_BUTTON = "library_button_presses";
     public static final String ADD_MUSIC_BUTTON = "add_music_button_presses";
     public static final String CREATE_PLAYLIST_BUTTON = "create_playlist_button_presses";
+    public static final String LOGOUT = "logout_button_pressed";
 
     //Main section
     private JImagePanel homeJButton;
@@ -228,6 +229,9 @@ public class SideMenuView extends JPanel {
 
         createPlaylistButton.setActionCommand(CREATE_PLAYLIST_BUTTON);
         createPlaylistButton.addActionListener(listener);
+
+        logOutJbutton.setActionCommand(LOGOUT);
+        logOutJbutton.addActionListener(listener);
     }
 
 }

@@ -43,6 +43,10 @@ public class SideMenuController implements ActionListener {
             case SideMenuView.CREATE_PLAYLIST_BUTTON:
                 System.out.println("Goes to the createPlaylist view");
                 break;
+            case SideMenuView.LOGOUT:
+                System.out.println("Logout");
+                listener.logout();
+                break;
             default:
                 break;
         }
