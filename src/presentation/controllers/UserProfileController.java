@@ -25,7 +25,7 @@ public class UserProfileController implements ActionListener {
         this.playlistManager = playlistManager;
 
         // Sets the user in the User Profile View
-        userProfileView.setUsername("Guillem HARDCODED");
+        userProfileView.setUsername("Guillem Godoy Hernández");
     }
 
     @Override
