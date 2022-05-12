@@ -2,7 +2,7 @@ package presentation.controllers;
 
 import business.SongManager;
 import business.UserManager;
-import business.entities.SongDAOException;
+import persistence.SongDAOException;
 import presentation.views.AddSongView;
 
 import javax.sound.sampled.*;

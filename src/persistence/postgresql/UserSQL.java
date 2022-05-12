@@ -1,7 +1,7 @@
 package persistence.postgresql;
 
 import business.entities.User;
-import business.entities.UserDAOException;
+import persistence.UserDAOException;
 import persistence.UserDAO;
 import persistence.config.DBConstants;
 import persistence.config.DBConfig;

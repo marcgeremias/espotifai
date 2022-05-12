@@ -1,4 +1,4 @@
-package business.entities;
+package persistence;
 
 public class PlaylistDAOException extends Exception {
     public PlaylistDAOException(String message) {

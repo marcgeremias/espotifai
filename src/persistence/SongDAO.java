@@ -1,6 +1,5 @@
 package persistence;
 
-import business.entities.SongDAOException;
 import business.entities.Genre;
 import business.entities.Song;
 
@@ -35,77 +34,69 @@ public interface SongDAO {
     /**
      * This method searched the storage system and returns a instance of {@link Song} if the values match.
      * @param songID unique identifier of the {@link Song} instance
-     * @param userDAO DataAccessObject of {@link business.entities.User} to reconstruct song object.
      * @return (1) Instance of {@link Song} if the identifier matches with stored values in the system or
      * (2) null otherwise
      * @throws SongDAOException if there is an error accessing the database.
      */
-    Song getSongByID(int songID, UserDAO userDAO) throws SongDAOException;
+    Song getSongByID(int songID) throws SongDAOException;
 
     /**
      * This method will return all the songs that are part of a playlist given the playlist ID.
      * @param playlistID {@link business.entities.Playlist} unique identifier
-     * @param userDAO DataAccessObject of {@link business.entities.User} to reconstruct song object.
      * @return (1) List of {@link Song} if the values matches any song in the system, (2) null otherwise.
      * @throws SongDAOException if there is an error accessing the database.
      */
-    ArrayList<Song> getSongsByPlaylistID(int playlistID, UserDAO userDAO) throws SongDAOException;
+    ArrayList<Song> getSongsByPlaylistID(int playlistID) throws SongDAOException;
 
     /**
      * This method will return all the songs that were added by a user given its unique identifier.
      * @param userID {@link business.entities.User} unique identifier
-     * @param userDAO DataAccessObject of {@link business.entities.User} to reconstruct song object.
      * @return (1) List of {@link Song} if the values matches any song in the system, (2) null otherwise.
      * @throws SongDAOException if there is an error accessing the database.
      */
-    ArrayList<Song> getSongsByUserID(String userID, UserDAO userDAO) throws SongDAOException;
+    ArrayList<Song> getSongsByUserID(String userID) throws SongDAOException;
 
     /**
      * This method will return all the songs that belong to an author given its name.
      * @param authorName String containing the name of the author to filter the songs.
-     * @param userDAO DataAccessObject of {@link business.entities.User} to reconstruct song object.
      * @return (1) List of {@link Song} if the values matches any song in the system, (2) null otherwise.
      * @throws SongDAOException if there is an error accessing the database.
      */
-    ArrayList<Song> getSongsByAuthorName(String authorName, UserDAO userDAO) throws SongDAOException;
+    ArrayList<Song> getSongsByAuthorName(String authorName) throws SongDAOException;
 
     /**
      * This method will return all the songs that have the same title. <b>Note</b> that songs can have the same
      * name and be different.
      * @param title String containing the title of the song.
-     * @param userDAO DataAccessObject of {@link business.entities.User} to reconstruct song object.
      * @return (1) List of {@link Song} if the values matches any song in the system, (2) null otherwise.
      * @throws SongDAOException if there is an error accessing the database.
      */
-    ArrayList<Song> getSongsByTitle(String title, UserDAO userDAO) throws SongDAOException;
+    ArrayList<Song> getSongsByTitle(String title) throws SongDAOException;
 
     /**
      * This method will return all the songs listed under the same album name.
      * @param album String containing the album of the song
-     * @param userDAO DataAccessObject of {@link business.entities.User} to reconstruct song object.
      * @return (1) List of {@link Song} if the values matches any song in the system, (2) null otherwise.
      * @throws SongDAOException if there is an error accessing the database.
      */
-    ArrayList<Song> getSongsByAlbum(String album, UserDAO userDAO) throws SongDAOException;
+    ArrayList<Song> getSongsByAlbum(String album) throws SongDAOException;
 
     /**
      * This method will return all the songs listed under the same genre.
      * @param genre instance of {@link Genre} to filter the songs.
-     * @param userDAO DataAccessObject of {@link business.entities.User} to reconstruct song object.
      * @return (1) List of {@link Song} if the values matches any song in the system, (2) null otherwise.
      * @throws SongDAOException if there is an error accessing the database.
      */
-    ArrayList<Song> getSongsByGenre(Genre genre, UserDAO userDAO) throws SongDAOException;
+    ArrayList<Song> getSongsByGenre(Genre genre) throws SongDAOException;
 
     /**
      * This method will search in the storage system any song that matches with the song title, album, author
      * or genre given the <b>key</b> parameter.
      * @param key String containing a value used to filter the search.
-     * @param userDAO DataAccessObject of {@link business.entities.User} to reconstruct song object.
      * @return (1) List of {@link Song} if the values matches any song in the system, (2) null otherwise.
      * @throws SongDAOException if there is an error accessing the database.
      */
-    ArrayList<Song> getSongsByKeyword(String key, UserDAO userDAO) throws SongDAOException;
+    ArrayList<Song> getSongsByKeyword(String key) throws SongDAOException;
 
     /**
      * This method will update the values of a song given its unique identifier. <b>Note</b> that ALL values will

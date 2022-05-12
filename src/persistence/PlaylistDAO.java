@@ -1,7 +1,6 @@
 package persistence;
 
 import business.entities.Playlist;
-import business.entities.PlaylistDAOException;
 
 import java.util.ArrayList;
 
