@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 public class PlayerView extends JPanel {
 
     public static final String HOME_VIEW = "home_view";
-    public static final String SEARCH_VIEW = "search_view";
+    public static final String SONG_LIST_VIEW = "song_list_view";
     public static final String LIBRARY_VIEW = "library_view";
     public static final String ADD_SONG_VIEW = "add_song_view";
     public static final String STATS_VIEW = "stats_view";
@@ -51,18 +51,18 @@ public class PlayerView extends JPanel {
     /**
      * Method called to associate all the views that are included in the card layout
      * @param homeView
-     * @param searchView
+     * @param songListView
      * @param libraryView
      * @param addSongView
      * @param statsView
      * @param songDetailView
      * @param playlistDetailView
      */
-    public void initCardLayout(HomeView homeView, SearchView searchView, LibraryView libraryView,
+    public void initCardLayout(HomeView homeView, SongListView songListView, LibraryView libraryView,
                                AddSongView addSongView, StatsView statsView, SongDetailView songDetailView,
                                PlaylistDetailView playlistDetailView, UserProfileView userProfileView){
         centerPane.add(homeView, HOME_VIEW);
-        centerPane.add(searchView, SEARCH_VIEW);
+        centerPane.add(songListView, SONG_LIST_VIEW);
         centerPane.add(libraryView, LIBRARY_VIEW);
         centerPane.add(addSongView, ADD_SONG_VIEW);
         centerPane.add(statsView, STATS_VIEW);
