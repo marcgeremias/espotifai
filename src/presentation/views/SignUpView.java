@@ -1,8 +1,8 @@
 package presentation.views;
 
 import presentation.controllers.MainViewListener;
-import presentation.views.components.PlaceholderPasswordField;
-import presentation.views.components.PlaceholderTextField;
+import presentation.views.components.*;
+import presentation.views.components.TextField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,14 +27,10 @@ public class SignUpView extends JPanel {
     // Label of the possible incorrect input
     private JLabel incorrectInput;
 
-    // Features of the MainView
-    private MainViewFeatures features;
-
     /**
      * Constructor method to set up the view
      */
-    public SignUpView(MainViewFeatures features) {
-        this.features = features;
+    public SignUpView() {
         usernameField = new PlaceholderTextField();
         emailField = new PlaceholderTextField();
         passwordField = new PlaceholderPasswordField();
@@ -121,10 +117,10 @@ public class SignUpView extends JPanel {
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
         center.add(logoImage());
         center.add(borderLine());
-        center.add(features.textField("Email", emailField));
-        center.add(features.textField("Username", usernameField));
-        center.add(features.passwordField("Password", passwordField));
-        center.add(features.passwordField("Confirm Password", confirmPasswordField));
+        center.add(new TextField("Email", emailField));
+        center.add(new TextField("Username", usernameField));
+        center.add(new PasswordField("Password", passwordField));
+        center.add(new PasswordField("Confirm Password", confirmPasswordField));
         center.add(joinButton());
 
         center.setOpaque(false);
@@ -218,7 +214,7 @@ public class SignUpView extends JPanel {
         JPanel downMargin = new JPanel();
         downMargin.setOpaque(false);
         downMargin.setBorder(BorderFactory.createEmptyBorder(0, 0, 120, 0));
-        downMargin.add(features.wrongInputLabel(incorrectInput));
+        downMargin.add(WrongInputLabel.wrongInputLabel(incorrectInput));
         return downMargin;
     }
 

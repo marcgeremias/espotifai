@@ -1,6 +1,8 @@
 package presentation.views;
 
 import business.entities.Genre;
+import presentation.views.components.PlaceholderTextField;
+import presentation.views.components.TextField;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -100,12 +102,12 @@ public class AddSongView extends JPanel {
 
         // Add center components
         centerPane.add(panelTitle);
-        centerPane.add(textField(TITLE_FIELD_PH, titleField));
-        centerPane.add(textField(ALBUM_FIELD_PH, albumField));
+        centerPane.add(new TextField(TITLE_FIELD_PH, titleField));
+        centerPane.add(new TextField(ALBUM_FIELD_PH, albumField));
         centerPane.add(genreSelector);
         centerPane.add(authorPane);
         centerPane.add(addFileButton);
-        centerPane.add(textField(ALBUM_COVER_PH, albumCover));
+        centerPane.add(new TextField(ALBUM_COVER_PH, albumCover));
         centerPane.add(addSongButton);
     }
 
@@ -113,7 +115,8 @@ public class AddSongView extends JPanel {
     * Creates a JComboBox containing the genres in the system
     */
     private void configureGenres() {
-        genreSelector = (JComboBox<Genre>) StyleApplier.applyStyle(genreSelector);
+        genreSelector.setBackground(new Color(76, 76, 76));
+        genreSelector.setForeground(Color.GRAY);
 
         for (Genre genre : Genre.values()) {
             genreSelector.addItem(genre);
@@ -127,7 +130,8 @@ public class AddSongView extends JPanel {
     */
     private void configureAuthors(ArrayList<String> authors) {
         // Authors JComboBox initialisation
-        authorSelector = (JComboBox<String>) StyleApplier.applyStyle(authorSelector);
+        authorSelector.setBackground(new Color(76, 76, 76));
+        authorSelector.setForeground(Color.GRAY);
         authorSelector.addItem(SELECT_AUTHOR_ITEM);
         authorSelector.addItem(OTHER_ITEM);
 
@@ -142,7 +146,7 @@ public class AddSongView extends JPanel {
         authorPane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         authorPane.add(authorSelector);
         authorField.setVisible(false);
-        authorPane.add(textField("Author", authorField));
+        authorPane.add(new TextField("Author", authorField));
     }
 
     /**
@@ -381,24 +385,5 @@ public class AddSongView extends JPanel {
      */
     public void showErrorDialog(String message) {
         JOptionPane.showMessageDialog(null, message, ERROR_DIALOG_TITLE, JOptionPane.ERROR_MESSAGE);
-    }
-
-    // TODO: Try to generalize this function so that every PlaceholderTextField looks alike
-    private Component textField(String placeHolder, PlaceholderTextField textField) {
-        //Using own textField classes
-        textField.setBorder(BorderFactory.createCompoundBorder(
-                textField.getBorder(),
-                BorderFactory.createEmptyBorder(5, 8, 5, 5)));
-        textField.setColumns(28);
-        textField.setBackground(new Color(76, 76, 76));
-        textField.setForeground(Color.WHITE);
-        textField.setPlaceholder(placeHolder);
-        Font f = textField.getFont();
-        textField.setFont(new Font(f.getName(), f.getStyle(), 12));
-        JPanel auxPanel = new JPanel();
-        auxPanel.setOpaque(false);
-        auxPanel.add(textField);
-
-        return auxPanel;
     }
 }

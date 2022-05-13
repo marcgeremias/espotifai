@@ -25,7 +25,7 @@ public class PlayerController implements PlayerViewListener {
 
     // Pane controllers
     private final HomeController homeController;
-    private final SearchController searchController;
+    private final SongListController songListController;
     private final LibraryController libraryController;
     private final AddSongController addSongController;
     private final StatsController statsController;
@@ -52,9 +52,9 @@ public class PlayerController implements PlayerViewListener {
         homeController = new HomeController(this, homeView, userManager, songManager, playlistManager);
         homeView.registerController(homeController);
 
-        SearchView searchView =  new SearchView();
-        searchController = new SearchController(this, searchView, userManager, songManager, playlistManager);
-        searchView.registerController(searchController);
+        SongListView songListView =  new SongListView();
+        songListController = new SongListController(this, songListView, userManager, songManager, playlistManager);
+        songListView.registerController(songListController);
 
         LibraryView libraryView = new LibraryView();
         libraryController = new LibraryController(this, libraryView, userManager, songManager, playlistManager);
@@ -85,22 +85,41 @@ public class PlayerController implements PlayerViewListener {
         musicPlaybackView.registerController(musicPlaybackController);
 
         SideMenuView sideMenuView = new SideMenuView();
-        sideMenuController = new SideMenuController(this, sideMenuView, userManager, playlistManager);
+        sideMenuController = new SideMenuController(this, sideMenuView, userManager, playlistManager, songManager);
         sideMenuView.registerController(sideMenuController);
 
         this.playerView.setContents(musicPlaybackView, sideMenuView);
-        this.playerView.initCardLayout(homeView, searchView, libraryView, addSongView, statsView,
+        this.playerView.initCardLayout(homeView, songListView, libraryView, addSongView, statsView,
                                         songDetailView, playlistDetailView, userProfileView);
-
-        //TODO PURO TESTING
-        this.playerView.changeView(PlayerView.PLAYLIST_DETAIL_VIEW);
-        //this.playerView.changeView(PlayerView.HOME_VIEW);
-
+        this.playerView.changeView(PlayerView.HOME_VIEW);
     }
 
     @Override
     public void changeView(String card) {
+        initCard(card);
         playerView.changeView(card);
+    }
+
+    private void initCard(String card) {
+        switch (card){
+            case PlayerView.HOME_VIEW:
+                break;
+            case PlayerView.SONG_LIST_VIEW:
+                songListController.initView();
+                break;
+            case PlayerView.LIBRARY_VIEW:
+                break;
+            case PlayerView.ADD_SONG_VIEW:
+                break;
+            case PlayerView.STATS_VIEW:
+                break;
+            case PlayerView.SONG_DETAIL_VIEW:
+                break;
+            case PlayerView.PLAYLIST_DETAIL_VIEW:
+                break;
+            case PlayerView.USER_PROFILE_VIEW:
+                break;
+        }
     }
 
     @Override

@@ -47,6 +47,7 @@ public class UserManager {
             // Correct User
             if (Crypt.decode(user.getPassword()).equals(passwordField)) {
                 // Correct password and validation completed
+                currentUser = user.getName();
                 return USER_CORRECTLY_ADDED;
             } else {
                 // Incorrect password
