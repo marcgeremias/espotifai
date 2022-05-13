@@ -34,6 +34,7 @@ public class PlayerController implements PlayerViewListener {
     private final UserProfileController userProfileController;
     private final MusicPlaybackController musicPlaybackController;
     private final SideMenuController sideMenuController;
+    private UserManager userManager;
 
     /**
      * This method initializes all the view necessary for the Main execution of the program
@@ -47,7 +48,7 @@ public class PlayerController implements PlayerViewListener {
                             SongManager songManager, PlaylistManager playlistManager) {
         this.listener = listener;
         this.playerView = playerView;
-
+        this.userManager = userManager;
         HomeView homeView = new HomeView();
         homeController = new HomeController(this, homeView, userManager, songManager, playlistManager);
         homeView.registerController(homeController);
@@ -124,6 +125,7 @@ public class PlayerController implements PlayerViewListener {
 
     @Override
     public void logout() {
+        userManager.logOutUser();
         listener.changeView(MainView.CARD_LOG_IN);
     }
 }

@@ -210,4 +210,9 @@ public class LoginView extends JPanel {
         incorrectInput.setText("ERROR: The User could not be added to the database.");
         incorrectInput.setVisible(true);
     }
+
+    public void clearFields() {
+        userField.setText("");
+        passwordField.setText("");
+    }
 }

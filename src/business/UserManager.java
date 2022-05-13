@@ -2,6 +2,7 @@ package business;
 
 import business.entities.User;
 import persistence.UserDAO;
+import persistence.UserDAOException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +22,6 @@ public class UserManager {
     public static final int WRONG_CONFIRM_PASSWORD = 4;
     public static final int ERROR_CREATING_USER = 5;
 
-
     public UserManager(UserDAO userDAO) {
         this.userDAO = userDAO;
         this.currentUser = null;
@@ -39,7 +39,7 @@ public class UserManager {
         try {
             user = userDAO.validateUser(userField);
 
-        } catch (Exception ex) {
+        } catch (UserDAOException ex) {
             ex.printStackTrace();
         }
 
@@ -72,7 +72,7 @@ public class UserManager {
         try {
             users = userDAO.getAllUsers();
 
-        } catch (Exception ex) {
+        } catch (UserDAOException ex) {
             ex.printStackTrace();
         }
 
@@ -114,7 +114,7 @@ public class UserManager {
             } else {
                 return ERROR_CREATING_USER;
             }
-        } catch (Exception e) {
+        } catch (UserDAOException e) {
             return ERROR_CREATING_USER;
         }
 
@@ -174,4 +174,12 @@ public class UserManager {
     public String getCurrentUser() {
         return currentUser;
     }
+
+    /**
+     * Method that deletes the current user from RAM
+     */
+    public void logOutUser(){
+        this.currentUser = null;
+    }
+
 }

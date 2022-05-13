@@ -39,8 +39,6 @@ public class SideMenuController implements ActionListener {
                 break;
             case SideMenuView.SEARCH_BUTTON:
                 listener.changeView(PlayerView.SONG_LIST_VIEW);
-                //FER CRIDA A GET COSES
-
                 break;
             case SideMenuView.LIBRARY_BUTTON:
                 listener.changeView(PlayerView.LIBRARY_VIEW);
@@ -50,6 +48,10 @@ public class SideMenuController implements ActionListener {
                 break;
             case SideMenuView.CREATE_PLAYLIST_BUTTON:
                 System.out.println("Goes to the createPlaylist view");
+                break;
+            case SideMenuView.LOGOUT:
+                System.out.println("Logout");
+                listener.logout();
                 break;
             default:
                 break;
