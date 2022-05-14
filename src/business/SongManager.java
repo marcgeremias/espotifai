@@ -36,7 +36,7 @@ public class SongManager {
     }
 
     /**
-     * Gets all songs
+     * Gets all songs in the system
      * @return an ArrayList of Songs containing all songs
      */
     public ArrayList<Song> getAllSongs() {

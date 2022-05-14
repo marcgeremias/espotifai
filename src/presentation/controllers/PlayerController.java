@@ -35,6 +35,8 @@ public class PlayerController implements PlayerViewListener {
     private final MusicPlaybackController musicPlaybackController;
     private final SideMenuController sideMenuController;
     private UserManager userManager;
+    // We need to make the view an attribute due to a dynamic JTable
+    private SongListView songListView;
 
     /**
      * This method initializes all the view necessary for the Main execution of the program
@@ -53,9 +55,9 @@ public class PlayerController implements PlayerViewListener {
         homeController = new HomeController(this, homeView, userManager, songManager, playlistManager);
         homeView.registerController(homeController);
 
-        SongListView songListView =  new SongListView();
+        songListView =  new SongListView();
         songListController = new SongListController(this, songListView, userManager, songManager, playlistManager);
-        songListView.registerController(songListController);
+        songListView.registerKeyController(songListController);
 
         LibraryView libraryView = new LibraryView();
         libraryController = new LibraryController(this, libraryView, userManager, songManager, playlistManager);
@@ -101,12 +103,18 @@ public class PlayerController implements PlayerViewListener {
         playerView.changeView(card);
     }
 
+    /*
+     * Method that initializes all the data needed when accessing into a view
+     * @param card the ID of the card of the view we are initializing
+     */
     private void initCard(String card) {
         switch (card){
             case PlayerView.HOME_VIEW:
                 break;
             case PlayerView.SONG_LIST_VIEW:
                 songListController.initView();
+                // We need to register the controller every time due to the dynamic JTable
+                songListView.registerMouseController(songListController);
                 break;
             case PlayerView.LIBRARY_VIEW:
                 break;
