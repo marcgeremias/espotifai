@@ -27,10 +27,6 @@ public class UserManager {
         this.currentUser = null;
     }
 
-    /*public User getCurrentUser() {
-        return currentUser;
-    }*/
-
     /**
      * Method that checks from the database the username or email and the password
      * of the Strings introduced in the textFields in the Login View
@@ -51,6 +47,7 @@ public class UserManager {
             // Correct User
             if (Crypt.decode(user.getPassword()).equals(passwordField)) {
                 // Correct password and validation completed
+                currentUser = user.getName();
                 return USER_CORRECTLY_ADDED;
             } else {
                 // Incorrect password
@@ -184,4 +181,5 @@ public class UserManager {
     public void logOutUser(){
         this.currentUser = null;
     }
+
 }

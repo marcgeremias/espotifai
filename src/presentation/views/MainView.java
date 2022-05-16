@@ -29,6 +29,7 @@ public class MainView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(Color.BLACK);
         setSize(1280, 720);
+        setResizable(false);
         setLocationRelativeTo(null);
     }
 
