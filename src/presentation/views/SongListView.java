@@ -5,6 +5,8 @@ import presentation.views.components.PlaceholderTextField;
 import presentation.views.components.TextField;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.*;
 import java.awt.*;
@@ -18,6 +20,7 @@ public class SongListView extends JPanel {
     private TableRowSorter<DefaultTableModel> sorter;
     private JTable table;
     private JPanel tableSongs;
+    private int selectedRow;
 
     // Boolean indicating if it's the first time acceding to the view
     private boolean notFirstTime;
@@ -74,7 +77,6 @@ public class SongListView extends JPanel {
     public void fillTable(ArrayList<Song> currentSongs) {
         // Inserting the data to each column
         String[][] data = new String[currentSongs.size()][5];
-
         for (int i = 0; i < currentSongs.size(); i++) {
             data[i][0] = currentSongs.get(i).getTitle();
             data[i][1] = String.valueOf(currentSongs.get(i).getGenre());
@@ -92,6 +94,14 @@ public class SongListView extends JPanel {
         }
         tableSongs.setOpaque(false);
         table = new JTable(data, column);
+
+        // Saving the selected Row to know what song is
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                selectedRow = table.getSelectedRow();
+                System.out.println(table.getSelectedRow());
+            }
+        });
 
         table.getTableHeader().setReorderingAllowed(false);
         table.setOpaque(false);
@@ -190,5 +200,9 @@ public class SongListView extends JPanel {
         panelSearch.setOpaque(false);
         panelSearch.add(searchSong);
         return panelSearch;
+    }
+
+    public int getSongValue() {
+        return selectedRow;
     }
 }

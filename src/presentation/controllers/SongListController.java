@@ -18,6 +18,7 @@ public class SongListController implements KeyListener, MouseListener {
     private SongManager songManager;
     private PlaylistManager playlistManager;
     private ArrayList<Song> currentSongs;
+    private int songNum;
 
     public SongListController(PlayerViewListener listener, SongListView songListView, UserManager userManager,
                               SongManager songManager, PlaylistManager playlistManager) {
@@ -61,9 +62,14 @@ public class SongListController implements KeyListener, MouseListener {
             // Double or more clicks
             if (e.getClickCount() > 1) {
                 //Access to detail songs view
+                songNum = songListView.getSongValue();
                 listener.changeView(PlayerView.SONG_DETAIL_VIEW);
             }
         }
+    }
+
+    public int getSongNum() {
+        return songNum;
     }
 
     @Override

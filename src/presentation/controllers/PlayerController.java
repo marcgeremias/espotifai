@@ -123,6 +123,8 @@ public class PlayerController implements PlayerViewListener {
             case PlayerView.STATS_VIEW:
                 break;
             case PlayerView.SONG_DETAIL_VIEW:
+                System.out.println("SONG DETAIL VIEW");
+                songDetailController.initView(songListController.getSongNum());
                 break;
             case PlayerView.PLAYLIST_DETAIL_VIEW:
                 break;
