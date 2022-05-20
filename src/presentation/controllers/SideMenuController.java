@@ -4,14 +4,10 @@ import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
 import presentation.views.PlayerView;
-import presentation.views.SearchView;
 import presentation.views.SideMenuView;
-import presentation.views.UserProfileView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import static presentation.views.PlayerView.SONG_LIST_VIEW;
 
 public class SideMenuController implements ActionListener {
 
@@ -35,7 +31,7 @@ public class SideMenuController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case SideMenuView.HOME_BUTTON:
-                listener.changeView(PlayerView.HOME_VIEW);
+                listener.changeView(PlayerView.DEFAULT_VIEW);
                 break;
             case SideMenuView.SEARCH_BUTTON:
                 listener.changeView(PlayerView.SONG_LIST_VIEW);

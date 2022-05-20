@@ -3,25 +3,20 @@ package presentation.controllers;
 import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
-import business.entities.User;
 import presentation.views.HomeView;
+import presentation.views.StatsView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class HomeController implements ActionListener {
 
-    private PlayerViewListener listener;
     private HomeView homeView;
-    private UserManager userManager;
     private SongManager songManager;
     private PlaylistManager playlistManager;
 
-    public HomeController(PlayerViewListener listener, HomeView homeView, UserManager userManager,
-                          SongManager songManager, PlaylistManager playlistManager) {
-        this.listener = listener;
+    public HomeController(HomeView homeView, SongManager songManager, PlaylistManager playlistManager) {
         this.homeView = homeView;
-        this.userManager = userManager;
         this.songManager = songManager;
         this.playlistManager = playlistManager;
     }
