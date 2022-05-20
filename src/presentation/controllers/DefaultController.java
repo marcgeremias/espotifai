@@ -50,9 +50,6 @@ public class DefaultController implements ActionListener {
                 statsController.refreshView();
                 defaultView.changeView(DefaultView.STATS_VIEW);
                 break;
-            case DefaultView.SETTINGS:
-                defaultView.changeView(DefaultView.SETTINGS);
-                break;
             default:
                 break;
         }

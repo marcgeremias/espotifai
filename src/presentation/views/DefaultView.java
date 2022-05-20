@@ -15,7 +15,6 @@ public class DefaultView extends JPanel {
     public static final String HOME_VIEW = "home_view";
     public static final String STATS_VIEW = "stats_view";
 
-    private HoverButton settingsButton;
     private HoverButton mainButton;
     private HoverButton statisticsButton;
 
@@ -36,7 +35,6 @@ public class DefaultView extends JPanel {
 
     private void configureView() {
         this.add(center(), BorderLayout.NORTH);
-        this.add(settingsButtonRegion(), BorderLayout.EAST);
     }
 
     private Component center() {
@@ -46,22 +44,6 @@ public class DefaultView extends JPanel {
         center.add(optionBar());
 
         return center;
-    }
-
-    private Component settingsButtonRegion() {
-        JPanel settings = new JPanel();
-        Border emptyBorder = BorderFactory.createEmptyBorder();
-
-        settingsButton = new HoverButton(Color.LIGHT_GRAY, Color.DARK_GRAY, "SETTINGS");
-        settingsButton.setForeground(Color.WHITE);
-        settingsButton.setBackground(Color.DARK_GRAY);
-        settingsButton.setFont(new Font("Apple Casual", Font.BOLD, 15));
-        settingsButton.setBorder(emptyBorder);
-
-        settings.setBackground(Color.DARK_GRAY);
-        settings.add(settingsButton);
-        settings.setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 60));
-        return settings;
     }
 
     private Component optionBar() {
@@ -100,9 +82,6 @@ public class DefaultView extends JPanel {
 
         statisticsButton.setActionCommand(STATISTICS);
         statisticsButton.addActionListener(controller);
-
-        settingsButton.setActionCommand(SETTINGS);
-        settingsButton.addActionListener(controller);
     }
 
     public void initCardLayout (HomeView homeView, StatsView statsView){
