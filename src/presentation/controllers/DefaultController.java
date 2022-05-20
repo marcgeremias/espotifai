@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 
 public class DefaultController implements ActionListener {
 
+    private PlayerViewListener listener;
     private DefaultView defaultView;
     private UserManager userManager;
     private SongManager songManager;
@@ -21,16 +22,19 @@ public class DefaultController implements ActionListener {
     private HomeController homeController;
     private StatsController statsController;
 
-    public DefaultController(DefaultView defaultView, UserManager userManager,
+    // We need to make the view an attribute due to a dynamic JTable
+    private HomeView homeView;
+
+    public DefaultController(PlayerViewListener listener, DefaultView defaultView, UserManager userManager,
                              SongManager songManager, PlaylistManager playlistManager) {
         this.defaultView = defaultView;
         this.userManager = userManager;
         this.songManager = songManager;
         this.playlistManager = playlistManager;
+        this.listener = listener;
 
-        HomeView homeView = new HomeView();
-        homeController = new HomeController(homeView, songManager, playlistManager);
-        homeView.registerController(homeController);
+        homeView = new HomeView();
+        homeController = new HomeController(listener, homeView, userManager, songManager, playlistManager);
 
         StatsView statsView = new StatsView();
         statsController = new StatsController(statsView, songManager);
@@ -53,6 +57,21 @@ public class DefaultController implements ActionListener {
             default:
                 break;
         }
+    }
+
+    /*
+     * Method that initializes all the data needed when accessing into a view
+     * @param card the ID of the card of the view we are initializing
+     */
+    public void initCard() {
+           // case DefaultView.HOME_VIEW:
+                homeController.initView();
+                // We need to register the controller every time due to the dynamic JTable
+                homeView.registerMouseController(homeController);
+             //   break;
+            //case DefaultView.STATS_VIEW:
+              //  break;
+
     }
 
 }

@@ -106,5 +106,5 @@ public interface PlaylistDAO {
      * @return (1) List of {@link Playlist} or <b>null</b>
      * @throws Exception if there is an error storing the data.
      */
-    ArrayList<Playlist> getDifferentPlaylistByUserID(String userId);
+    ArrayList<Playlist> getDifferentPlaylistByUserID(String userId) throws PlaylistDAOException;
 }

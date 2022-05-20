@@ -18,8 +18,8 @@ public class PlaylistManager {
             return allPlaylists == null ? new ArrayList<>() : allPlaylists;
     }
 
-    public ArrayList<Playlist> getOtherUserPlaylists(String currentUser) {
-        ArrayList<Playlist> allPlaylists = playlistDAO.getDifferentPlaylistByUserID(currentUser);
-        return new ArrayList<>();
+    public ArrayList<Playlist> getOtherUserPlaylists(String currentUser) throws PlaylistDAOException{
+        ArrayList<Playlist> otherPlaylists = playlistDAO.getDifferentPlaylistByUserID(currentUser);
+        return otherPlaylists == null ? new ArrayList<>() : otherPlaylists;
     }
 }

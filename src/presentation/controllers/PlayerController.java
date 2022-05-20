@@ -45,7 +45,7 @@ public class PlayerController implements PlayerViewListener {
         this.userManager = userManager;
         DefaultView defaultView = new DefaultView();
 
-        defaultController = new DefaultController(defaultView, userManager, songManager, playlistManager);
+        defaultController = new DefaultController(this, defaultView, userManager, songManager, playlistManager);
         defaultView.registerController(defaultController);
 
         songListView =  new SongListView();
@@ -98,6 +98,7 @@ public class PlayerController implements PlayerViewListener {
     private void initCard(String card) {
         switch (card){
             case PlayerView.DEFAULT_VIEW:
+                defaultController.initCard();
                 break;
             case PlayerView.SONG_LIST_VIEW:
                 songListController.initView();

@@ -268,36 +268,34 @@ public class PlaylistSQL implements PlaylistDAO {
          | id_playlist  |   title   | id_owner  |
          */
             ArrayList<Playlist> playlists = getPlaylists(c, new ArrayList<>(), rs1);
-                    //new ArrayList<>();
-            /*while (rs1.next()) {
-                try {
-                    Playlist playlist = new Playlist(
-                            rs1.getInt(1), // == playlistID
-                            rs1.getString(2),
-                            rs1.getString(3)//userDAO.getUserByID(rs1.getString(3)),
-                            //rs1.//songDAO.getSongsByPlaylistID(userId)
-                    );
-                    playlists.add(playlist);
-                } catch (SQLException e) {
-            /*
-                Because DAO is generic and throws a generic Exception we need to make sure that if Exception is
-                thrown that we transform it to a SQLException
-
-                    throw new PlaylistDAOException(e.getMessage());
-                }
-            }*/
-
             c.close();
             return playlists;
+
         } catch (SQLException e) {
             throw new PlaylistDAOException(e.getMessage());
         }
-
     }
 
     @Override
-    public ArrayList<Playlist> getDifferentPlaylistByUserID(String userId) {
-        return null;
+    public ArrayList<Playlist> getDifferentPlaylistByUserID(String userId) throws PlaylistDAOException{
+        try {
+            Connection c = DBConfig.getInstance().openConnection();
+
+            String selectPlaylistSQL = "SELECT * FROM " + DBConstants.TABLE_PLAYLIST + " WHERE " + DBConstants.COL_ID_NICKNAME + " <> ?";
+            PreparedStatement selectPlaylistSTMT = c.prepareStatement(selectPlaylistSQL);
+            selectPlaylistSTMT.setString(1, userId);
+            ResultSet rs1 = selectPlaylistSTMT.executeQuery();
+        /*
+         |   Col 1      |   Col 2   |   Col 3   |
+         | id_playlist  |   title   | id_owner  |
+         */
+            ArrayList<Playlist> playlists = getPlaylists(c, new ArrayList<>(), rs1);
+            c.close();
+            return playlists;
+
+        } catch (SQLException e) {
+            throw new PlaylistDAOException(e.getMessage());
+        }
     }
 
     /*
