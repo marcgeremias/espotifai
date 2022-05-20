@@ -3,6 +3,7 @@ package presentation.controllers;
 import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
+import presentation.views.PlayerView;
 import presentation.views.UserProfileView;
 
 import java.awt.event.ActionEvent;
@@ -38,8 +39,7 @@ public class UserProfileController implements ActionListener {
                 // Deletes an account
                 break;
             case UserProfileView.BACK_BUTTON:
-                System.out.println("The Back Button has been pressed");
-                // Goes to the main view
+                listener.changeView(PlayerView.DEFAULT_VIEW);
             default:
                 break;
         }

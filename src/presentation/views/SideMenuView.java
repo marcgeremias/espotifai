@@ -27,6 +27,7 @@ public class SideMenuView extends JPanel {
     public static final String ADD_MUSIC_BUTTON = "add_music_button_presses";
     public static final String CREATE_PLAYLIST_BUTTON = "create_playlist_button_presses";
     public static final String LOGOUT = "logout_button_pressed";
+    public static final String SETTINGS = "settings_button_pressed";
 
     //Main section
     private JImagePanel homeJButton;
@@ -38,7 +39,8 @@ public class SideMenuView extends JPanel {
     private JImagePanel createPlaylistButton;
 
     //Last section
-    private HoverButton logOutJbutton; //HoverButton
+    private HoverButton logOutJbutton;
+    private HoverButton settingsButton;
 
     /**
      * Constructor method to set up the view
@@ -196,16 +198,23 @@ public class SideMenuView extends JPanel {
         logOutJbutton = new HoverButton(Color.RED, Color.BLACK, "Log Out");
         logOutJbutton.setBackground(Color.BLACK);
         logOutJbutton.setForeground(Color.LIGHT_GRAY);
-
-        // Letter Settings
         logOutJbutton.setFont(new Font("Apple Casual", Font.BOLD, 10));
-
         // Border Settings
         logOutJbutton.setBorderPainted(true);
         logOutJbutton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
         logOutJbutton.setPreferredSize(new Dimension(100,25));
 
+        settingsButton = new HoverButton(Color.DARK_GRAY, Color.BLACK, "Settings");
+        settingsButton.setBackground(Color.BLACK);
+        settingsButton.setForeground(Color.LIGHT_GRAY);
+        settingsButton.setFont(new Font("Apple Casual", Font.BOLD, 10));
+        //Border Settings
+        settingsButton.setBorderPainted(true);
+        settingsButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
+        settingsButton.setPreferredSize(new Dimension(100,25));
+
         logOutPanel.setBorder(BorderFactory.createEmptyBorder(20, 4, 20, 6));
+        logOutPanel.add(settingsButton);
         logOutPanel.add(logOutJbutton);
 
         return logOutPanel;
@@ -232,6 +241,9 @@ public class SideMenuView extends JPanel {
 
         logOutJbutton.setActionCommand(LOGOUT);
         logOutJbutton.addActionListener(listener);
+
+        settingsButton.setActionCommand(SETTINGS);
+        settingsButton.addActionListener(listener);
     }
 
 }
