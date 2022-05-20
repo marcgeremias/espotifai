@@ -26,7 +26,7 @@ public class UserProfileController implements ActionListener {
         this.playlistManager = playlistManager;
 
         // Sets the user in the User Profile View
-        userProfileView.setUsername("Guillem Godoy Hernández");
+        userProfileView.setUsername(userManager.getCurrentUser());
     }
 
     @Override
@@ -36,12 +36,12 @@ public class UserProfileController implements ActionListener {
                 System.out.println("The Delete Account button has been pressed");
                 // Shows an external panel with the deletion confirmation
                 userProfileView.showConfirmationPanel();
+                //userManager.deleteUser();
                 // Deletes an account
                 break;
             case UserProfileView.BACK_BUTTON:
+                // Goes to the home view
                 listener.changeView(MainView.CARD_PLAYER);
-                System.out.println("The Back Button has been pressed");
-                // Goes to the main view
             default:
                 break;
         }

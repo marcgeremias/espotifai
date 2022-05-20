@@ -182,4 +182,8 @@ public class UserManager {
         this.currentUser = null;
     }
 
+    public void deleteUser(){
+        this.deleteUser();
+    }
+
 }
