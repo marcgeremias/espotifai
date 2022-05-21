@@ -12,4 +12,9 @@ public interface PlayerViewListener {
      * This method is called when user logs out of the account and the mainview needs to be refreshed to the login page
      */
     void logout();
+
+    /**
+     * This method is called when a user wants to delete its account
+     */
+    void delete();
 }

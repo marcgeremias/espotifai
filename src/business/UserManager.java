@@ -182,8 +182,11 @@ public class UserManager {
         this.currentUser = null;
     }
 
-    public void deleteUser(){
-        this.deleteUser();
+    /**
+     * Method that deletes the user from the program
+     */
+    public void deleteUser() throws UserDAOException{
+        userDAO.deleteUser(currentUser);
     }
 
 }
