@@ -1,8 +1,8 @@
 package presentation.views;
 
+import business.entities.Playlist;
 import business.entities.Song;
 import presentation.views.components.JImagePanel;
-import presentation.views.components.TextField;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -35,7 +35,7 @@ public class SongDetailView extends JPanel {
     private JTable table;
     private JPanel tableSongs;
     private boolean notFirstTime;
-    private JComboBox<String> PlaylistSelector;
+    private JComboBox<String> playlistSelector;
     private JPanel playlistPane;
     private JButton addPlaylistButton;
 
@@ -58,8 +58,8 @@ public class SongDetailView extends JPanel {
         playButton.setActionCommand(BTN_PLAY_IMAGE);
         playButton.addActionListener(controller);
 
-        addPlaylistButton.setActionCommand(BTN_ADD_PLAYLIST);
-        addPlaylistButton.addActionListener(controller);
+       //addPlaylistButton.setActionCommand(BTN_ADD_PLAYLIST);
+        //addPlaylistButton.addActionListener(controller);
     }
 
 
@@ -69,6 +69,8 @@ public class SongDetailView extends JPanel {
      */
     private Component center() {
         tableSongs = new JPanel(new GridLayout());
+        playlistSelector = new JComboBox<String>();
+        playlistPane = new JPanel();
         //JPanel sencer
         JPanel center = new JPanel();
         center.setBorder(new EmptyBorder(20, 1, 1, 1));
@@ -321,21 +323,21 @@ public class SongDetailView extends JPanel {
     /**
      * Creates a JComboBox from which to pick a playlist to add in a song
      */
-    public void showPlaylists(ArrayList<String> allPlaylists) {
+    public void showPlaylists(ArrayList<Playlist> allPlaylists) {
         // Authors JComboBox initialisation
-        PlaylistSelector.setBackground(new Color(76, 76, 76));
-        PlaylistSelector.setForeground(Color.GRAY);
-        PlaylistSelector.addItem("Select Playlist");
+        playlistSelector.setBackground(new Color(76, 76, 76));
+        playlistSelector.setForeground(Color.GRAY);
+        playlistSelector.addItem("Select Playlist");
 
-        for (String playlists : allPlaylists) {
-            PlaylistSelector.addItem(playlists);
+        for (Playlist allPlaylist : allPlaylists) {
+            playlistSelector.addItem(allPlaylist.getName());
         }
 
-        PlaylistSelector.setSelectedIndex(0);
+        playlistSelector.setSelectedIndex(0);
 
         // Author pane components
         playlistPane.setLayout(new BoxLayout(playlistPane, BoxLayout.Y_AXIS));
         playlistPane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
-        playlistPane.add(PlaylistSelector);
+        playlistPane.add(playlistSelector);
     }
 }

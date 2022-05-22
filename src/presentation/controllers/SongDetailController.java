@@ -3,7 +3,9 @@ package presentation.controllers;
 import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
+import business.entities.Playlist;
 import business.entities.Song;
+import persistence.PlaylistDAOException;
 import presentation.views.AddSongView;
 import presentation.views.PlaylistDetailView;
 import presentation.views.SongDetailView;
@@ -19,7 +21,7 @@ public class SongDetailController implements ActionListener {
     private SongManager songManager;
     private PlaylistManager playlistManager;
     private Song currentSong;
-    ArrayList<String> allPlaylists;
+    ArrayList<Playlist> allPlaylists;
 
     public SongDetailController(PlayerViewListener listener, SongDetailView songDetailView, UserManager userManager,
                              SongManager songManager, PlaylistManager playlistManager) {
@@ -37,7 +39,10 @@ public class SongDetailController implements ActionListener {
     public void initView(int songNum) {
         currentSong = songManager.getAllSongs().get(songNum);
         songDetailView.fillTable(currentSong);
-        allPlaylists = playlistManager.getAllPlaylists();
+        try {
+            allPlaylists = playlistManager.getAllPlaylists();
+        } catch (PlaylistDAOException e) {
+        }
         songDetailView.showPlaylists(allPlaylists);
 
     }
