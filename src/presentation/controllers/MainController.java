@@ -57,7 +57,6 @@ public class MainController implements MainViewListener {
         // Defining views in the card layout of the JFrame MainView
         mainView.initCardLayout(loginView, signUpView, playerView);
 
-
         mainView.changeView(MainView.CARD_LOG_IN);
     }
 
@@ -65,4 +64,9 @@ public class MainController implements MainViewListener {
     public void changeView(String card) {
         mainView.changeView(card);
     }
+
+    public void initViews() {
+
+    }
+
 }

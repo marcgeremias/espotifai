@@ -13,13 +13,13 @@ public class HomeView extends JPanel {
 
     private JTable table;
     private JPanel tableSongs;
-
+    DefaultTableModel tableModel;
     // Boolean indicating if it's the first time acceding to the view
     private boolean notFirstTime;
 
     public HomeView() {
         this.setLayout(new BorderLayout());
-        this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        this.setBackground(Color.DARK_GRAY);
         this.add(titleLabel(), BorderLayout.NORTH);
         this.add(center(), BorderLayout.CENTER);
         this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -47,31 +47,40 @@ public class HomeView extends JPanel {
     }
 
     /**
-     * Method that fills the JTable with the playlist of the current user in the JTable
-     * @param myPlaylists an arraylist of songs that are currently in the system
+     * Method that fills the JTable with the other playlists of the other users in the JTable
+     * @param othersPlaylists an arraylist of songs that are currently in the system
      */
-    public void fillTable(ArrayList<Playlist> myPlaylists) {
-        // Inserting the data to each column
-        String[][] data = new String[myPlaylists.size()][2];
-
-        for (int i = 0; i < myPlaylists.size(); i++) {
-            data[i][0] = myPlaylists.get(i).getName();
-            data[i][1] = String.valueOf(myPlaylists.get(i).getOwner());
-        }
-        // Inserting the column titles
-        String[] column = {"Name","Owner"};
-
-        // Creating and personalizing JTable
+    public void fillTable(ArrayList<Playlist> othersPlaylists) {
         if (notFirstTime) {
             tableSongs = new JPanel(new GridLayout());
+            //System.out.println("ROWS: " + tableModel.getRowCount());
         }
-        tableSongs.setOpaque(false);
-        table = new JTable(data, column);
 
+        String[][] data = new String[othersPlaylists.size()][2];
+        // Inserting the column titles
+        String[] column = {"Name", "Owner"};
+
+
+
+        // Inserting the data to each column
+
+        for (int i = 0; i < othersPlaylists.size(); i++) {
+            data[i][0] = othersPlaylists.get(i).getName();
+            data[i][1] = String.valueOf(othersPlaylists.get(i).getOwner());
+
+            //System.out.println(othersPlaylists.get(i).getName());
+            //System.out.println(othersPlaylists.get(i).getOwner());
+
+        }
+
+
+        tableModel = new DefaultTableModel(data, column);
+        tableModel.fireTableDataChanged();
+        table = new JTable(tableModel);
+
+        tableSongs.setOpaque(false);
         table.getTableHeader().setReorderingAllowed(false);
         table.setOpaque(false);
-        DefaultTableModel tableModel = new DefaultTableModel(data, column);
-        table.setModel(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setDefaultEditor(Object.class, null);
 
@@ -79,10 +88,10 @@ public class HomeView extends JPanel {
         table.getTableHeader().setForeground(Color.BLACK);
         table.getTableHeader().setBackground(Color.WHITE);
         table.getTableHeader().setFont(new Font("arial", Font.BOLD, 15));
-        table.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        table.setBackground(Color.DARK_GRAY);
         table.setForeground(Color.WHITE);
         table.setFont(new Font("arial", Font.PLAIN, 15));
-        table.getTableHeader().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        table.getTableHeader().setBackground(Color.DARK_GRAY);
         table.getTableHeader().setForeground(Color.WHITE);
 
         table.setRowHeight(40);
@@ -93,14 +102,14 @@ public class HomeView extends JPanel {
 
         table.setShowGrid(false);
         JScrollPane pane = new JScrollPane(table);
-        pane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        pane.setBackground(Color.DARK_GRAY);
         pane.setBorder(BorderFactory.createEmptyBorder());
         table.setFillsViewportHeight(true);
-        pane.getViewport().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        pane.getViewport().setBackground(Color.DARK_GRAY);
         pane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
             @Override
             protected void configureScrollBarColors() {
-                this.thumbColor = Color.DARK_GRAY;
+                this.thumbColor = Color.LIGHT_GRAY;
             }
         });
         pane.getVerticalScrollBar().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
@@ -147,7 +156,7 @@ public class HomeView extends JPanel {
      * @return the JTable with the search song label
      */
     private Component titleLabel(){
-        JLabel searchSong = new JLabel("MY PLAYLISTS");
+        JLabel searchSong = new JLabel("OTHER PLAYLISTS");
         searchSong.setForeground(Color.WHITE);
         searchSong.setFont(new Font("Apple Casual", Font.BOLD, 30));
         searchSong.setHorizontalAlignment(JLabel.CENTER);

@@ -13,6 +13,7 @@ public class LibraryView extends JPanel {
 
     private JTable table;
     private JPanel tableSongs;
+    DefaultTableModel tableModel;
 
     // Boolean indicating if it's the first time acceding to the view
     private boolean notFirstTime;
@@ -51,12 +52,25 @@ public class LibraryView extends JPanel {
      * @param myPlaylists an arraylist of songs that are currently in the system
      */
     public void fillTable(ArrayList<Playlist> myPlaylists) {
+
+        if (tableModel != null) {
+            tableModel.fireTableDataChanged();
+        }
+        tableModel = new DefaultTableModel();
+        table = new JTable(tableModel);
+        table.getTableHeader().setReorderingAllowed(false);
+        table.setOpaque(false);
+        tableModel.addColumn("Name");
+
         // Inserting the data to each column
         String[][] data = new String[myPlaylists.size()][2];
 
         for (int i = 0; i < myPlaylists.size(); i++) {
             data[i][0] = myPlaylists.get(i).getName();
             data[i][1] = String.valueOf(myPlaylists.get(i).getOwner());
+            tableModel.insertRow(i, new Object[] {data[i][0]});
+            //System.out.println(myPlaylists.get(i).getName());
+            //System.out.println(myPlaylists.get(i).getOwner());
         }
         // Inserting the column titles
         String[] column = {"Name","Owner"};
@@ -66,12 +80,7 @@ public class LibraryView extends JPanel {
             tableSongs = new JPanel(new GridLayout());
         }
         tableSongs.setOpaque(false);
-        table = new JTable(data, column);
 
-        table.getTableHeader().setReorderingAllowed(false);
-        table.setOpaque(false);
-        DefaultTableModel tableModel = new DefaultTableModel(data, column);
-        table.setModel(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setDefaultEditor(Object.class, null);
 
@@ -87,9 +96,8 @@ public class LibraryView extends JPanel {
 
         table.setRowHeight(40);
         resizeColumnWidth(table);
-        for (int i = 0; i < column.length; i++) {
-            table.getColumnModel().getColumn(i).setResizable(false);
-        }
+        table.getColumnModel().getColumn(0).setResizable(false);
+
 
         table.setShowGrid(false);
         JScrollPane pane = new JScrollPane(table);
