@@ -10,6 +10,7 @@ import presentation.views.SongDetailView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class SongDetailController implements ActionListener {
     private PlayerViewListener listener;
@@ -18,6 +19,7 @@ public class SongDetailController implements ActionListener {
     private SongManager songManager;
     private PlaylistManager playlistManager;
     private Song currentSong;
+    ArrayList<String> allPlaylists;
 
     public SongDetailController(PlayerViewListener listener, SongDetailView songDetailView, UserManager userManager,
                              SongManager songManager, PlaylistManager playlistManager) {
@@ -35,6 +37,9 @@ public class SongDetailController implements ActionListener {
     public void initView(int songNum) {
         currentSong = songManager.getAllSongs().get(songNum);
         songDetailView.fillTable(currentSong);
+        allPlaylists = playlistManager.getAllPlaylists();
+        songDetailView.showPlaylists(allPlaylists);
+
     }
 
     @Override

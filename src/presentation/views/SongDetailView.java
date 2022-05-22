@@ -1,23 +1,17 @@
 package presentation.views;
 
 import business.entities.Song;
-import presentation.controllers.MainViewListener;
-import presentation.controllers.PlayerViewListener;
-import presentation.controllers.PlaylistDetailController;
 import presentation.views.components.JImagePanel;
+import presentation.views.components.TextField;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.basic.BasicScrollBarUI;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 /**
@@ -29,18 +23,21 @@ public class SongDetailView extends JPanel {
     private JImagePanel listImage;
     private JImagePanel playButton;
     public static final String BTN_PLAY_IMAGE = "BTN PLAY IMAGE";
-    public static final String BTN_LIST_IMAGE = "BTN LIST IMAGE";
+    public static final String BTN_ADD_PLAYLIST = "BTN ADD PLAYLIST";
 
     public static final String LOGO_IMAGE_PATH = "res/images/nyan_cat.png";
     public static final String LOGO_PLAY_PATH = "res/icons/play-button-green.png";
 
-    public static final String PLAYLIST_TYPE = "PLAYLIST";
+    public static final String PLAYLIST_TYPE = "SONG";
     public static final String ALBUM_TYPE = "ALBUM";
-    private static final String LIST_NAME = "MyPlaylist#1";
+    private static final String LIST_NAME = "SONG";
 
     private JTable table;
     private JPanel tableSongs;
     private boolean notFirstTime;
+    private JComboBox<String> PlaylistSelector;
+    private JPanel playlistPane;
+    private JButton addPlaylistButton;
 
     /**
      * Constructor method to set up the view
@@ -60,6 +57,9 @@ public class SongDetailView extends JPanel {
     public void registerController(ActionListener controller) {
         playButton.setActionCommand(BTN_PLAY_IMAGE);
         playButton.addActionListener(controller);
+
+        addPlaylistButton.setActionCommand(BTN_ADD_PLAYLIST);
+        addPlaylistButton.addActionListener(controller);
     }
 
 
@@ -71,6 +71,7 @@ public class SongDetailView extends JPanel {
         tableSongs = new JPanel(new GridLayout());
         //JPanel sencer
         JPanel center = new JPanel();
+        center.setBorder(new EmptyBorder(20, 1, 1, 1));
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
 
         //Part superior
@@ -78,6 +79,7 @@ public class SongDetailView extends JPanel {
 
         //Part inferior
         center.add(tableSongs, BorderLayout.SOUTH);
+        center.add(playlistPane, BorderLayout.SOUTH);
 
         return center;
     }
@@ -314,5 +316,26 @@ public class SongDetailView extends JPanel {
             //Se establece el ancho de la columna
             columnModel.getColumn(column).setPreferredWidth(width);
         }
+    }
+
+    /**
+     * Creates a JComboBox from which to pick a playlist to add in a song
+     */
+    public void showPlaylists(ArrayList<String> allPlaylists) {
+        // Authors JComboBox initialisation
+        PlaylistSelector.setBackground(new Color(76, 76, 76));
+        PlaylistSelector.setForeground(Color.GRAY);
+        PlaylistSelector.addItem("Select Playlist");
+
+        for (String playlists : allPlaylists) {
+            PlaylistSelector.addItem(playlists);
+        }
+
+        PlaylistSelector.setSelectedIndex(0);
+
+        // Author pane components
+        playlistPane.setLayout(new BoxLayout(playlistPane, BoxLayout.Y_AXIS));
+        playlistPane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        playlistPane.add(PlaylistSelector);
     }
 }

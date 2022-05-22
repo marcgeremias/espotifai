@@ -21,6 +21,7 @@ public class SongListView extends JPanel {
     private JTable table;
     private JPanel tableSongs;
     private int selectedRow;
+    DefaultTableModel tableModel;
 
     // Boolean indicating if it's the first time acceding to the view
     private boolean notFirstTime;
@@ -93,8 +94,35 @@ public class SongListView extends JPanel {
             tableSongs = new JPanel(new GridLayout());
         }
         tableSongs.setOpaque(false);
-        table = new JTable(data, column);
 
+        /*if (notFirstTime) {
+            System.out.println(table.getRowCount() + " vs " + currentSongs.size());
+            if (table.getRowCount() != currentSongs.size()) {
+                tableModel = new DefaultTableModel(data, column);
+                table = new JTable(tableModel);
+            }
+        } else {
+            tableModel = new DefaultTableModel(data, column);
+            table = new JTable(tableModel);
+        }*/
+
+        /*if (notFirstTime) {
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                tableModel.removeRow(i);
+            }
+
+            tableModel = new DefaultTableModel(data, column);
+            table = new JTable(tableModel);
+
+        } else {
+            tableModel = new DefaultTableModel(data, column);
+            table = new JTable(tableModel);
+        }*/
+
+        tableModel = new DefaultTableModel(data, column);
+        table = new JTable(tableModel);
+
+        tableModel.fireTableDataChanged();
         // Saving the selected Row to know what song is
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent event) {
@@ -102,10 +130,6 @@ public class SongListView extends JPanel {
                 System.out.println(table.getSelectedRow());
             }
         });
-
-        table.getTableHeader().setReorderingAllowed(false);
-        table.setOpaque(false);
-        DefaultTableModel tableModel = new DefaultTableModel(data, column);
         table.setModel(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setDefaultEditor(Object.class, null);
@@ -117,6 +141,11 @@ public class SongListView extends JPanel {
         }
         table.setRowSorter(sorter);
         filter();
+
+
+
+        table.getTableHeader().setReorderingAllowed(false);
+        table.setOpaque(false);
 
         // Personalizing UI
         table.getTableHeader().setForeground(Color.BLACK);
