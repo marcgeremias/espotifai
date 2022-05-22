@@ -92,4 +92,19 @@ public interface PlaylistDAO {
      */
     boolean deletePlaylist(int playlistID) throws PlaylistDAOException;
 
+    /**
+     * This method will return the playlists of a user.
+     * @param userId unique identifier of user.
+     * @return (1) List of {@link Playlist} or <b>null</b>
+     * @throws Exception if there is an error storing the data.
+     */
+    ArrayList<Playlist> getPlaylistByUserID(String userId) throws PlaylistDAOException;
+
+    /**
+     * This method will return the other playlists that are not from a user.
+     * @param userId unique identifier of user.
+     * @return (1) List of {@link Playlist} or <b>null</b>
+     * @throws Exception if there is an error storing the data.
+     */
+    ArrayList<Playlist> getDifferentPlaylistByUserID(String userId) throws PlaylistDAOException;
 }
