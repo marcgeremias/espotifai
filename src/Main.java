@@ -1,6 +1,7 @@
 import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
+import persistence.config.APILyrics;
 import persistence.postgresql.PlaylistSQL;
 import persistence.postgresql.SongSQL;
 import persistence.postgresql.UserSQL;
@@ -13,7 +14,7 @@ public class Main {
         javax.swing.SwingUtilities.invokeLater(() -> {
             UserSQL userSQL = new UserSQL();
             UserManager userManager = new UserManager(userSQL);
-            SongManager songManager = new SongManager(new SongSQL(), userSQL);
+            SongManager songManager = new SongManager(new SongSQL(), userSQL, new APILyrics());
             PlaylistManager playlistManager = new PlaylistManager(new PlaylistSQL());
             MainView mainView = new MainView();
             MainController mainController = new MainController(mainView, userManager, songManager, playlistManager);
