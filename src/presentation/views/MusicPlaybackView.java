@@ -1,11 +1,15 @@
 package presentation.views;
 
+import business.entities.Song;
 import presentation.controllers.MusicPlaybackController;
 import presentation.views.components.JImagePanel;
 import presentation.views.components.JSliderCustom;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+
+import static business.PlayerManager.MAX_VOL;
+import static business.PlayerManager.MIN_VOL;
 
 /**
  * Public class for the MusicPlaybackView that extends JPanel
@@ -99,7 +103,7 @@ public class MusicPlaybackView extends JPanel {
         btn_skip_back.setPreferredSize(new Dimension(35, 25));
         btn_skip_back.setOpaque(false);
 
-        btn_play = new JImagePanel(PAUSE_P, null, PLAY_P);
+        btn_play = new JImagePanel(PLAY_P, null, PAUSE_P);
         btn_play.setPreferredSize(new Dimension(35, 35));
         btn_play.setOpaque(false);
 
@@ -192,7 +196,7 @@ public class MusicPlaybackView extends JPanel {
         btn_sound.setPreferredSize(new Dimension(15, 15));
         btn_sound.setOpaque(false);
 
-        sldr_volume = new JSliderCustom(0, MAX_VOLUME_TICS, (int)(MAX_VOLUME_TICS*0.5), MusicPlaybackController.SLDR_SOUND);
+        sldr_volume = new JSliderCustom(MIN_VOL, MAX_VOL, 70, MusicPlaybackController.SLDR_SOUND);
         sldr_volume.setPreferredSize(new Dimension(70, 15));
         bufferPane.add(btn_sound);
         bufferPane.add(sldr_volume);
@@ -248,5 +252,61 @@ public class MusicPlaybackView extends JPanel {
     public void toggleSoundButton(){
         btn_sound.swapSecondary();
         repaint();
+    }
+
+    public void notifySongError(String message) {
+        JOptionPane.showMessageDialog(this, message, "Song Loading Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void setSliderPos(int frame) {
+        sldr_music.setValue(frame);
+        currentTime.setText((frame/60) % 60 + ":" + String.format("%02d",frame % 60));
+        repaint();
+    }
+
+    public void setSliderValues(int currentPos, int currentSongLength) {
+        sldr_music.setMaximum(currentSongLength);
+        sldr_music.setMinimum(0);
+        sldr_music.setValue(currentPos);
+        totalTime.setText((currentSongLength/60) % 60 + ":" + String.format("%02d",currentSongLength % 60));
+        currentTime.setText((currentPos/60) % 60 + ":" + String.format("%02d",currentPos % 60));
+        repaint();
+    }
+
+    public void setSongDetails(Song currentSong, BufferedImage cover) {
+        songTitle.setText(currentSong.getTitle());
+        authorName.setText(currentSong.getAuthor());
+        songCoverImage = new JImagePanel(cover);
+        revalidate();
+        repaint();
+    }
+
+    public boolean isBtnPlay(){
+        return btn_play.isPrimarySelected();
+    }
+
+    /**
+     * Sets the icon of the play button to Pause if true Play if false
+     * @param pause if true sets the icon to Pause icon
+     */
+    public void setBtnPause(boolean pause){
+        btn_play.setShowSecondary(pause);
+    }
+
+    public void setSoundSliderPos(int pos) {
+        sldr_volume.setValue(pos);
+        repaint();
+    }
+
+    public boolean isBtnMute() {
+        return !btn_sound.isPrimarySelected();
+    }
+
+    public void setBtnMute(boolean mute){
+        btn_sound.setShowSecondary(mute);
+    }
+
+    public float getSoundSliderValue() {
+        return (float) sldr_volume.getValue();
     }
 }

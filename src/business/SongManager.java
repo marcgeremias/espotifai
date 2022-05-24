@@ -7,7 +7,9 @@ import persistence.SongDAOException;
 import persistence.UserDAO;
 
 import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -107,5 +109,13 @@ public class SongManager {
         Song song = new Song(title, album, genre, author, path, duration, user);
 
         songDAO.createSong(song, file);
+    }
+
+    public AudioInputStream getSongStream(Song song) throws SongDAOException{
+        return songDAO.downloadSong(song.getId());
+    }
+
+    public BufferedImage getCoverImage(int songID) throws SongDAOException {
+        return songDAO.downloadCoverImage(songID);
     }
 }

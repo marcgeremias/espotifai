@@ -1,8 +1,10 @@
 package presentation.controllers;
 
+import business.PlayerManager;
 import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
+import business.entities.Song;
 import business.entities.User;
 import presentation.views.*;
 import presentation.views.components.JSliderUI;
@@ -44,7 +46,7 @@ public class PlayerController implements PlayerViewListener {
      * @param playlistManager playlistManager for accessing playlist data
      */
     public PlayerController(MainViewListener listener, PlayerView playerView, UserManager userManager,
-                            SongManager songManager, PlaylistManager playlistManager) {
+                            SongManager songManager, PlaylistManager playlistManager, PlayerManager playerManager) {
         this.listener = listener;
         this.playerView = playerView;
         this.userManager = userManager;
@@ -82,7 +84,7 @@ public class PlayerController implements PlayerViewListener {
         userProfileView.registerController(userProfileController);
 
         MusicPlaybackView musicPlaybackView = new MusicPlaybackView();
-        musicPlaybackController = new MusicPlaybackController(musicPlaybackView, songManager);
+        musicPlaybackController = new MusicPlaybackController(musicPlaybackView, songManager, playerManager);
         musicPlaybackView.registerController(musicPlaybackController);
 
         SideMenuView sideMenuView = new SideMenuView();
@@ -107,5 +109,10 @@ public class PlayerController implements PlayerViewListener {
     public void logout() {
         userManager.logOutUser();
         listener.changeView(MainView.CARD_LOG_IN);
+    }
+
+    @Override
+    public void playSong(ArrayList<Song> songs, int index) {
+        musicPlaybackController.initSongPlaylist(songs, index);
     }
 }

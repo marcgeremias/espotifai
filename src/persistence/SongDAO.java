@@ -4,6 +4,7 @@ import business.entities.Genre;
 import business.entities.Song;
 
 import javax.sound.sampled.AudioInputStream;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -123,4 +124,12 @@ public interface SongDAO {
      * @throws SongDAOException if the song couldn't be downloaded.
      */
     AudioInputStream downloadSong(int songID) throws SongDAOException;
+
+    /**
+     * This method will download the cover image associated with the song in the storage system
+     * @param songID unique identifier of the song
+     * @return BufferedImage instance with the song or null
+     * @throws SongDAOException if the image can't be retrieved from the system or doesn't exist
+     */
+    BufferedImage downloadCoverImage(int songID) throws SongDAOException;
 }
