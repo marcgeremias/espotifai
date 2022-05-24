@@ -36,7 +36,7 @@ public class PlaylistSQL implements PlaylistDAO {
                     + ", " + DBConstants.COL_ID_NICKNAME + ") VALUES (?, ?)";
             PreparedStatement insertPlaylistSTMT = c.prepareStatement(insertPlaylistSQL);
             insertPlaylistSTMT.setString(1, playlist.getName());
-            insertPlaylistSTMT.setString(2, playlist.getOwner().getName());
+            insertPlaylistSTMT.setString(2, playlist.getOwner());
             int count = insertPlaylistSTMT.executeUpdate();
 
             c.close();
@@ -75,10 +75,11 @@ public class PlaylistSQL implements PlaylistDAO {
                     playlist = new Playlist(
                             rs1.getInt(1), // == playlistID
                             rs1.getString(2),
-                            userDAO.getUserByID(rs1.getString(3)),
-                            songDAO.getSongsByPlaylistID(playlistID)
+                            rs1.getString(3)
+                            //userDAO.getUserByID(rs1.getString(3)),
+                            //songDAO.getSongsByPlaylistID(playlistID)
                     );
-                } catch (SongDAOException | UserDAOException e) {
+                } catch (SQLException e) {
             /*
                 Because DAO is generic and throws a generic Exception we need to make sure that if Exception is
                 thrown that we transform it to a SQLException
@@ -114,7 +115,7 @@ public class PlaylistSQL implements PlaylistDAO {
          |   Col 1      |   Col 2   |   Col 3   |
          | id_playlist  |   title   | id_owner  |
          */
-            return getPlaylists(userDAO, songDAO, c, playlists, rs1);
+            return getPlaylists(c, playlists, rs1);
         } catch (SQLException e) {
             throw new PlaylistDAOException(e.getMessage());
         }
@@ -143,7 +144,7 @@ public class PlaylistSQL implements PlaylistDAO {
          |   Col 1      |   Col 2   |   Col 3   |
          | id_playlist  |   title   | id_owner  |
          */
-            return getPlaylists(userDAO, songDAO, c, playlists, rs1);
+            return getPlaylists(c, playlists, rs1);
         } catch (SQLException e) {
             throw new PlaylistDAOException(e.getMessage());
         }
@@ -219,7 +220,7 @@ public class PlaylistSQL implements PlaylistDAO {
                     "WHERE " + DBConstants.COL_ID_PLAYLIST + " = ?";
             PreparedStatement updatePlaylistSTMT = c.prepareStatement(updatePlaylistSQL);
             updatePlaylistSTMT.setString(1, playlist.getName());
-            updatePlaylistSTMT.setString(2, playlist.getOwner().getName());  //TODO: canviar a Tell don't ask?
+            updatePlaylistSTMT.setString(2, playlist.getOwner());  //TODO: canviar a Tell don't ask?
             updatePlaylistSTMT.setInt(3, playlist.getId());
             int count = updatePlaylistSTMT.executeUpdate();
 
@@ -253,21 +254,66 @@ public class PlaylistSQL implements PlaylistDAO {
         }
     }
 
+    @Override
+    public ArrayList<Playlist> getPlaylistByUserID(String userId) throws PlaylistDAOException {
+        try {
+            Connection c = DBConfig.getInstance().openConnection();
+
+            String selectPlaylistSQL = "SELECT * FROM " + DBConstants.TABLE_PLAYLIST + " WHERE " + DBConstants.COL_ID_NICKNAME + " = ?";
+            PreparedStatement selectPlaylistSTMT = c.prepareStatement(selectPlaylistSQL);
+            selectPlaylistSTMT.setString(1, userId);
+            ResultSet rs1 = selectPlaylistSTMT.executeQuery();
+        /*
+         |   Col 1      |   Col 2   |   Col 3   |
+         | id_playlist  |   title   | id_owner  |
+         */
+            ArrayList<Playlist> playlists = getPlaylists(c, new ArrayList<>(), rs1);
+            c.close();
+            return playlists;
+
+        } catch (SQLException e) {
+            throw new PlaylistDAOException(e.getMessage());
+        }
+    }
+
+    @Override
+    public ArrayList<Playlist> getDifferentPlaylistByUserID(String userId) throws PlaylistDAOException{
+        try {
+            Connection c = DBConfig.getInstance().openConnection();
+
+            String selectPlaylistSQL = "SELECT * FROM " + DBConstants.TABLE_PLAYLIST + " WHERE " + DBConstants.COL_ID_NICKNAME + " <> ?";
+            PreparedStatement selectPlaylistSTMT = c.prepareStatement(selectPlaylistSQL);
+            selectPlaylistSTMT.setString(1, userId);
+            ResultSet rs1 = selectPlaylistSTMT.executeQuery();
+        /*
+         |   Col 1      |   Col 2   |   Col 3   |
+         | id_playlist  |   title   | id_owner  |
+         */
+            ArrayList<Playlist> playlists = getPlaylists(c, new ArrayList<>(), rs1);
+            c.close();
+            return playlists;
+
+        } catch (SQLException e) {
+            throw new PlaylistDAOException(e.getMessage());
+        }
+    }
+
     /*
     Private method to get playlist object data from result set
      */
-    private ArrayList<Playlist> getPlaylists(UserDAO userDAO, SongDAO songDAO, Connection c, ArrayList<Playlist> playlists, ResultSet rs1) throws SQLException {
+    private ArrayList<Playlist> getPlaylists(Connection c, ArrayList<Playlist> playlists, ResultSet rs1) throws SQLException {
         try {
             while (rs1.next()) {
                 Playlist playlist = new Playlist(
                         rs1.getInt(1), // == playlistID
                         rs1.getString(2),
-                        userDAO.getUserByID(rs1.getString(3)),
-                        songDAO.getSongsByPlaylistID(rs1.getInt(1))
+                        rs1.getString(3)
+                        //userDAO.getUserByID(rs1.getString(3)),
+                        //songDAO.getSongsByPlaylistID(rs1.getInt(1))
                 );
                 playlists.add(playlist);
             }
-        } catch (SongDAOException | UserDAOException e){
+        } catch (SQLException e){
             /*
                 Because DAO is generic and throws a generic Exception we need to make sure that if Exception is
                 thrown that we transform it to a SQLException

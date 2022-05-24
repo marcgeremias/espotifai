@@ -66,6 +66,13 @@ public interface SongDAO {
     ArrayList<Song> getSongsByAuthorName(String authorName) throws SongDAOException;
 
     /**
+     * This method will return all the songs in the database.
+     * @return (1) List of {@link Song} if the values matches any song in the system, (2) null otherwise.
+     * @throws SongDAOException if there is an error accessing the database.
+     */
+    ArrayList<Song> getAllSongs() throws SongDAOException;
+
+    /**
      * This method will return all the songs that have the same title. <b>Note</b> that songs can have the same
      * name and be different.
      * @param title String containing the title of the song.

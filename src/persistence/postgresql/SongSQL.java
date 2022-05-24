@@ -211,6 +211,21 @@ public class SongSQL implements SongDAO {
         }
     }
 
+    @Override
+    public ArrayList<Song> getAllSongs() throws SongDAOException {
+        try {
+            Connection c = DBConfig.getInstance().openConnection();
+            ArrayList<Song> songs = new ArrayList<>();
+
+            String selectSongsSQL = "SELECT * FROM " + DBConstants.TABLE_SONG;
+
+            PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
+            return getSongs(c, songs, selectSongsSTMT);
+        } catch (SQLException e) {
+            throw new SongDAOException(e.getMessage());
+        }
+    }
+
     /**
      * This method will query the database and return all the songs that match the given parameter.
      * @param title identifier to query the songs

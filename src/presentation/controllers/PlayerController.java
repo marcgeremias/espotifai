@@ -7,14 +7,6 @@ import business.UserManager;
 import business.entities.Song;
 import business.entities.User;
 import presentation.views.*;
-import presentation.views.components.JSliderUI;
-import presentation.views.components.SliderListener;
-
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class PlayerController implements PlayerViewListener {
 
@@ -23,19 +15,22 @@ public class PlayerController implements PlayerViewListener {
     private MainViewListener listener;
 
     // Is this legal?
-    private UserManager userManager;
+    User userLoggedIn;
 
     // Pane controllers
-    private final HomeController homeController;
-    private final SearchController searchController;
+    private final DefaultController defaultController;
+    private final SongListController songListController;
     private final LibraryController libraryController;
     private final AddSongController addSongController;
-    private final StatsController statsController;
     private final SongDetailController songDetailController;
     private final PlaylistDetailController playlistDetailController;
     private final UserProfileController userProfileController;
     private final MusicPlaybackController musicPlaybackController;
     private final SideMenuController sideMenuController;
+    private UserManager userManager;
+    // We need to make the view an attribute due to a dynamic JTable
+    private SongListView songListView;
+    private LibraryView libraryView;
 
     /**
      * This method initializes all the view necessary for the Main execution of the program
@@ -50,26 +45,21 @@ public class PlayerController implements PlayerViewListener {
         this.listener = listener;
         this.playerView = playerView;
         this.userManager = userManager;
+        DefaultView defaultView = new DefaultView();
 
-        HomeView homeView = new HomeView();
-        homeController = new HomeController(this, homeView, userManager, songManager, playlistManager);
-        homeView.registerController(homeController);
+        defaultController = new DefaultController(this, defaultView, userManager, songManager, playlistManager);
+        defaultView.registerController(defaultController);
 
-        SearchView searchView =  new SearchView();
-        searchController = new SearchController(this, searchView, userManager, songManager, playlistManager);
-        searchView.registerController(searchController);
+        songListView =  new SongListView();
+        songListController = new SongListController(this, songListView, userManager, songManager, playlistManager);
+        songListView.registerKeyController(songListController);
 
-        LibraryView libraryView = new LibraryView();
+        libraryView = new LibraryView();
         libraryController = new LibraryController(this, libraryView, userManager, songManager, playlistManager);
-        libraryView.registerController(libraryController);
 
         AddSongView addSongView = new AddSongView(songManager.getAuthors());
         addSongController = new AddSongController(this, addSongView, userManager, songManager);
         addSongView.registerController(addSongController);
-
-        StatsView statsView = new StatsView();
-        statsController = new StatsController(this, statsView, userManager, songManager, playlistManager);
-        statsView.registerController(statsController);
 
         SongDetailView songDetailView = new SongDetailView();
         songDetailController = new SongDetailController(this, songDetailView, userManager, songManager, playlistManager);
@@ -88,21 +78,49 @@ public class PlayerController implements PlayerViewListener {
         musicPlaybackView.registerController(musicPlaybackController);
 
         SideMenuView sideMenuView = new SideMenuView();
-        sideMenuController = new SideMenuController(this, sideMenuView, userManager, playlistManager);
+        sideMenuController = new SideMenuController(this, sideMenuView, userManager, playlistManager, songManager);
         sideMenuView.registerController(sideMenuController);
 
         this.playerView.setContents(musicPlaybackView, sideMenuView);
-        this.playerView.initCardLayout(homeView, searchView, libraryView, addSongView, statsView,
+        this.playerView.initCardLayout(defaultView, songListView, libraryView, addSongView,
                                         songDetailView, playlistDetailView, userProfileView);
-
-        //this.playerView.changeView(PlayerView.HOME_VIEW);   // default view
-        //this.playerView.changeView(PlayerView.USER_PROFILE_VIEW);
-        this.playerView.changeView(PlayerView.ADD_SONG_VIEW);
+        this.playerView.changeView(PlayerView.DEFAULT_VIEW);
     }
 
     @Override
     public void changeView(String card) {
+        initCard(card);
         playerView.changeView(card);
+    }
+
+    /*
+     * Method that initializes all the data needed when accessing into a view
+     * @param card the ID of the card of the view we are initializing
+     */
+    private void initCard(String card) {
+        switch (card){
+            case PlayerView.DEFAULT_VIEW:
+                defaultController.initCard();
+                break;
+            case PlayerView.SONG_LIST_VIEW:
+                songListController.initView();
+                // We need to register the controller every time due to the dynamic JTable
+                songListView.registerMouseController(songListController);
+                break;
+            case PlayerView.LIBRARY_VIEW:
+                libraryController.initView();
+                // We need to register the controller every time due to the dynamic JTable
+                libraryView.registerMouseController(libraryController);
+                break;
+            case PlayerView.ADD_SONG_VIEW:
+                break;
+            case PlayerView.SONG_DETAIL_VIEW:
+                break;
+            case PlayerView.PLAYLIST_DETAIL_VIEW:
+                break;
+            case PlayerView.USER_PROFILE_VIEW:
+                break;
+        }
     }
 
     @Override
