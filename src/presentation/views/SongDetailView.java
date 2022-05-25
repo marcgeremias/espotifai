@@ -137,6 +137,9 @@ public class SongDetailView extends JPanel {
         lyricsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPanePersonalized(lyricsScrollPane);
         lyricsScrollPane.setPreferredSize(new Dimension(100, 100));
+
+        revalidate();
+        repaint();
     }
 
     /**
@@ -345,5 +348,9 @@ public class SongDetailView extends JPanel {
         });
         scrollPane.getVerticalScrollBar().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         scrollPane.getHorizontalScrollBar().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+    }
+
+    public void lyricsError() {
+        JOptionPane.showMessageDialog(this, "Error fetching the lyrics");
     }
 }

@@ -10,7 +10,7 @@ public class LyricsLoader extends Thread{
     private String author;
     private String songName;
 
-    public LyricsLoader(LyricsListener lyricsListener, String author, String songName){
+    public LyricsLoader(LyricsListener lyricsListener, String songName, String author){
         this.lyricsListener = lyricsListener;
         this.author = author;
         this.songName = songName;

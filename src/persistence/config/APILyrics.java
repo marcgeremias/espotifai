@@ -1,14 +1,18 @@
 package persistence.config;
 
 import com.sun.security.auth.UnixNumericGroupPrincipal;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Scanner;
 
 /**
@@ -33,7 +37,24 @@ public class APILyrics {
                 separator +
                 songTitle.replace(" ", "_");
 
-        URL url = new URL(stringBuilder);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder(URI.create(stringBuilder))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
+        HttpResponse<String> response = null;
+        try {
+            //TODO: change sync request to async request for thread safe purposes.
+            // Here we send the request and wait for the response, this method is currently blocking all the threads
+            // and there is a better alternative with an async function, for now this works
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            org.json.JSONObject object = new JSONObject(response.body());
+            lyrics = object.getString("lyrics");
+            System.out.println(lyrics);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        /*URL url = new URL(stringBuilder);
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
@@ -57,7 +78,7 @@ public class APILyrics {
 
             lyrics = (String) data_obj.get("lyrics");
         }
-
+        */
         return lyrics;
     }
 
