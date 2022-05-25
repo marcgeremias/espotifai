@@ -3,6 +3,8 @@ package presentation.views;
 import business.entities.Playlist;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.*;
 import java.awt.*;
@@ -16,6 +18,7 @@ public class HomeView extends JPanel {
     DefaultTableModel tableModel;
     // Boolean indicating if it's the first time acceding to the view
     private boolean notFirstTime;
+    private int selectedRow;
 
     public HomeView() {
         this.setLayout(new BorderLayout());
@@ -117,6 +120,27 @@ public class HomeView extends JPanel {
 
         tableSongs.add(pane);
         notFirstTime = true;
+
+        // Saving the selected Row to know what song is
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                if (event.getValueIsAdjusting()) {
+                    // If it's the first time, the table says the selected row
+                    if (!notFirstTime) {
+                        selectedRow = table.getSelectedRow();
+                    } else {
+                        // If it's not the first time, if the first index has not changed, the new selected row
+                        // it's the last index and the same for last index.
+                        if (selectedRow == event.getFirstIndex()) {
+                            selectedRow = event.getLastIndex();
+                        } else {
+                            selectedRow = event.getFirstIndex();
+                        }
+                    }
+                }
+                System.out.println("EVENT: " + selectedRow);
+            }
+        });
     }
 
     /*
@@ -166,5 +190,9 @@ public class HomeView extends JPanel {
         panelSearch.setOpaque(false);
         panelSearch.add(searchSong);
         return panelSearch;
+    }
+
+    public int getSongValue() {
+        return selectedRow;
     }
 }

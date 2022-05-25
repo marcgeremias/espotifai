@@ -8,6 +8,7 @@ import presentation.views.components.JImagePanel;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -22,17 +23,11 @@ import java.util.ArrayList;
 public class SongDetailView extends JPanel {
 
     // Image from the list of songs
-    private JImagePanel listImage;
     private JImagePanel playButton;
     public static final String BTN_PLAY_IMAGE = "BTN PLAY IMAGE";
     public static final String BTN_ADD_PLAYLIST = "BTN ADD PLAYLIST";
 
-    public static final String LOGO_IMAGE_PATH = "res/images/nyan_cat.png";
-    public static final String LOGO_PLAY_PATH = "res/icons/play-button-green.png";
-
-    public static final String PLAYLIST_TYPE = "SONG";
-    public static final String ALBUM_TYPE = "ALBUM";
-    private static final String LIST_NAME = "SONG";
+    public static final String LOGO_PLAY_PATH = "res/icons/play-button.png";
 
     private JTable table;
     private JPanel tableSong;
@@ -40,6 +35,7 @@ public class SongDetailView extends JPanel {
     private JComboBox<String> playlistSelector;
     private JPanel playlistPane;
     private HoverButton addPlaylistButton;
+    private JScrollPane lyricsScrollPane;
 
     /**
      * Constructor method to set up the view
@@ -49,6 +45,7 @@ public class SongDetailView extends JPanel {
         tableSong = new JPanel(new GridLayout());
         tableSong.setBorder(new EmptyBorder(50, 50, 0, 50));
         this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+
         this.add(tableSong, BorderLayout.NORTH);
         this.add(westMargin(), BorderLayout.WEST);
         this.add(eastMargin(), BorderLayout.EAST);
@@ -59,10 +56,10 @@ public class SongDetailView extends JPanel {
      * Method to add the listener to the playlist buttons
      */
     public void registerController(ActionListener controller) {
-       // playButton.setActionCommand(BTN_PLAY_IMAGE);
-       // playButton.addActionListener(controller);
+        playButton.setActionCommand(BTN_PLAY_IMAGE);
+        playButton.addActionListener(controller);
 
-       addPlaylistButton.setActionCommand(BTN_ADD_PLAYLIST);
+        addPlaylistButton.setActionCommand(BTN_ADD_PLAYLIST);
         addPlaylistButton.addActionListener(controller);
     }
 
@@ -75,20 +72,21 @@ public class SongDetailView extends JPanel {
         playlistSelector = new JComboBox<String>();
         playlistPane = new JPanel();
         addPlaylistButton = new HoverButton(Color.DARK_GRAY, Color.BLACK, "ADD");
+        lyricsScrollPane = new JScrollPane();
 
         //JPanel center config
         JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
         center.setOpaque(true);
         center.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
-        //center.setBorder(BorderFactory.createEmptyBorder());
 
         //center.add(tableSong);
         center.add(addPanelLabel("LYRICS"));
-        center.add(songLyrics());
+        center.add(lyricsScrollPane);
+        center.add(setPlayImage());
         center.add(addPanelLabel("ADD SONG INTO A PLAYLIST"));
         center.add(playlistPane);
-         center.add(addPlaylistButton());
+        center.add(addPlaylistButton());
 
         return center;
     }
@@ -118,118 +116,43 @@ public class SongDetailView extends JPanel {
         searchSong.setHorizontalAlignment(JLabel.CENTER);
 
         JPanel panelSearch = new JPanel();
-        panelSearch.setBorder(BorderFactory.createEmptyBorder(20,15,5,15));
+        panelSearch.setBorder(BorderFactory.createEmptyBorder(40,15,0,15));
         panelSearch.setOpaque(false);
         panelSearch.add(searchSong);
         return panelSearch;
     }
 
-    private Component songLyrics() {
-        JTable songTable = new JTable();
-        JTextArea textArea = new JTextArea("Testing the text", 5, 10);
+    public void setSongLyrics(String lyrics) {
+        JTextArea textArea = new JTextArea(lyrics, 10, 10);
         textArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        songTable.add(scrollPane);
-        return songTable;
+        textArea.setForeground(Color.WHITE);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        textArea.setFont(new Font("Apple Casual", Font.BOLD, 12));
+        textArea.setHighlighter(null);
+        textArea.setWrapStyleWord(true);
+
+        lyricsScrollPane.setViewportView(textArea);
+        lyricsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPanePersonalized(lyricsScrollPane);
+        lyricsScrollPane.setPreferredSize(new Dimension(100, 100));
     }
 
     /**
-     * Method to set the top JPanel
-     * @return the JPanel on the top
+     * Method that sets the play image
+     * @return JPanel with the button image
      */
-    /*private Component upUI() {
-        JPanel upUI = new JPanel();
-        // Margin with song list
-        upUI.setPreferredSize(new Dimension(160, 160));
-        //upUI.setPreferredSize(new Dimension(320, 320));
-        //Part esquerre
-        upUI.add(setImageList());
-        //Part dreta
-        upUI.add(setTexts());
-        // Left alignment
-        upUI.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-        upUI.setBackground(Color.MAGENTA);
-        return upUI;
-    }*/
-
-    /**
-     * Method that creates a BoxLayout with som texts
-     * @return the BoxLayout created inside a JPanel
-     */
-    private Component setTexts() {
-        JPanel textsFrame = new JPanel();
-        // Alignment on Y_AXIS
-        textsFrame.setLayout(new BoxLayout(textsFrame, BoxLayout.Y_AXIS));
-
-        textsFrame.add(typeText());
-        textsFrame.add(listName());
-
-        return textsFrame;
-    }
-
-    /**
-     * Method that creates the text of the type List
-     * @return the text created inside a JPanel
-     */
-    private Component typeText() {
-        JPanel jPanel = new JPanel();
-        jPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-        JLabel jLabel = new JLabel();
-        jLabel.setFont(new Font("Arial", Font.BOLD, 15));
-        jLabel.setText(PLAYLIST_TYPE);
-        jPanel.add(jLabel);
-
-        return jPanel;
-    }
-
-    /**
-     * Method that creates the text of the name List
-     * @return the text created inside a JPanel
-     */
-    private Component listName() {
-        JPanel jPanel = new JPanel();
-
-        JLabel jLabel = new JLabel();
-        jLabel.setFont(new Font("Arial", Font.BOLD, 40));
-        jLabel.setText(LIST_NAME);
-        jPanel.add(jLabel);
-
-        return jPanel;
-    }
-
-    /**
-     * Method that sets the images of the top JPanel
-     * @return JPanel with the cover image and button image
-     */
-    private Component setImageList(){
-        JPanel general = new JPanel();
-
-        JPanel frameImage = new JPanel();
-        JPanel frameButton = new JPanel();
-        frameButton.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-        general.setLayout(new BoxLayout(general, BoxLayout.Y_AXIS));
-
-        // Defining the image
-        // EN UN FUTUR S'HAURA DE TRANSFORMAR A BufferedImage PQ VINDRA DE LA DDBB
-        listImage = new JImagePanel(LOGO_IMAGE_PATH, null, null);
-        listImage.setPreferredSize(new Dimension(250, 250));
-        frameImage.add(listImage);
-
+    private Component setPlayImage(){
+        JPanel playPanel = new JPanel();
+        playPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        playPanel.setBorder(new EmptyBorder(2, 2, 20, 2));
         playButton = new JImagePanel(LOGO_PLAY_PATH, null, null);
         playButton.setPreferredSize(new Dimension(40, 40));
-        frameButton.add(playButton);
-
-        playButton.setBackground(Color.MAGENTA);
-        // Add image to frame
-        general.add(frameImage);
-        general.add(frameButton);
-
-        frameButton.setBackground(Color.MAGENTA);
-
-        return general;
+        playPanel.add(playButton);
+        playButton.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        playPanel.setOpaque(false);
+        return playPanel;
     }
 
 
@@ -261,8 +184,14 @@ public class SongDetailView extends JPanel {
         String[] column = {"Title","Genre","Album","Author", "User Uploaded", "Time"};
 
         if (notFirstTime) {
+            // Resetting view
+            table = null;
+            tableSong = null;
             tableSong = new JPanel(new GridLayout());
+            repaint();
+            revalidate();
         }
+
         tableSong.setOpaque(true);
         tableSong.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         table = new JTable(data, column);
@@ -270,7 +199,10 @@ public class SongDetailView extends JPanel {
         table.getTableHeader().setReorderingAllowed(false);
         table.setOpaque(false);
         DefaultTableModel tableModel = new DefaultTableModel(data, column);
+        //tableModel.fireTableDataChanged();
+        table.repaint();
         table.setModel(tableModel);
+        tableModel.fireTableDataChanged();
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setDefaultEditor(Object.class, null);
 
@@ -301,7 +233,13 @@ public class SongDetailView extends JPanel {
         pane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         pane.setBorder(BorderFactory.createEmptyBorder());
         tableSong.add(pane);
+
+        /*if (notFirstTime) {
+            this.add(tableSong, BorderLayout.NORTH);
+        }*/
+
         notFirstTime = true;
+
     }
 
     /**
@@ -387,13 +325,25 @@ public class SongDetailView extends JPanel {
         playlistSelector.setSelectedIndex(0);
 
         // Author pane components
-        //playlistPane.setLayout(new BoxLayout(playlistPane, BoxLayout.Y_AXIS));
         playlistPane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
-        //playlistPane.setBorder(new EmptyBorder(100, 350, 100, 350));
         playlistPane.add(playlistSelector);
     }
 
-    public String getPlaylistSelected() {
-        return playlistSelector.getItemAt(playlistSelector.getSelectedIndex());
+    public int getPlaylistIndexSelected() {
+        return playlistSelector.getSelectedIndex() - 1;
+    }
+
+    private void scrollPanePersonalized(JScrollPane scrollPane) {
+        scrollPane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getViewport().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = Color.DARK_GRAY;
+            }
+        });
+        scrollPane.getVerticalScrollBar().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        scrollPane.getHorizontalScrollBar().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
     }
 }

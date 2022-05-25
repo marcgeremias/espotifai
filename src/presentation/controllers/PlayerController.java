@@ -127,5 +127,6 @@ public class PlayerController implements PlayerViewListener {
     public void logout() {
         userManager.logOutUser();
         listener.changeView(MainView.CARD_LOG_IN);
+        playerView.changeView(DefaultView.HOME_VIEW);
     }
 }

@@ -84,6 +84,7 @@ public class SongListView extends JPanel {
             data[i][2] = currentSongs.get(i).getAlbum();
             data[i][3] = currentSongs.get(i).getAuthor();
             data[i][4] = currentSongs.get(i).getUser();
+
         }
         // Inserting the column titles
         String[] column = {"Title","Genre","Album","Author", "User Uploaded"};
@@ -126,8 +127,20 @@ public class SongListView extends JPanel {
         // Saving the selected Row to know what song is
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent event) {
-                selectedRow = table.getSelectedRow();
-                System.out.println(table.getSelectedRow());
+                if (event.getValueIsAdjusting()) {
+                    // If it's the first time, the table says the selected row
+                    if (!notFirstTime) {
+                        selectedRow = table.getSelectedRow();
+                    } else {
+                        // If it's not the first time, if the first index has not changed, the new selected row
+                        // it's the last index and the same for last index.
+                        if (selectedRow == event.getFirstIndex()) {
+                            selectedRow = event.getLastIndex();
+                        } else {
+                            selectedRow = event.getFirstIndex();
+                        }
+                    }
+                }
             }
         });
         table.setModel(tableModel);
