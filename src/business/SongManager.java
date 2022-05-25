@@ -5,6 +5,8 @@ import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import persistence.SongDAO;
 import persistence.SongDAOException;
 import persistence.UserDAO;
+import persistence.config.APILyrics;
+import presentation.controllers.LyricsListener;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class SongManager {
+    private static int NUMBER_OF_GENRES = 16;
+
     private SongDAO songDAO;
     private UserDAO userDAO;
     //private ArrayList<String> authors; // get authors from beginning then add when new author?
@@ -23,6 +27,17 @@ public class SongManager {
     public SongManager(SongDAO songDAO, UserDAO userDAO) {
         this.songDAO = songDAO;
         this.userDAO = userDAO;
+    }
+
+    /**
+     * Inicializa the getLyrics thread.
+     * @param lyricsListener listner for grt lyrics.
+     * @param songTitle song title.
+     * @param songAuthor song author.
+     */
+    public void getLyrics(LyricsListener lyricsListener, String songTitle, String songAuthor){
+        LyricsLoader lyricsLoader = new LyricsLoader(lyricsListener, songTitle, songAuthor);
+        lyricsLoader.start();
     }
 
     /**
@@ -129,5 +144,19 @@ public class SongManager {
 
     public BufferedImage getCoverImage(int songID) throws SongDAOException {
         return songDAO.downloadCoverImage(songID);
+    }
+
+    public int[] getNumberOfSongsByGenre() throws SongDAOException{
+        int i = 0;
+        int[] data = new int[NUMBER_OF_GENRES];
+
+        for (Genre genre : Genre.values()){
+            ArrayList<Song> array = songDAO.getSongsByGenre(genre);
+            data[i] = array == null ? 0 : array.size();
+            System.out.println(data[i]);
+            i++;
+        }
+
+        return data;
     }
 }

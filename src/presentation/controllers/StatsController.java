@@ -1,29 +1,35 @@
 package presentation.controllers;
 
-import business.PlaylistManager;
 import business.SongManager;
-import business.UserManager;
+import persistence.SongDAOException;
 import presentation.views.StatsView;
+import presentation.views.components.DataChart;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-public class StatsController implements ActionListener {
+public class StatsController {
 
     private StatsView statsView;
     private SongManager songManager;
+    private DataChart dataChart;
 
+    /**
+     * Public method that creates a new constructor which links with the Statistics view
+     * @param statsView
+     * @param songManager
+     */
     public StatsController(StatsView statsView, SongManager songManager) {
         this.statsView = statsView;
         this.songManager = songManager;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
-
+    /**
+     * Method that loads the data into the DataChart that prints the Statistics
+     */
     public void refreshView() {
-        //Actualitza la vista amb info nova pel grafic
+        try {
+            int[] data = songManager.getNumberOfSongsByGenre();
+            statsView.loadData(data);
+        } catch (SongDAOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -288,7 +288,7 @@ public class SongSQL implements SongDAO {
             ArrayList<Song> songs = new ArrayList<>();
 
             String selectSongsSQL = "SELECT * FROM " + DBConstants.TABLE_SONG
-                    + " WHERE " + DBConstants.SONG_COL_GENRE + " = ?";
+                    + " WHERE " + " UPPER( " + DBConstants.SONG_COL_GENRE + ") = ?";
 
             PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
             selectSongsSTMT.setString(1, String.valueOf(genre));
