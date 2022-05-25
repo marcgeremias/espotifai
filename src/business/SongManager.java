@@ -78,6 +78,8 @@ public class SongManager {
         try {
             ArrayList<Song> existingSongs = songDAO.getSongsByAlbum(album);
 
+            if (existingSongs == null) return true;
+
             for (Song existingSong : existingSongs) {
                 if (existingSong.getTitle().equalsIgnoreCase(title)) {
                     return false;
