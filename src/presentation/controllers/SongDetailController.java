@@ -50,8 +50,9 @@ public class SongDetailController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
-            case PlaylistDetailView.BTN_PLAY_IMAGE:
-                System.out.println("PLAY BUTTON CLICKED");
+            case SongDetailView.BTN_ADD_PLAYLIST:
+                System.out.println("ADD PLAYLIST CLICKED");
+                //playlistManager.addSongToPlaylist()
                 break;
         }
     }

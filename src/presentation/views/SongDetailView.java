@@ -2,10 +2,12 @@ package presentation.views;
 
 import business.entities.Playlist;
 import business.entities.Song;
+import presentation.views.components.HoverButton;
 import presentation.views.components.JImagePanel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -33,19 +35,21 @@ public class SongDetailView extends JPanel {
     private static final String LIST_NAME = "SONG";
 
     private JTable table;
-    private JPanel tableSongs;
+    private JPanel tableSong;
     private boolean notFirstTime;
     private JComboBox<String> playlistSelector;
     private JPanel playlistPane;
-    private JButton addPlaylistButton;
+    private HoverButton addPlaylistButton;
 
     /**
      * Constructor method to set up the view
      */
     public SongDetailView() {
         this.setLayout(new BorderLayout());
-
-        this.add(northMargin(), BorderLayout.NORTH);
+        tableSong = new JPanel(new GridLayout());
+        tableSong.setBorder(new EmptyBorder(50, 50, 0, 50));
+        this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        this.add(tableSong, BorderLayout.NORTH);
         this.add(westMargin(), BorderLayout.WEST);
         this.add(eastMargin(), BorderLayout.EAST);
         this.add(center(), BorderLayout.CENTER);
@@ -55,11 +59,11 @@ public class SongDetailView extends JPanel {
      * Method to add the listener to the playlist buttons
      */
     public void registerController(ActionListener controller) {
-        playButton.setActionCommand(BTN_PLAY_IMAGE);
-        playButton.addActionListener(controller);
+       // playButton.setActionCommand(BTN_PLAY_IMAGE);
+       // playButton.addActionListener(controller);
 
-       //addPlaylistButton.setActionCommand(BTN_ADD_PLAYLIST);
-        //addPlaylistButton.addActionListener(controller);
+       addPlaylistButton.setActionCommand(BTN_ADD_PLAYLIST);
+        addPlaylistButton.addActionListener(controller);
     }
 
 
@@ -68,30 +72,72 @@ public class SongDetailView extends JPanel {
      * @return the JPanel with all the center of the PlaylistDetail view
      */
     private Component center() {
-        tableSongs = new JPanel(new GridLayout());
         playlistSelector = new JComboBox<String>();
         playlistPane = new JPanel();
-        //JPanel sencer
+        addPlaylistButton = new HoverButton(Color.DARK_GRAY, Color.BLACK, "ADD");
+
+        //JPanel center config
         JPanel center = new JPanel();
-        center.setBorder(new EmptyBorder(20, 1, 1, 1));
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+        center.setOpaque(true);
+        center.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        //center.setBorder(BorderFactory.createEmptyBorder());
 
-        //Part superior
-        center.add(upUI());
-
-        //Part inferior
-        center.add(tableSongs, BorderLayout.SOUTH);
-        center.add(playlistPane, BorderLayout.SOUTH);
+        //center.add(tableSong);
+        center.add(addPanelLabel("LYRICS"));
+        center.add(songLyrics());
+        center.add(addPanelLabel("ADD SONG INTO A PLAYLIST"));
+        center.add(playlistPane);
+         center.add(addPlaylistButton());
 
         return center;
     }
 
+    private Component addPlaylistButton() {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false);
+
+        addPlaylistButton.setBackground(Color.BLACK);
+        addPlaylistButton.setForeground(Color.LIGHT_GRAY);
+        addPlaylistButton.setFont(new Font("Apple Casual", Font.BOLD, 10));
+        //Border Settings
+        addPlaylistButton.setBorderPainted(true);
+        addPlaylistButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
+        addPlaylistButton.setPreferredSize(new Dimension(100,25));
+
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 4, 20, 6));
+        buttonPanel.add(addPlaylistButton);
+
+        return buttonPanel;
+    }
+
+    private Component addPanelLabel(String message) {
+        JLabel searchSong = new JLabel(message);
+        searchSong.setForeground(Color.WHITE);
+        searchSong.setFont(new Font("Apple Casual", Font.BOLD, 20));
+        searchSong.setHorizontalAlignment(JLabel.CENTER);
+
+        JPanel panelSearch = new JPanel();
+        panelSearch.setBorder(BorderFactory.createEmptyBorder(20,15,5,15));
+        panelSearch.setOpaque(false);
+        panelSearch.add(searchSong);
+        return panelSearch;
+    }
+
+    private Component songLyrics() {
+        JTable songTable = new JTable();
+        JTextArea textArea = new JTextArea("Testing the text", 5, 10);
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        songTable.add(scrollPane);
+        return songTable;
+    }
 
     /**
      * Method to set the top JPanel
      * @return the JPanel on the top
      */
-    private Component upUI() {
+    /*private Component upUI() {
         JPanel upUI = new JPanel();
         // Margin with song list
         upUI.setPreferredSize(new Dimension(160, 160));
@@ -105,7 +151,7 @@ public class SongDetailView extends JPanel {
 
         upUI.setBackground(Color.MAGENTA);
         return upUI;
-    }
+    }*/
 
     /**
      * Method that creates a BoxLayout with som texts
@@ -215,9 +261,10 @@ public class SongDetailView extends JPanel {
         String[] column = {"Title","Genre","Album","Author", "User Uploaded", "Time"};
 
         if (notFirstTime) {
-            tableSongs = new JPanel(new GridLayout());
+            tableSong = new JPanel(new GridLayout());
         }
-        tableSongs.setOpaque(false);
+        tableSong.setOpaque(true);
+        tableSong.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         table = new JTable(data, column);
 
         table.getTableHeader().setReorderingAllowed(false);
@@ -228,6 +275,9 @@ public class SongDetailView extends JPanel {
         table.setDefaultEditor(Object.class, null);
 
         // Personalizing UI
+        table.setFocusable(false);
+        table.setRowSelectionAllowed(false);
+        //table.setPreferredSize(new Dimension(70, 70));
         table.getTableHeader().setForeground(Color.BLACK);
         table.getTableHeader().setBackground(Color.WHITE);
         table.getTableHeader().setFont(new Font("arial", Font.BOLD, 15));
@@ -247,8 +297,10 @@ public class SongDetailView extends JPanel {
         table.setFillsViewportHeight(true);
 
         JScrollPane pane = new JScrollPane(table);
-        pane.setPreferredSize(new Dimension(100, 100));
-        tableSongs.add(pane);
+        pane.setPreferredSize(new Dimension(table.getWidth(), 62));
+        pane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        pane.setBorder(BorderFactory.createEmptyBorder());
+        tableSong.add(pane);
         notFirstTime = true;
     }
 
@@ -260,7 +312,7 @@ public class SongDetailView extends JPanel {
         JPanel northMargin = new JPanel();
         northMargin.setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));
 
-        northMargin.setBackground(Color.blue);
+        northMargin.setOpaque(false);
         return northMargin;
     }
 
@@ -272,7 +324,7 @@ public class SongDetailView extends JPanel {
         JPanel westMargin = new JPanel();
         westMargin.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 50));
 
-        westMargin.setBackground(Color.RED);
+        westMargin.setOpaque(false);
         return westMargin;
     }
 
@@ -284,7 +336,7 @@ public class SongDetailView extends JPanel {
         JPanel eastMargin = new JPanel();
         eastMargin.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 0));
 
-        eastMargin.setBackground(Color.CYAN);
+        eastMargin.setOpaque(false);
         return eastMargin;
     }
 
@@ -328,7 +380,6 @@ public class SongDetailView extends JPanel {
         playlistSelector.setBackground(new Color(76, 76, 76));
         playlistSelector.setForeground(Color.GRAY);
         playlistSelector.addItem("Select Playlist");
-
         for (Playlist allPlaylist : allPlaylists) {
             playlistSelector.addItem(allPlaylist.getName());
         }
@@ -336,8 +387,13 @@ public class SongDetailView extends JPanel {
         playlistSelector.setSelectedIndex(0);
 
         // Author pane components
-        playlistPane.setLayout(new BoxLayout(playlistPane, BoxLayout.Y_AXIS));
+        //playlistPane.setLayout(new BoxLayout(playlistPane, BoxLayout.Y_AXIS));
         playlistPane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        //playlistPane.setBorder(new EmptyBorder(100, 350, 100, 350));
         playlistPane.add(playlistSelector);
+    }
+
+    public String getPlaylistSelected() {
+        return playlistSelector.getItemAt(playlistSelector.getSelectedIndex());
     }
 }

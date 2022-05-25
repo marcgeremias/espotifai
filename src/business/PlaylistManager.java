@@ -29,4 +29,8 @@ public class PlaylistManager {
         ArrayList<Playlist> allPlaylists = playlistDAO.getAllPlaylists();
         return allPlaylists == null ? new ArrayList<>() : allPlaylists;
     }
+
+    public boolean addSongToPlaylist(int playlistID, int songID) throws PlaylistDAOException{
+        return playlistDAO.addSongToPlaylist(playlistID, songID);
+    }
 }
