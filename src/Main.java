@@ -14,7 +14,7 @@ public class Main {
         javax.swing.SwingUtilities.invokeLater(() -> {
             UserSQL userSQL = new UserSQL();
             UserManager userManager = new UserManager(userSQL);
-            SongManager songManager = new SongManager(new SongSQL(), userSQL, new APILyrics());
+            SongManager songManager = new SongManager(new SongSQL(), userSQL);
             PlaylistManager playlistManager = new PlaylistManager(new PlaylistSQL());
             MainView mainView = new MainView();
             MainController mainController = new MainController(mainView, userManager, songManager, playlistManager);

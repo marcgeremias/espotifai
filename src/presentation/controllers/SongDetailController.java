@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class SongDetailController implements ActionListener {
+public class SongDetailController implements ActionListener, LyricsListener {
     private PlayerViewListener listener;
     private SongDetailView songDetailView;
     private UserManager userManager;
@@ -136,5 +136,15 @@ public class SongDetailController implements ActionListener {
                 System.out.println("REPRODUCE MUSICCC");
                 break;
         }
+    }
+
+    @Override
+    public void notifyLyricsDone(String lyrics) {
+
+    }
+
+    @Override
+    public void notifyError() {
+
     }
 }

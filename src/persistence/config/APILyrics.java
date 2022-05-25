@@ -17,7 +17,8 @@ import java.util.Scanner;
 public class APILyrics {
     private static final String URL = "https://api.lyrics.ovh/v1/";
     private static final char separator = '/';
-    private String lyrics;
+    private static String lyrics;
+
 
     /**
      * Sends a GET request for a specific song
@@ -26,7 +27,7 @@ public class APILyrics {
      * @return a String with the song lyrics, null in case there aren't lyrics for this song
      * @throws Exception In case there is an error on the HTTP Connection
      */
-    public String makeLyricsRequest(String songTitle, String songAuthor) throws Exception {
+    public static String makeLyricsRequest(String songTitle, String songAuthor) throws Exception {
         String stringBuilder = URL +
                 songAuthor.replace(" ", "_") +
                 separator +
