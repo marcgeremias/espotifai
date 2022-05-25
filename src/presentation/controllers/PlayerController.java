@@ -1,19 +1,20 @@
 package presentation.controllers;
 
+import business.PlayerManager;
 import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
+import business.entities.Song;
 import business.entities.User;
 import presentation.views.*;
+
+import java.util.ArrayList;
 
 public class PlayerController implements PlayerViewListener {
 
     private PlayerView playerView;
     // If a logout is performed we want to change the view to the login one
     private MainViewListener listener;
-
-    // Is this legal?
-    User userLoggedIn;
 
     // Pane controllers
     private final DefaultController defaultController;
@@ -26,6 +27,7 @@ public class PlayerController implements PlayerViewListener {
     private final MusicPlaybackController musicPlaybackController;
     private final SideMenuController sideMenuController;
     private UserManager userManager;
+    private PlayerManager playerManager;
     // We need to make the view an attribute due to a dynamic JTable
     private SongListView songListView;
     private LibraryView libraryView;
@@ -39,10 +41,11 @@ public class PlayerController implements PlayerViewListener {
      * @param playlistManager playlistManager for accessing playlist data
      */
     public PlayerController(MainViewListener listener, PlayerView playerView, UserManager userManager,
-                            SongManager songManager, PlaylistManager playlistManager) {
+                            SongManager songManager, PlaylistManager playlistManager, PlayerManager playerManager) {
         this.listener = listener;
         this.playerView = playerView;
         this.userManager = userManager;
+        this.playerManager = playerManager;
         DefaultView defaultView = new DefaultView();
 
         defaultController = new DefaultController(this, defaultView, userManager, songManager, playlistManager);
@@ -72,7 +75,7 @@ public class PlayerController implements PlayerViewListener {
         userProfileView.registerController(userProfileController);
 
         MusicPlaybackView musicPlaybackView = new MusicPlaybackView();
-        musicPlaybackController = new MusicPlaybackController(musicPlaybackView, songManager);
+        musicPlaybackController = new MusicPlaybackController(musicPlaybackView, songManager, playerManager);
         musicPlaybackView.registerController(musicPlaybackController);
 
         SideMenuView sideMenuView = new SideMenuView();
@@ -124,6 +127,12 @@ public class PlayerController implements PlayerViewListener {
     @Override
     public void logout() {
         userManager.logOutUser();
+        playerManager.clearData();
         listener.changeView(MainView.CARD_LOG_IN);
+    }
+
+    @Override
+    public void playSong(ArrayList<Song> songs, int index) {
+        musicPlaybackController.initSongPlaylist(songs, index);
     }
 }
