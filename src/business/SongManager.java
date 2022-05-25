@@ -5,6 +5,7 @@ import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import persistence.SongDAO;
 import persistence.SongDAOException;
 import persistence.UserDAO;
+import persistence.config.APILyrics;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -16,11 +17,27 @@ import java.util.Map;
 public class SongManager {
     private SongDAO songDAO;
     private UserDAO userDAO;
+    private APILyrics apiLyrics;
     //private ArrayList<String> authors; // get authors from beginning then add when new author?
 
-    public SongManager(SongDAO songDAO, UserDAO userDAO) {
+    public SongManager(SongDAO songDAO, UserDAO userDAO, APILyrics apiLyrics) {
         this.songDAO = songDAO;
         this.userDAO = userDAO;
+        this.apiLyrics = apiLyrics;
+    }
+
+    /**
+     * Gets the lyrics from a song
+     * @param songTitle: a String containing the title of the song
+     * @param songAuthor: a String containing the author of the song
+     * @return a String with the song lyrics
+     */
+    public String getLyrics(String songTitle, String songAuthor){
+        try {
+            return apiLyrics.makeLyricsRequest(songTitle, songAuthor);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
