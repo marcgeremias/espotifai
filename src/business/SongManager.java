@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class SongManager {
+    private static int NUMBER_OF_GENRES = 16;
+
     private SongDAO songDAO;
     private UserDAO userDAO;
     //private ArrayList<String> authors; // get authors from beginning then add when new author?
@@ -119,5 +121,19 @@ public class SongManager {
         Song song = new Song(title, album, genre, author, path, duration, user);
 
         songDAO.createSong(song, file);
+    }
+
+    public int[] getNumberOfSongsByGenre() throws SongDAOException{
+        int i = 0;
+        int[] data = new int[NUMBER_OF_GENRES];
+
+        for (Genre genre : Genre.values()){
+            ArrayList<Song> array = songDAO.getSongsByGenre(genre);
+            data[i] = array == null ? 0 : array.size();
+            System.out.println(data[i]);
+            i++;
+        }
+
+        return data;
     }
 }
