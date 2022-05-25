@@ -74,13 +74,13 @@ public class SongSQL implements SongDAO {
 
             if (rs.next()) {
                 c.close();
-                //return uploadSong(songFile, rs.getInt(1)); todo: uncomment for delivery
-                return true;
+                return uploadSong(songFile, rs.getInt(1)); //todo: uncomment for delivery
+                //return true;
             } else {
                 c.close();
                 return false;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DbxException | IOException e) {
             throw new SongDAOException(e.getMessage());
         }
     }

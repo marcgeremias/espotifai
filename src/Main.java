@@ -18,12 +18,7 @@ public class Main {
             UserManager userManager = new UserManager(userSQL);
             SongManager songManager = new SongManager(new SongSQL(), userSQL);
             PlaylistManager playlistManager = new PlaylistManager(new PlaylistSQL());
-            PlayerManager playerManager = null;
-            try {
-                playerManager = new PlayerManager(songManager);
-            } catch (LineUnavailableException e) {
-                System.out.println("Could not access system audio. Please restart program");;
-            }
+            PlayerManager playerManager = new PlayerManager(songManager);
             MainView mainView = new MainView();
             MainController mainController = new MainController(mainView, userManager, songManager, playlistManager, playerManager);
 

@@ -32,9 +32,9 @@ public class MusicPlaybackView extends JPanel {
     private static final String SKIP_NEXT_H = ICONS_BASE_PATH + "skip-next-button" + DEFAULT_EXTENSION;
     private static final String SKIP_BACK_P = ICONS_BASE_PATH + "skip-back-button_grey" + DEFAULT_EXTENSION;
     private static final String SKIP_BACK_H = ICONS_BASE_PATH + "skip-back-button" + DEFAULT_EXTENSION;
-    private static final String LYRICS_P = ICONS_BASE_PATH + "microphone-button_grey" + DEFAULT_EXTENSION;
-    private static final String LYRICS_S = ICONS_BASE_PATH + "microphone-button_green" + DEFAULT_EXTENSION;
-    private static final String LYRICS_H = ICONS_BASE_PATH + "microphone-button" + DEFAULT_EXTENSION;
+    private static final String SONG_LOOP_P = ICONS_BASE_PATH + "infinite_grey" + DEFAULT_EXTENSION;
+    private static final String SONG_LOOP_S = ICONS_BASE_PATH + "infinite_green" + DEFAULT_EXTENSION;
+    private static final String SONG_LOOP_H = ICONS_BASE_PATH + "infinite" + DEFAULT_EXTENSION;
     private static final String SOUND_P = ICONS_BASE_PATH + "audio-on_grey" + DEFAULT_EXTENSION;
     private static final String SOUND_S = ICONS_BASE_PATH + "audio-off" + DEFAULT_EXTENSION;
     private static final String SOUND_H = ICONS_BASE_PATH + "audio-on" + DEFAULT_EXTENSION;
@@ -52,10 +52,11 @@ public class MusicPlaybackView extends JPanel {
 
     private JImagePanel btn_play;
     private JImagePanel btn_random;
-    private JImagePanel btn_loop;
+    private JImagePanel btn_loop_song;
+    private JImagePanel btn_loop_playlist;
     private JImagePanel btn_skip_next;
     private JImagePanel btn_skip_back;
-    private JImagePanel btn_lyrics;
+    //private JImagePanel btn_lyrics;
     private JImagePanel btn_sound;
     private JSliderCustom sldr_music;
     private JSliderCustom sldr_volume;
@@ -111,15 +112,15 @@ public class MusicPlaybackView extends JPanel {
         btn_skip_next.setPreferredSize(new Dimension(35, 25));
         btn_skip_next.setOpaque(false);
 
-        btn_loop = new JImagePanel(LOOP_P, LOOP_H, LOOP_S);
-        btn_loop.setPreferredSize(new Dimension(15, 15));
-        btn_loop.setOpaque(false);
+        btn_loop_playlist = new JImagePanel(LOOP_P, LOOP_H, LOOP_S);
+        btn_loop_playlist.setPreferredSize(new Dimension(15, 15));
+        btn_loop_playlist.setOpaque(false);
 
         controls.add(btn_random);
         controls.add(btn_skip_back);
         controls.add(btn_play);
         controls.add(btn_skip_next);
-        controls.add(btn_loop);
+        controls.add(btn_loop_playlist);
 
         return controls;
     }
@@ -151,7 +152,7 @@ public class MusicPlaybackView extends JPanel {
     private Component coverImagePane(){
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setOpaque(false);
-        panel.setPreferredSize(new Dimension(250, panel.getHeight()));
+        panel.setPreferredSize(new Dimension(400, panel.getHeight()));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         ((FlowLayout)panel.getLayout()).setHgap(16);
 
@@ -188,9 +189,9 @@ public class MusicPlaybackView extends JPanel {
         JPanel bufferPane = new JPanel();
         bufferPane.setOpaque(false);
 
-        btn_lyrics = new JImagePanel(LYRICS_P, LYRICS_H, LYRICS_S);
-        btn_lyrics.setPreferredSize(new Dimension(15, 15));
-        btn_lyrics.setOpaque(false);
+        btn_loop_song = new JImagePanel(SONG_LOOP_P, SONG_LOOP_H, SONG_LOOP_S);
+        btn_loop_song.setPreferredSize(new Dimension(15, 15));
+        btn_loop_song.setOpaque(false);
 
         btn_sound = new JImagePanel(SOUND_P, SOUND_H, SOUND_S);
         btn_sound.setPreferredSize(new Dimension(15, 15));
@@ -201,7 +202,7 @@ public class MusicPlaybackView extends JPanel {
         bufferPane.add(btn_sound);
         bufferPane.add(sldr_volume);
 
-        panel.add(btn_lyrics);
+        panel.add(btn_loop_song);
         panel.add(bufferPane);
 
         return panel;
@@ -220,12 +221,12 @@ public class MusicPlaybackView extends JPanel {
         btn_play.setActionCommand(MusicPlaybackController.BTN_PLAY);
         btn_skip_next.addActionListener(controller);
         btn_skip_next.setActionCommand(MusicPlaybackController.BTN_SKIP_NEXT);
-        btn_loop.addActionListener(controller);
-        btn_loop.setActionCommand(MusicPlaybackController.BTN_LOOP);
+        btn_loop_playlist.addActionListener(controller);
+        btn_loop_playlist.setActionCommand(MusicPlaybackController.BTN_LOOP);
         btn_sound.addActionListener(controller);
         btn_sound.setActionCommand(MusicPlaybackController.BTN_SOUND);
-        btn_lyrics.addActionListener(controller);
-        btn_lyrics.setActionCommand(MusicPlaybackController.BTN_LYRICS);
+        btn_loop_song.addActionListener(controller);
+        btn_loop_song.setActionCommand(MusicPlaybackController.BTN_LOOP_SONG);
         sldr_music.addSliderListener(controller);
         sldr_volume.addSliderListener(controller);
     }
@@ -237,6 +238,7 @@ public class MusicPlaybackView extends JPanel {
      * @param songDuration integer containing the song duration
      * @param cover BufferedImage with the cover image to display
      */
+    //TODO: Remove if not used
     public void setCurrentSongValues(String songTitle, String authorName, int songDuration, BufferedImage cover) {
         this.currentSongDuration = songDuration;
         this.songTitle.setText(songTitle);
@@ -249,21 +251,35 @@ public class MusicPlaybackView extends JPanel {
     /**
      * This method will swap the sound button on or off
      */
+    //TODO: Remove if not used
     public void toggleSoundButton(){
         btn_sound.swapSecondary();
         repaint();
     }
 
+    /**
+     * This method is called to notify through a pop up of some error to the user.
+     * @param message message to display in the popup
+     */
     public void notifySongError(String message) {
         JOptionPane.showMessageDialog(this, message, "Song Loading Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * This method will update the slider position given a value
+     * @param frame integer containing the value of the desired position of the slider
+     */
     public void setSliderPos(int frame) {
         sldr_music.setValue(frame);
         currentTime.setText((frame/60) % 60 + ":" + String.format("%02d",frame % 60));
         repaint();
     }
 
+    /**
+     * This method will set the song progress slider to the desired range of values
+     * @param currentPos position where the slider will rest
+     * @param currentSongLength maximum value for the slider
+     */
     public void setSliderValues(int currentPos, int currentSongLength) {
         sldr_music.setMaximum(currentSongLength);
         sldr_music.setMinimum(0);
@@ -273,6 +289,11 @@ public class MusicPlaybackView extends JPanel {
         repaint();
     }
 
+    /**
+     * This method will set the song details and updated the view
+     * @param currentSong instance of {@link Song} to be displayed
+     * @param cover image containing the cover of the song
+     */
     public void setSongDetails(Song currentSong, BufferedImage cover) {
         songTitle.setText(currentSong.getTitle());
         authorName.setText(currentSong.getAuthor());
@@ -281,6 +302,10 @@ public class MusicPlaybackView extends JPanel {
         repaint();
     }
 
+    /**
+     * This method checks whether the play button is shown
+     * @return true if the button shows the play button, false if the button shows the pause button
+     */
     public boolean isBtnPlay(){
         return btn_play.isPrimarySelected();
     }
@@ -293,20 +318,45 @@ public class MusicPlaybackView extends JPanel {
         btn_play.setShowSecondary(pause);
     }
 
+    /**
+     * This method sets the sound slider position to the desired value
+     * @param pos value to set the slider to
+     */
+    //TODO: Remove if not used
     public void setSoundSliderPos(int pos) {
         sldr_volume.setValue(pos);
         repaint();
     }
 
+    /**
+     * Method to check button mute state
+     * @return true if mute icon is shown, false otherwise
+     */
     public boolean isBtnMute() {
         return !btn_sound.isPrimarySelected();
     }
 
+    /**
+     * Sets the button mute to desired state
+     * @param mute true or false
+     */
     public void setBtnMute(boolean mute){
         btn_sound.setShowSecondary(mute);
     }
 
+    /**
+     * Getter for sound slider
+     * @return current value of the sound slider
+     */
     public float getSoundSliderValue() {
         return (float) sldr_volume.getValue();
+    }
+
+    /**
+     * Method to check if the button loop is selected or not
+     * @return true if the secondary icon for the loop song icon is shown, false otherwise
+     */
+    public boolean isBtnSongLoop(){
+        return !btn_loop_song.isPrimarySelected();
     }
 }

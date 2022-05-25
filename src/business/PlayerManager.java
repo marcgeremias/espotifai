@@ -1,6 +1,5 @@
 package business;
 
-import business.entities.Genre;
 import business.entities.Song;
 import persistence.SongDAOException;
 import presentation.controllers.MusicPlaybackController;
@@ -16,6 +15,9 @@ import java.util.Stack;
 
 import static presentation.controllers.MusicPlaybackController.TMR_INTERRUPT;
 
+/**
+ * The PlayerManager class is an instance used to execute all the logic behind a music playback execution
+ */
 public class PlayerManager {
 
     public static final int MIN_VOL = -30;
@@ -27,26 +29,25 @@ public class PlayerManager {
     private int currentSongIndex;
     private Timer songTimer;
     private Clip player;
-    private int playerHandle;
     private SongLoader songLoader;
-    private AudioInputStream[] songsBuffer;
     private FloatControl audioControl;
 
-    private boolean repeatSong;
     private boolean repeatPlaylist;
     private boolean randomSong;
 
     private int currentSongLength;
     private Stack<Integer> trail;
 
-    public PlayerManager(SongManager songManager) throws LineUnavailableException {
+    /**
+     * Public constructor for the PlayerManager class
+     * @param songManager instance of {@link SongManager}
+     */
+    public PlayerManager(SongManager songManager) {
         this.songManager = songManager;
         this.songs = new ArrayList<>();
         this.currentSongIndex = 0;
-        this.repeatSong = false;
         this.repeatPlaylist = false;
         this.randomSong = false;
-        songLoader = new SongLoader(songManager);
     }
 
     /**
@@ -55,27 +56,49 @@ public class PlayerManager {
      * @param index index start of the song we want to reproduce first
      */
     public void initSongPlaylist(ArrayList<Song> songs, int index) {
+        if (player != null){
+            if (player.isRunning()){
+                player.stop();
+            }
+            player = null;
+        }
+        if (songTimer != null) {
+            songTimer.stop();
+            songTimer = null;
+        }
+        this.trail = new Stack<>();
+        for (int i = 0; i < index; i++) {
+            trail.push(i);
+        }
         this.songs = songs;
         this.currentSongIndex = index;
-        this.trail = new Stack<>();
-        songsBuffer = new AudioInputStream[songs.size()];
-        songLoader.load(songs, songsBuffer);
+        // This method needs to be called everytime because a new thread needs to be initiated
+        songLoader = new SongLoader(songManager);
+        songLoader.load(songs);
         songLoader.start();
     }
 
+    /**
+     * This method will start reproducing the song indicated by the currentSongIndex variable
+     * @param listener instance of {@link MusicPlaybackController} that will be responsible for managing the timer
+     * @throws SongDAOException if the song can't be downloaded
+     * @throws LineUnavailableException if the system can't open a new Clip instance
+     * @throws IOException if a file can't be read correctly
+     * @throws UnsupportedAudioFileException if the format of the file read isn't supported by the {@link AudioSystem} instance
+     * @see AudioSystem
+     */
     public void loadNextSong(MusicPlaybackController listener) throws SongDAOException, LineUnavailableException, IOException, UnsupportedAudioFileException {
         AudioInputStream ais;
         ArrayList<Integer> tmp = songLoader.getSongsSaved();
-        if (tmp.contains(songs.get(currentSongIndex))){
-            int indexWhere = tmp.indexOf(songs.get(currentSongIndex));
-            ais = AudioSystem.getAudioInputStream(new File("./res/songs/" + songs + ".wav"));
+        //If the song is already downloaded we can play it directly from local files
+        if (tmp.contains(songs.get(currentSongIndex).getId())){
+            int indexWhere = tmp.indexOf(songs.get(currentSongIndex).getId());
+            ais = AudioSystem.getAudioInputStream(new File("./res/songs/" + tmp.get(indexWhere) + ".wav"));
         } else {
             ais = songManager.getSongStream(songs.get(currentSongIndex));
         }
-        //AudioCue.makeStereoCue(ais);
         player = AudioSystem.getClip();
         player.open(ais);
-        //playerHandle = player.play();
         // Value is in microseconds and it needs conversion to seconds
         currentSongLength = (int) (player.getMicrosecondLength() / 1000000);
         // delay is represented in ms so 1000 is 1 second
@@ -85,23 +108,39 @@ public class PlayerManager {
         audioControl = (FloatControl) player.getControl(FloatControl.Type.MASTER_GAIN);
     }
 
+    /**
+     * This method will get the current song length
+     * @return integer corresponding to the current song length
+     */
     public int getCurrentSongLength() {
         return currentSongLength;
     }
 
+    /**
+     * This method will set the playback position in the song thread
+     * @param sliderPos value corresponding to the position where playback frame is to be placed
+     */
     public void setPlaybackFrame(int sliderPos) {
         //player.setFramePosition(playerHandle, sliderPos * 1000000L);
         player.setMicrosecondPosition(sliderPos * 1000000L);
     }
 
+    /**
+     * This method will return the instance of {@link Song} that is being currently played in the player.
+     * @return instance of {@link Song}
+     */
     public Song getCurrentSongAttributes() {
         return songs.get(currentSongIndex);
     }
 
+    /**
+     * This method will generate the next song index based on the flags activated and the current song index
+     * @return true if the index was generated correctly, false if the current song is the last of the playlist and
+     * therefore no more indexes can be generated
+     */
     public boolean generateNextIndex(){
-        trail.push(currentSongIndex);
-        System.out.println("Pushed "+currentSongIndex);
         if(randomSong){
+            trail.push(currentSongIndex);
             Random rand = new Random();
             int r;
             do {
@@ -109,29 +148,36 @@ public class PlayerManager {
             } while (currentSongIndex == r);
             currentSongIndex = r;
         } else {
-            currentSongIndex++;
-            if (repeatPlaylist && currentSongIndex == songs.size()){
+            if (repeatPlaylist && currentSongIndex >= (songs.size() - 1)) {
+                trail.push(currentSongIndex);
                 currentSongIndex = 0;
-            } else if (currentSongIndex >= songs.size()){
+            } else if (currentSongIndex < (songs.size() - 1)){
+                trail.push(currentSongIndex);
+                currentSongIndex++;
+            } else {
                 return false;
             }
         }
-        System.out.println("New song "+currentSongIndex);
         return true;
     }
 
+    /**
+     * Toggles the random song flag
+     */
     public void toggleRandom(){
         randomSong = !randomSong;
     }
 
-    public void toggleLoopSong(){
-        repeatSong = !repeatSong;
-    }
-
+    /**
+     * Toggles the loop playlist flag
+     */
     public void toggleLoopPlaylist(){
         repeatPlaylist = !repeatPlaylist;
     }
 
+    /**
+     * This method will resume the song thread, and it's timer thread
+     */
     public void resumeSong(){
         if (player != null) {
             player.start();
@@ -139,6 +185,9 @@ public class PlayerManager {
         }
     }
 
+    /**
+     * This method will pause the song thread, and it's timer thread
+     */
     public void pauseSong() {
         if (player != null) {
             player.stop();
@@ -146,6 +195,9 @@ public class PlayerManager {
         }
     }
 
+    /**
+     * This method will kill the current song thread and timer
+     */
     public void killSong() {
         if (player != null) {
             if (player.isRunning()) {
@@ -160,15 +212,26 @@ public class PlayerManager {
         }
     }
 
+    /**
+     * This method is used to set the volume of the system audio output
+     * @param decibelsReduce value ranging from -80 to 6 corresponding to the dB reduce
+     */
     public void setAudioControlLevel(float decibelsReduce) {
-        //player.(playerHandle, decibelsReduce/100);
         audioControl.setValue(decibelsReduce);
     }
 
+    /**
+     * This method is used to know whether a song has ended
+     * @return true if song has ended false otherwise
+     */
     public boolean songEnded() {
         return currentSongLength <= player.getMicrosecondPosition()/1000000;
     }
 
+    /**
+     * This method will prepare the previous song played
+     * @return true if a previous song was found and loaded correctly, false otherwise
+     */
     public boolean setPreviousSongIndex() {
         try {
             if (trail.size() >= 1) {
@@ -181,5 +244,45 @@ public class PlayerManager {
         } catch (IndexOutOfBoundsException | EmptyStackException e){
             return false;
         }
+    }
+
+    /**
+     * This method will check if a given list of songs is exactly the same as the currently loaded in the instance.
+     * @param songs list of songs
+     * @return true if the lists match, false otherwise
+     */
+    public boolean isSamePlaylist(ArrayList<Song> songs) {
+        if (this.songs.size() > 0) {
+            for (int i = 0; i < this.songs.size(); i++) {
+                if (this.songs.get(i) != songs.get(i)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * This method is called to force a currentSongIndex
+     * @param currentSongIndex new index to set the value
+     */
+    public void setCurrentSongIndex(int currentSongIndex) {
+        trail.push(currentSongIndex);
+        this.currentSongIndex = currentSongIndex;
+    }
+
+    /**
+     * This method is called to clear all values from the instance from RAM
+     */
+    public void clearData(){
+        killSong();
+        this.songs = new ArrayList<>();
+        this.currentSongIndex = 0;
+        this.repeatPlaylist = false;
+        this.randomSong = false;
+        this.currentSongLength = 0;
+        trail = null;
     }
 }

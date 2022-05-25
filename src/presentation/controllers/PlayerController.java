@@ -16,9 +16,6 @@ public class PlayerController implements PlayerViewListener {
     // If a logout is performed we want to change the view to the login one
     private MainViewListener listener;
 
-    // Is this legal?
-    User userLoggedIn;
-
     // Pane controllers
     private final DefaultController defaultController;
     private final SongListController songListController;
@@ -30,6 +27,7 @@ public class PlayerController implements PlayerViewListener {
     private final MusicPlaybackController musicPlaybackController;
     private final SideMenuController sideMenuController;
     private UserManager userManager;
+    private PlayerManager playerManager;
     // We need to make the view an attribute due to a dynamic JTable
     private SongListView songListView;
     private LibraryView libraryView;
@@ -47,6 +45,7 @@ public class PlayerController implements PlayerViewListener {
         this.listener = listener;
         this.playerView = playerView;
         this.userManager = userManager;
+        this.playerManager = playerManager;
         DefaultView defaultView = new DefaultView();
 
         defaultController = new DefaultController(this, defaultView, userManager, songManager, playlistManager);
@@ -128,6 +127,7 @@ public class PlayerController implements PlayerViewListener {
     @Override
     public void logout() {
         userManager.logOutUser();
+        playerManager.clearData();
         listener.changeView(MainView.CARD_LOG_IN);
     }
 
