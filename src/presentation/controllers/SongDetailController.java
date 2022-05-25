@@ -9,7 +9,7 @@ import presentation.views.SongDetailView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SongDetailController implements ActionListener {
+public class SongDetailController implements ActionListener, LyricsListener {
     private PlayerViewListener listener;
     private SongDetailView songDetailView;
     private UserManager userManager;
@@ -27,6 +27,16 @@ public class SongDetailController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
+    }
+
+    @Override
+    public void notifyLyricsDone(String lyrics) {
+
+    }
+
+    @Override
+    public void notifyError() {
 
     }
 }
