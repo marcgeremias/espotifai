@@ -37,7 +37,7 @@ public class StatsView extends PlayerView {
     }
 
     /**
-     * Method that 
+     * Method that
      * @param data
      */
     public void loadData(int[] data) {
