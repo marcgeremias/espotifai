@@ -45,4 +45,32 @@ public class Playlist {
     public ArrayList<Integer> getSongs() {
         return songs;
     }
+
+    /**
+     * Checks whether a song belongs to the playlist
+     * @param song an integer representing the song
+     * @return a boolean indicating whether the song is in the playlist
+     */
+    public boolean containsSong(int song) {
+        for (int s : songs) {
+            if (s == song) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Removes a song from the playlist
+     * @param song an integer representing the song to remove
+     */
+    public void removeSong(int song) {
+        for (int i = 0; i < songs.size(); i++) {
+            if (songs.get(i) == song) {
+                songs.remove(i);
+                break;
+            }
+        }
+    }
 }

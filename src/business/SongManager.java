@@ -17,12 +17,16 @@ import java.util.Map;
 
 public class SongManager {
     private SongDAO songDAO;
-    private UserDAO userDAO;
+    //private UserDAO userDAO;
+    //private PlaybackManager playbackManager;
     //private ArrayList<String> authors; // get authors from beginning then add when new author?
+    private PlaylistManager playlistManager;
 
-    public SongManager(SongDAO songDAO, UserDAO userDAO) {
+    //public SongManager(SongDAO songDAO, UserDAO userDAO) {
+    public SongManager(SongDAO songDAO, PlaylistManager playlistManager) {
         this.songDAO = songDAO;
-        this.userDAO = userDAO;
+        this.playlistManager = playlistManager;
+        //this.userDAO = userDAO;
     }
 
     /**
@@ -81,7 +85,7 @@ public class SongManager {
             }
 
             return true;
-        } catch (Exception e) {
+        } catch (SongDAOException e) {
             // either no songs or album not defined in database
             return true;
         }
@@ -132,5 +136,45 @@ public class SongManager {
         Song song = new Song(title, album, genre, author, path, duration, user);
 
         songDAO.createSong(song, file);
+    }
+
+    // TODO: Remove method, now for testing purposes
+    private boolean isPlaying() {
+        return true;
+    }
+
+    /**
+     * Checks whether the song to delete is currently playing and whether it belongs
+     * to the currently logged-in user
+     * @param songID an integer representing the ID of the song to delete
+     * @param currentUser a String containing the username of the current user
+     * @return a boolean indicating whether the song can be deleted
+     */
+    public boolean songCanBeDeleted(int songID, String currentUser) {
+        Song song = null;
+        try {
+            song = songDAO.getSongByID(songID);
+            // check song not playing
+            // check song user is current user
+            return song.getUser().equals(currentUser) && !isPlaying();
+            //return playerManager.currentSongPlaying() != song && song.getUser().equals(currentUser);
+        } catch (SongDAOException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Permanently deletes a song from the system
+     * @param song an integer representing the ID of the song to delete
+     * @return a boolean indicating whether the song could be deleted
+     */
+    public boolean deleteSong(int song) {
+        try {
+            songDAO.deleteSong(song);
+            playlistManager.removeSongFromPlaylists(song);
+            return true;
+        } catch (SongDAOException e) {
+            return false;
+        }
     }
 }

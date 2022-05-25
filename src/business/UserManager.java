@@ -171,6 +171,10 @@ public class UserManager {
         currentUser = user;
     }
 
+    /**
+     * Gets the username of the currently logged-in user
+     * @return a String containing the current user's username
+     */
     public String getCurrentUser() {
         return currentUser;
     }
