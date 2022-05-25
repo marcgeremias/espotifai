@@ -8,6 +8,8 @@ import business.entities.Song;
 import business.entities.User;
 import presentation.views.*;
 
+import java.util.ArrayList;
+
 public class PlayerController implements PlayerViewListener {
 
     private PlayerView playerView;

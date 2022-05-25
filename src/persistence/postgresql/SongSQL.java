@@ -405,7 +405,7 @@ public class SongSQL implements SongDAO {
 
             //Method to download the song
             //downloader.download(baos);
-            FileMetadata metadata = client.files().downloadBuilder("/songs/1.mp3").download(baos);
+            FileMetadata metadata = client.files().downloadBuilder(SONGS_ROOT_FOLDER + "/" + songID +"." + SONG_FORMAT).download(baos);
 
             //Convert the ByteOutputStream to an AudioInputStream
             ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
@@ -503,7 +503,7 @@ public class SongSQL implements SongDAO {
                 sourceFormat.getSampleRate(),
                 false);
 
-        System.out.println(convertFormat.getFrameSize());
+        //System.out.println(convertFormat.getFrameSize());
 
         AudioInputStream ais = AudioSystem.getAudioInputStream(convertFormat, mp3Stream);
         //ais.getFrameLength();

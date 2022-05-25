@@ -196,7 +196,7 @@ public class MusicPlaybackView extends JPanel {
         btn_sound.setPreferredSize(new Dimension(15, 15));
         btn_sound.setOpaque(false);
 
-        sldr_volume = new JSliderCustom(MIN_VOL, MAX_VOL, 70, MusicPlaybackController.SLDR_SOUND);
+        sldr_volume = new JSliderCustom(MIN_VOL, MAX_VOL, 0, MusicPlaybackController.SLDR_SOUND);
         sldr_volume.setPreferredSize(new Dimension(70, 15));
         bufferPane.add(btn_sound);
         bufferPane.add(sldr_volume);

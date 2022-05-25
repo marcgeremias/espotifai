@@ -11,7 +11,10 @@ import persistence.SongDAOException;
 import presentation.views.MusicPlaybackView;
 import presentation.views.components.SliderListener;
 
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -19,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 
 public class MusicPlaybackController implements ActionListener, SliderListener {
 
@@ -67,38 +71,50 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
                 try {
                     // Minimum seconds that need to pass to go back to previous song, else it will restart the song
                     if (songSecondPos > 3) {
-                        playerManager.killSong();
-                        playerManager.loadNextSong(this);
+                        musicPlaybackView.setSliderPos(0);
+                        playerManager.setPlaybackFrame(0);
+                        songSecondPos = 0;
                     } else {
-                        playerManager.killSong();
                         if (playerManager.setPreviousSongIndex()) {
-                            playerManager.loadNextSong(this);
+                            playerManager.killSong();
+                            prepareNewSong();
+                            //playerManager.loadNextSong(this);
+                            //playerManager.resumeSong();
                         } else {
                             musicPlaybackView.notifySongError("No previous songs found");
                         }
                     }
-                } catch (SongDAOException | LineUnavailableException | IOException ex){
+                } catch (SongDAOException | LineUnavailableException | IOException | UnsupportedAudioFileException ex){
                     musicPlaybackView.notifySongError("Couldn't skip back");
                 }
             }
             case BTN_SKIP_NEXT -> {
-                playerManager.killSong();
-                playerManager.generateNextIndex();
-                try {
-                    playerManager.loadNextSong(this);
-                } catch (SongDAOException | LineUnavailableException | IOException ex) {
-                    musicPlaybackView.notifySongError("Couldn't load song");
+                if (playerManager.generateNextIndex()) {
+                    playerManager.killSong();
+                    try {
+                        prepareNewSong();
+                    } catch (SongDAOException | LineUnavailableException | IOException | UnsupportedAudioFileException ex) {
+                        musicPlaybackView.notifySongError("Couldn't load song");
+                    }
+                } else {
+                    musicPlaybackView.notifySongError("No more songs in the playlist");
                 }
             }
             case BTN_LYRICS -> {
                 // Toggle lyrics show/not show
-                ArrayList<Song> songs = new ArrayList<>();
-                songs.add(new Song(1, "Esperare", "NUSE", Genre.ROCK, "Nena Daconte", "Test", 160, null));
-                initSongPlaylist(songs, 0);
+                ArrayList<Song> songs = songManager.getAllSongs();
+                ArrayList<Song> songsFiltered = new ArrayList<>();
+                for (Song song :songs){
+                    if (song.getUser().equals("Armand")){
+                        songsFiltered.add(song);
+                    }
+                }
+                //songs.add(new Song(1, "Esperare", "NUSE", Genre.ROCK, "Nena Daconte", "Test", 160, null));
+                initSongPlaylist(songsFiltered, 0);
             }
             case BTN_SOUND -> {
                 if (musicPlaybackView.isBtnMute()){
-                    playerManager.setAudioControlLevel(0);
+                    playerManager.setAudioControlLevel(-80);
                 } else {
                     playerManager.setAudioControlLevel(musicPlaybackView.getSoundSliderValue());
                 }
@@ -107,6 +123,18 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
                 songSecondPos++;
                 if (!playerManager.songEnded()) {
                     musicPlaybackView.setSliderPos(songSecondPos);
+                } else {
+                    /*if (playerManager.generateNextIndex()){
+                        playerManager.killSong();
+                        try {
+                            playerManager.loadNextSong(this);
+                        } catch (SongDAOException | IOException | LineUnavailableException ex) {
+                            musicPlaybackView.notifySongError("Couldn't load song");
+                        }
+                    } else {
+                        playerManager.killSong();
+                        musicPlaybackView.notifySongError("No more songs in the playlist");
+                    }*/
                 }
             }
         }
@@ -121,31 +149,32 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
                 songSecondPos = sliderPos;
             }
             case SLDR_SOUND -> {
-                playerManager.setAudioControlLevel(sliderPos == 30 ? 0 : (float) sliderPos);
-                musicPlaybackView.setBtnMute(sliderPos < 5);
+                playerManager.setAudioControlLevel(sliderPos == -30 ? -80 : (float) sliderPos);
+                musicPlaybackView.setBtnMute(sliderPos < -30);
             }
         }
     }
 
 
     public void initSongPlaylist(ArrayList<Song> songs, int index) {
-        playerManager.initSongPlaylist(songs, index);
         try {
+            playerManager.initSongPlaylist(songs, index);
             prepareNewSong();
-        } catch (SongDAOException | IOException | LineUnavailableException e) {
+        } catch (SongDAOException | IOException | LineUnavailableException | UnsupportedAudioFileException e) {
             musicPlaybackView.notifySongError(e.getMessage());
         }
     }
 
-    private void prepareNewSong() throws SongDAOException, LineUnavailableException, IOException {
+    private void prepareNewSong() throws SongDAOException, LineUnavailableException, IOException, UnsupportedAudioFileException {
         playerManager.loadNextSong(this);
         playerManager.resumeSong();
         musicPlaybackView.setBtnPause(true);
         musicPlaybackView.setSliderValues(0, playerManager.getCurrentSongLength());
-        musicPlaybackView.setSoundSliderPos(70); // initial pos
-        playerManager.setAudioControlLevel(70);
+        //musicPlaybackView.setSoundSliderPos(0); // initial pos
+        //playerManager.setAudioControlLevel(0);
         Song currentSong = playerManager.getCurrentSongAttributes();
         musicPlaybackView.setSongDetails(currentSong, songManager.getCoverImage(currentSong.getId()));
         songSecondPos = 0;
     }
+
 }

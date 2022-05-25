@@ -27,8 +27,8 @@ public class APIConfig {
 
     private static final String PATH = "./res/api_config.json";
     private static final String API_PROVIDER = "dropbox";
-    public static final String SONGS_ROOT_FOLDER = "songs";
-    public static final String COVERS_ROOT_FOLDER = "covers";
+    public static final String SONGS_ROOT_FOLDER = "/songs";
+    public static final String COVERS_ROOT_FOLDER = "/covers";
 
     private static String ACCESS_TOKEN;
 
