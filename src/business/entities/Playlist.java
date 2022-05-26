@@ -8,22 +8,22 @@ public class Playlist {
 
     private int id;
     private String name;
-    private User owner;
-    private ArrayList<Song> songs;
+    private String owner;
+    private ArrayList<Integer> songs;
 
-    public Playlist(String name, User owner){
+    public Playlist(String name, String owner){
         this.name = name;
         this.owner = owner;
     }
 
-    public Playlist(int id, String name, User owner) {
+    public Playlist(int id, String name, String owner) {
         this.id = id;
         this.name = name;
         this.owner = owner;
         songs = new ArrayList<>();
     }
 
-    public Playlist(int id, String name, User owner, ArrayList<Song> songs) {
+    public Playlist(int id, String name, String owner, ArrayList<Integer> songs) {
         this.id = id;
         this.name = name;
         this.owner = owner;
@@ -38,11 +38,11 @@ public class Playlist {
         return id;
     }
 
-    public User getOwner() {
-        return owner.clone();
+    public String getOwner() {
+        return owner;
     }
 
-    public ArrayList<Song> getSongs() {
+    public ArrayList<Integer> getSongs() {
         return songs;
     }
 }

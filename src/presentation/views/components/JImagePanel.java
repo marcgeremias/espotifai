@@ -110,6 +110,14 @@ public class JImagePanel extends JPanel implements MouseListener {
         this.actionCommand = command;
     }
 
+    public boolean isPrimarySelected(){
+        return !showSecondary;
+    }
+
+    public void setShowSecondary(boolean showSecondary) {
+        this.showSecondary = showSecondary;
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         showSecondary = !showSecondary;

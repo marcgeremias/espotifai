@@ -1,11 +1,17 @@
 package presentation.controllers;
 
+import business.PlayerManager;
 import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
+import business.entities.Song;
+import business.entities.Playlist;
 import business.entities.User;
 import persistence.UserDAOException;
 import presentation.views.*;
+
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 public class PlayerController implements PlayerViewListener {
 
@@ -24,8 +30,10 @@ public class PlayerController implements PlayerViewListener {
     private final MusicPlaybackController musicPlaybackController;
     private final SideMenuController sideMenuController;
     private UserManager userManager;
+    private PlayerManager playerManager;
     // We need to make the view an attribute due to a dynamic JTable
     private SongListView songListView;
+    private LibraryView libraryView;
 
     /**
      * This method initializes all the view necessary for the Main execution of the program
@@ -36,22 +44,28 @@ public class PlayerController implements PlayerViewListener {
      * @param playlistManager playlistManager for accessing playlist data
      */
     public PlayerController(MainViewListener listener, PlayerView playerView, UserManager userManager,
-                            SongManager songManager, PlaylistManager playlistManager) {
+                            SongManager songManager, PlaylistManager playlistManager, PlayerManager playerManager) {
         this.listener = listener;
         this.playerView = playerView;
         this.userManager = userManager;
+        this.playerManager = playerManager;
         DefaultView defaultView = new DefaultView();
 
-        defaultController = new DefaultController(defaultView, userManager, songManager, playlistManager);
+        defaultController = new DefaultController(this, defaultView, userManager, songManager, playlistManager);
         defaultView.registerController(defaultController);
 
         songListView =  new SongListView();
         songListController = new SongListController(this, songListView, userManager, songManager, playlistManager);
         songListView.registerKeyController(songListController);
+        songListView.registerMouseController(songListController);
 
-        LibraryView libraryView = new LibraryView();
+        libraryView = new LibraryView();
         libraryController = new LibraryController(this, libraryView, userManager, songManager, playlistManager);
-        libraryView.registerController(libraryController);
+        libraryView.registerMouseController(libraryController);
+
+        SideMenuView sideMenuView = new SideMenuView();
+        sideMenuController = new SideMenuController(this, sideMenuView, userManager, playlistManager, songManager);
+        sideMenuView.registerController(sideMenuController);
 
         AddSongView addSongView = new AddSongView(songManager.getAuthors());
         addSongController = new AddSongController(this, addSongView, userManager, songManager);
@@ -70,12 +84,8 @@ public class PlayerController implements PlayerViewListener {
         userProfileView.registerController(userProfileController);
 
         MusicPlaybackView musicPlaybackView = new MusicPlaybackView();
-        musicPlaybackController = new MusicPlaybackController(musicPlaybackView, songManager);
+        musicPlaybackController = new MusicPlaybackController(musicPlaybackView, songManager, playerManager);
         musicPlaybackView.registerController(musicPlaybackController);
-
-        SideMenuView sideMenuView = new SideMenuView();
-        sideMenuController = new SideMenuController(this, sideMenuView, userManager, playlistManager, songManager);
-        sideMenuView.registerController(sideMenuController);
 
         this.playerView.setContents(musicPlaybackView, sideMenuView);
         this.playerView.initCardLayout(defaultView, songListView, libraryView, addSongView,
@@ -84,8 +94,16 @@ public class PlayerController implements PlayerViewListener {
     }
 
     @Override
+    public void showSongDetails(Song song) {
+        songDetailController.initView(song);
+        playerView.revalidate();
+        playerView.changeView(PlayerView.SONG_DETAIL_VIEW);
+    }
+
+    @Override
     public void changeView(String card) {
         initCard(card);
+        playerView.revalidate();
         playerView.changeView(card);
     }
 
@@ -96,17 +114,20 @@ public class PlayerController implements PlayerViewListener {
     private void initCard(String card) {
         switch (card){
             case PlayerView.DEFAULT_VIEW:
+                defaultController.initCard();
                 break;
             case PlayerView.SONG_LIST_VIEW:
                 songListController.initView();
-                // We need to register the controller every time due to the dynamic JTable
-                songListView.registerMouseController(songListController);
                 break;
             case PlayerView.LIBRARY_VIEW:
+                libraryController.initView();
+                // We need to register the controller every time due to the dynamic JTable
                 break;
             case PlayerView.ADD_SONG_VIEW:
                 break;
             case PlayerView.SONG_DETAIL_VIEW:
+                //System.out.println("SONG DETAIL VIEW");
+                //songDetailController.initView(songListController.getSongNum());
                 break;
             case PlayerView.PLAYLIST_DETAIL_VIEW:
                 break;
@@ -119,8 +140,26 @@ public class PlayerController implements PlayerViewListener {
     @Override
     public void logout() {
         userManager.logOutUser();
+        playerManager.clearData();
         listener.changeView(MainView.CARD_LOG_IN);
+        playerView.changeView(DefaultView.HOME_VIEW);
+    }
+
+    @Override
+    public void playSong(ArrayList<Song> songs, int index) {
+        musicPlaybackController.initSongPlaylist(songs, index);
+    }
+
+    public void initHomeView() {
+        defaultController.initCard();
+        playerView.revalidate();
         playerView.changeView(PlayerView.DEFAULT_VIEW);
+    }
+
+    @Override
+    public void showPlaylistDetails(Playlist playlistId) {
+        playerView.changeView(PlayerView.PLAYLIST_DETAIL_VIEW);
+        playlistDetailController.initView(playlistId);
     }
 
     @Override
