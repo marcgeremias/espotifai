@@ -39,6 +39,11 @@ public class PlaylistManager {
         playlistDAO.deleteSongFromPlaylist(playlistID, songID);
     }
 
+    public void deleteSongFromPlaylist(String playlistName, String currentUser) throws PlaylistDAOException {
+        Playlist newPlaylist = new Playlist(playlistName, currentUser);
+        playlistDAO.createPlaylist(newPlaylist);
+    }
+
     /**
      * Method that checks if the current jComboBox song is in the actual playlist
      * @return True in case the song is inside the playlist, otherwise false

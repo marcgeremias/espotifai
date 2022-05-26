@@ -90,7 +90,7 @@ public class PlayerController implements PlayerViewListener {
 
         CreatePlaylistView createPlaylistView = new CreatePlaylistView();
         createPlaylistController = new CreatePlaylistController(this, createPlaylistView, userManager, songManager, playlistManager);
-        addSongView.registerController(addSongController);
+        createPlaylistView.registerController(createPlaylistController);
 
         this.playerView.setContents(musicPlaybackView, sideMenuView);
         this.playerView.initCardLayout(defaultView, songListView, libraryView, addSongView,
