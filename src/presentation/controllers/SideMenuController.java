@@ -44,7 +44,7 @@ public class SideMenuController implements ActionListener {
                 listener.changeView(PlayerView.ADD_SONG_VIEW);
                 break;
             case SideMenuView.CREATE_PLAYLIST_BUTTON:
-                System.out.println("Goes to the createPlaylist view");
+                listener.changeView(PlayerView.CREATE_PLAYLIST);
                 break;
             case SideMenuView.SETTINGS:
                 listener.changeView(PlayerView.USER_PROFILE_VIEW);

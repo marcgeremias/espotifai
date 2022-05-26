@@ -33,8 +33,8 @@ public class LibraryView extends JPanel {
     }
 
     /*
-     * Method to configure all the center components and containers of the SongList view
-     * @return the JPanel with all the center of the Login view
+     * Method to configure all the center components and containers of the Library view
+     * @return the JPanel with all the center of the Library view
      */
     private Component center() {
         tableSongs = new JPanel(new GridLayout());

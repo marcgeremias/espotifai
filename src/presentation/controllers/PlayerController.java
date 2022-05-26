@@ -29,6 +29,8 @@ public class PlayerController implements PlayerViewListener {
     private final UserProfileController userProfileController;
     private final MusicPlaybackController musicPlaybackController;
     private final SideMenuController sideMenuController;
+    private final CreatePlaylistController createPlaylistController;
+
     private UserManager userManager;
     private PlayerManager playerManager;
     // We need to make the view an attribute due to a dynamic JTable
@@ -87,9 +89,13 @@ public class PlayerController implements PlayerViewListener {
         musicPlaybackController = new MusicPlaybackController(musicPlaybackView, songManager, playerManager);
         musicPlaybackView.registerController(musicPlaybackController);
 
+        CreatePlaylistView createPlaylistView = new CreatePlaylistView();
+        createPlaylistController = new CreatePlaylistController(this, createPlaylistView, userManager, songManager, playlistManager);
+        createPlaylistView.registerController(createPlaylistController);
+
         this.playerView.setContents(musicPlaybackView, sideMenuView);
         this.playerView.initCardLayout(defaultView, songListView, libraryView, addSongView,
-                                        songDetailView, playlistDetailView, userProfileView);
+                                        songDetailView, playlistDetailView, userProfileView, createPlaylistView);
         this.playerView.changeView(PlayerView.DEFAULT_VIEW);
     }
 
@@ -133,6 +139,9 @@ public class PlayerController implements PlayerViewListener {
                 break;
             case PlayerView.USER_PROFILE_VIEW:
                 userProfileController.setNickname(userManager.getCurrentUser());
+                break;
+
+            case PlayerView.CREATE_PLAYLIST:
                 break;
         }
     }
