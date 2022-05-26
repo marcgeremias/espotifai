@@ -1,6 +1,7 @@
 package persistence.config;
 
 import com.sun.security.auth.UnixNumericGroupPrincipal;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -50,9 +51,8 @@ public class APILyrics {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
             org.json.JSONObject object = new JSONObject(response.body());
             lyrics = object.getString("lyrics");
-            System.out.println(lyrics);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+        } catch (IOException | InterruptedException | JSONException e) {
+            throw new Exception("Lyrics not found");
         }
         /*URL url = new URL(stringBuilder);
 

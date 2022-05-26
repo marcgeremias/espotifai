@@ -12,6 +12,7 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class SongDetailView extends JPanel {
     private JPanel playlistPane;
     private HoverButton addPlaylistButton;
     private JScrollPane lyricsScrollPane;
+    private DefaultTableModel tableModel;
 
     /**
      * Constructor method to set up the view
@@ -43,6 +45,8 @@ public class SongDetailView extends JPanel {
     public SongDetailView() {
         this.setLayout(new BorderLayout());
         tableSong = new JPanel(new GridLayout());
+        table = new JTable();
+        tableModel = new DefaultTableModel();
         tableSong.setBorder(new EmptyBorder(50, 50, 0, 50));
         this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
 
@@ -188,20 +192,37 @@ public class SongDetailView extends JPanel {
 
         if (notFirstTime) {
             // Resetting view
-            table = null;
-            tableSong = null;
-            tableSong = new JPanel(new GridLayout());
-            repaint();
-            revalidate();
+            //table = null;
+            //tableSong = null;
+            //tableSong = new JPanel(new GridLayout());
+            //repaint();
+            //revalidate();
         }
+
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            tableModel.removeRow(i);
+        }
+
+        /*if (notFirstTime) {
+            tableSong = new JPanel(new GridLayout());
+        }
+
+        tableModel = new DefaultTableModel(data, column);
+        table = new JTable(tableModel);*/
+
+        for (int i = 0; i < data[0].length; i++) {
+            tableModel.addRow(new String[]{data[0][i]});
+            tableModel.addColumn(column[i]);
+        }
+                //= new DefaultTableModel(data, column);
+        tableModel.fireTableDataChanged();
 
         tableSong.setOpaque(true);
         tableSong.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
-        table = new JTable(data, column);
+        table.setModel(tableModel);
 
         table.getTableHeader().setReorderingAllowed(false);
         table.setOpaque(false);
-        DefaultTableModel tableModel = new DefaultTableModel(data, column);
         //tableModel.fireTableDataChanged();
         table.repaint();
         table.setModel(tableModel);
@@ -242,6 +263,8 @@ public class SongDetailView extends JPanel {
         }*/
 
         notFirstTime = true;
+        revalidate();
+        repaint();
 
     }
 
@@ -350,7 +373,7 @@ public class SongDetailView extends JPanel {
         scrollPane.getHorizontalScrollBar().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
     }
 
-    public void lyricsError() {
-        JOptionPane.showMessageDialog(this, "Error fetching the lyrics");
+    public void lyricsError(String message) {
+        JOptionPane.showMessageDialog(this,message);
     }
 }
