@@ -5,9 +5,13 @@ import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import persistence.SongDAO;
 import persistence.SongDAOException;
 import persistence.UserDAO;
+import persistence.config.APILyrics;
+import presentation.controllers.LyricsListener;
 
 import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,6 +27,17 @@ public class SongManager {
     public SongManager(SongDAO songDAO, UserDAO userDAO) {
         this.songDAO = songDAO;
         this.userDAO = userDAO;
+    }
+
+    /**
+     * Inicializa the getLyrics thread.
+     * @param lyricsListener listner for grt lyrics.
+     * @param songTitle song title.
+     * @param songAuthor song author.
+     */
+    public void getLyrics(LyricsListener lyricsListener, String songTitle, String songAuthor){
+        LyricsLoader lyricsLoader = new LyricsLoader(lyricsListener, songTitle, songAuthor);
+        lyricsLoader.start();
     }
 
     /**
@@ -50,6 +65,18 @@ public class SongManager {
     }
 
     /**
+     * Gets all songs from a playlist
+     * @return an ArrayList of Songs containing all songs
+     */
+    public ArrayList<Song> getAllPlaylistSongs(int playlistId) {
+        try {
+            return songDAO.getSongsByPlaylistID(playlistId);
+        } catch (SongDAOException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    /**
      * Checks whether the song's attributes are correct
      * @param title: a String containing the title of the song
      * @param album: a String containing the album of the song
@@ -62,6 +89,8 @@ public class SongManager {
 
         try {
             ArrayList<Song> existingSongs = songDAO.getSongsByAlbum(album);
+
+            if (existingSongs == null) return true;
 
             for (Song existingSong : existingSongs) {
                 if (existingSong.getTitle().equalsIgnoreCase(title)) {
@@ -108,7 +137,7 @@ public class SongManager {
      * @param path: a String containing the path to the song image
      * @param user: an instance of {@link User} representing the user that adds the song
      */
-    public void addSong(File file, String title, String album, Genre genre, String author, String path, String user) throws SongDAOException, UnsupportedAudioFileException, IOException {
+    public void addSong(File file, File image, String title, String album, Genre genre, String author, String path, String user) throws SongDAOException, UnsupportedAudioFileException, IOException {
         // Extract song duration from file
         AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(file);
         Map properties = baseFileFormat.properties();
@@ -120,7 +149,15 @@ public class SongManager {
 
         Song song = new Song(title, album, genre, author, path, duration, user);
 
-        songDAO.createSong(song, file);
+        songDAO.createSong(song, file, image);
+    }
+
+    public AudioInputStream getSongStream(Song song) throws SongDAOException{
+        return songDAO.downloadSong(song.getId());
+    }
+
+    public BufferedImage getCoverImage(int songID) throws SongDAOException {
+        return songDAO.downloadCoverImage(songID);
     }
 
     public int[] getNumberOfSongsByGenre() throws SongDAOException{
@@ -136,4 +173,8 @@ public class SongManager {
 
         return data;
     }
+
+
+
+
 }

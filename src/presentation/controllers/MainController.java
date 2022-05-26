@@ -1,5 +1,6 @@
 package presentation.controllers;
 
+import business.PlayerManager;
 import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
@@ -11,12 +12,15 @@ import presentation.views.components.PlaceholderTextField;
 import javax.swing.*;
 import java.awt.*;
 
+import static presentation.views.MainView.CARD_PLAYER;
+
 public class MainController implements MainViewListener {
 
     private MainView mainView;
     private UserManager userManager;
     private SongManager songManager;
     private PlaylistManager playlistManager;
+    private PlayerManager playerManager;
     private LoginController loginController;
     private SingUpController signUpController;
     private PlayerController playerController;
@@ -26,11 +30,13 @@ public class MainController implements MainViewListener {
      * @param mainView the MainView class
      * @param userManager the UserManager class
      */
-    public MainController(MainView mainView, UserManager userManager, SongManager songManager, PlaylistManager playlistManager) {
+    public MainController(MainView mainView, UserManager userManager, SongManager songManager,
+                          PlaylistManager playlistManager, PlayerManager playerManager) {
         this.mainView = mainView;
         this.userManager = userManager;
         this.songManager = songManager;
         this.playlistManager = playlistManager;
+        this.playerManager = playerManager;
     }
 
     /**
@@ -52,17 +58,24 @@ public class MainController implements MainViewListener {
         // PlayerView acts as a 'frame' and there are no buttons or actions associated with this view because it
         // is formed by other views with their respective controllers therefore it doesn't need to register a controller.
         PlayerView playerView = new PlayerView();
-        playerController = new PlayerController(this, playerView, userManager, songManager, playlistManager);
+        playerController = new PlayerController(this, playerView, userManager, songManager, playlistManager, playerManager);
 
         // Defining views in the card layout of the JFrame MainView
         mainView.initCardLayout(loginView, signUpView, playerView);
-
 
         mainView.changeView(MainView.CARD_LOG_IN);
     }
 
     @Override
     public void changeView(String card) {
+        initViews(card);
         mainView.changeView(card);
     }
+
+    public void initViews(String card) {
+        if (CARD_PLAYER.equals(card)) {
+            playerController.initHomeView();
+        }
+    }
+
 }

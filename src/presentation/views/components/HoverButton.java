@@ -14,6 +14,7 @@ public class HoverButton extends JButton implements MouseListener{
         this.mouseOverColor = mouseOverColor;
         this.defaultColor = defaultColor;
 
+        this.setFocusable(false);
         this.setOpaque(true);
         addMouseListener(this);
     }
