@@ -6,6 +6,8 @@ import persistence.PlaylistDAOException;
 
 import java.util.ArrayList;
 
+import java.util.ArrayList;
+
 public class PlaylistManager {
     private PlaylistDAO playlistDAO;
 
@@ -14,12 +16,21 @@ public class PlaylistManager {
     }
 
     public ArrayList<Playlist> getCurrentUserPlaylists(String currentUser) throws PlaylistDAOException{
-            ArrayList<Playlist> allPlaylists = playlistDAO.getPlaylistByUserID(currentUser);
-            return allPlaylists == null ? new ArrayList<>() : allPlaylists;
+            ArrayList<Playlist> myPlaylists = playlistDAO.getPlaylistByUserID(currentUser);
+            return myPlaylists == null ? new ArrayList<>() : myPlaylists;
     }
 
     public ArrayList<Playlist> getOtherUserPlaylists(String currentUser) throws PlaylistDAOException{
         ArrayList<Playlist> otherPlaylists = playlistDAO.getDifferentPlaylistByUserID(currentUser);
         return otherPlaylists == null ? new ArrayList<>() : otherPlaylists;
+    }
+
+    public ArrayList<Playlist> getAllPlaylists() throws PlaylistDAOException{
+        ArrayList<Playlist> allPlaylists = playlistDAO.getAllPlaylists();
+        return allPlaylists == null ? new ArrayList<>() : allPlaylists;
+    }
+
+    public boolean addSongToPlaylist(int playlistID, int songID) throws PlaylistDAOException{
+        return playlistDAO.addSongToPlaylist(playlistID, songID);
     }
 }

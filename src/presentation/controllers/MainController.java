@@ -12,6 +12,8 @@ import presentation.views.components.PlaceholderTextField;
 import javax.swing.*;
 import java.awt.*;
 
+import static presentation.views.MainView.CARD_PLAYER;
+
 public class MainController implements MainViewListener {
 
     private MainView mainView;
@@ -66,11 +68,14 @@ public class MainController implements MainViewListener {
 
     @Override
     public void changeView(String card) {
+        initViews(card);
         mainView.changeView(card);
     }
 
-    public void initViews() {
-
+    public void initViews(String card) {
+        if (CARD_PLAYER.equals(card)) {
+            playerController.initHomeView();
+        }
     }
 
 }
