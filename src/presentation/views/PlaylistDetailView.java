@@ -1,16 +1,22 @@
 package presentation.views;
 
-import presentation.controllers.MainViewListener;
+import business.entities.Playlist;
+import business.entities.Song;
 import presentation.controllers.PlayerViewListener;
-import presentation.controllers.PlaylistDetailController;
-import presentation.views.components.JImagePanel;
+import presentation.views.components.HoverButton;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 
 /**
@@ -18,259 +24,264 @@ import java.util.Arrays;
  */
 public class PlaylistDetailView extends JPanel {
 
-    // Image from the list of songs
+    private JPanel panelPlaylistModify;
+    private JTable table;
+    private JPanel tableSongs;
+    private DefaultTableModel tableModel;
+    private JLabel playlistTitle;
 
-    private JImagePanel listImage;
-    private JImagePanel playButton;
-    public static final String BTN_PLAY_IMAGE = "BTN PLAY IMAGE";
-    public static final String BTN_LIST_IMAGE = "BTN LIST IMAGE";
+    private static final String[] columns = {"Title",  "Genre","Album","Author","Uploaded By"};
+    public static final String BTN_ADD_SONG = "BTN ADD SONG";
+    public static final String BTN_DELATE_SONG = "BTN DELETE SONG";
+    public static final String JCOMBOX_SONG = "JCOMBOX_SONG";
 
-    public static final String LOGO_IMAGE_PATH = "res/images/nyan_cat.png";
-    public static final String LOGO_PLAY_PATH = "res/icons/play-button-green.png";
-
-    public static final String PLAYLIST_TYPE = "PLAYLIST";
-    public static final String ALBUM_TYPE = "ALBUM";
-    private static final String LIST_NAME = "MyPlaylist#1";
-
-    // Interface of the PlayerViewListener
     private PlayerViewListener listener;
 
 
+    private JButton delateSong;
+    private JComboBox<String> jSelectSong;
+    private JButton addSong;
+
+
     /**
-     * Constructor method to set up the view
+     * Method to add the listener to the Login view buttons
      */
+    public void registerController(ActionListener controller) {
+        // Action listener for delate song
+        delateSong.addActionListener(controller);
+        delateSong.setActionCommand(BTN_DELATE_SONG);
+
+        // Action listener for add song
+        addSong.addActionListener(controller);
+        addSong.setActionCommand(BTN_ADD_SONG);
+
+        // Action listener for select songs
+        jSelectSong.addActionListener(controller);
+        jSelectSong.setActionCommand(JCOMBOX_SONG);
+    }
+
+
+
     public PlaylistDetailView(PlayerViewListener listener) {
         this.listener = listener;
         this.setLayout(new BorderLayout());
-
-        this.add(northMargin(), BorderLayout.NORTH);
-        this.add(westMargin(), BorderLayout.WEST);
-        this.add(eastMargin(), BorderLayout.EAST);
+        this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        this.add(titleLabel(), BorderLayout.NORTH);
         this.add(center(), BorderLayout.CENTER);
-
+        this.add(down(), BorderLayout.SOUTH);
+        this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        this.setOpaque(true);
     }
 
-    /**
-     * Method to add the listener to the playlist buttons
-     */
-    public void registerController(ActionListener controller) {
-        playButton.setActionCommand(BTN_PLAY_IMAGE);
-        playButton.addActionListener(controller);
+    private Container down() {
+        panelPlaylistModify = new JPanel();
 
-        listImage.setActionCommand(BTN_LIST_IMAGE);
-        listImage.addActionListener(controller);
+        panelPlaylistModify.setBackground(Color.GRAY);
+        panelPlaylistModify.setOpaque(true);
 
+        jSelectSong = new JComboBox<>();
+
+        jSelectSong.setBackground(new Color(76, 76, 76));
+        jSelectSong.setForeground(Color.GRAY);
+
+
+        delateSong = new HoverButton(Color.DARK_GRAY, Color.BLACK, "Delete Song");
+        delateSong.setBackground(Color.BLACK);
+        delateSong.setForeground(Color.LIGHT_GRAY);
+        delateSong.setFont(new Font("Apple Casual", Font.BOLD, 10));
+        //Border Settings
+        delateSong.setBorderPainted(true);
+        delateSong.setBorder(new LineBorder((Color.LIGHT_GRAY)));
+        delateSong.setPreferredSize(new Dimension(100,25));
+
+
+        addSong = new HoverButton(Color.DARK_GRAY, Color.BLACK, "Add Song");
+        addSong.setBackground(Color.BLACK);
+        addSong.setForeground(Color.LIGHT_GRAY);
+        addSong.setFont(new Font("Apple Casual", Font.BOLD, 10));
+        //Border Settings
+        addSong.setBorderPainted(true);
+        addSong.setBorder(new LineBorder((Color.LIGHT_GRAY)));
+        addSong.setPreferredSize(new Dimension(100,25));
+
+
+
+        panelPlaylistModify.add(delateSong);
+        panelPlaylistModify.add(addSong);
+        panelPlaylistModify.add(jSelectSong);
+
+        return panelPlaylistModify;
     }
 
 
-    /**
-     * Method to configure all the center components and containers of the PlaylistDetail view
-     * @return the JPanel with all the center of the PlaylistDetail view
-     */
     private Component center() {
-        //JPanel sencer
+        tableSongs = new JPanel(new GridLayout());
+
+        tableModel = new DefaultTableModel();
+        table = new JTable(tableModel);
+
+        table.getTableHeader().setReorderingAllowed(false);
+        table.setOpaque(false);
+
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setDefaultEditor(Object.class, null);
+
+        // Personalizing UI
+        table.getTableHeader().setForeground(Color.BLACK);
+        table.getTableHeader().setBackground(Color.WHITE);
+        table.getTableHeader().setFont(new Font("arial", Font.BOLD, 15));
+        table.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        table.setForeground(Color.WHITE);
+        table.setFont(new Font("arial", Font.PLAIN, 15));
+        table.getTableHeader().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        table.getTableHeader().setForeground(Color.WHITE);
+
+        table.setRowHeight(40);
+        resizeColumnWidth(table);
+        //table.getColumnModel().getColumn(0).setResizable(false);
+        // Creating and personalizing JTable
+        tableSongs.setOpaque(false);
+
+        table.setShowGrid(false);
+        JScrollPane pane = new JScrollPane(table);
+        pane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        pane.setBorder(BorderFactory.createEmptyBorder());
+        table.setFillsViewportHeight(true);
+        pane.getViewport().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        pane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = Color.DARK_GRAY;
+            }
+        });
+        pane.getVerticalScrollBar().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        pane.getHorizontalScrollBar().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        tableSongs.add(pane);
+
         JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
-
-        //Part superior
-        center.add(upUI());
-        //Part inferior
-        center.add(downUI());
-
+        center.add(tableSongs);
+        center.setOpaque(false);
         return center;
     }
 
-
     /**
-     * Method to set the top JPanel
-     * @return the JPanel on the top
+     * Method used to fill the jTable playlist songs
+     * @param mySongs Songs from the actual playlist
+     * @param playlistSelected Actual playlist selected
      */
-    private Component upUI() {
-        JPanel upUI = new JPanel();
-        // Margin with song list
-        upUI.setPreferredSize(new Dimension(160, 160));
-        //upUI.setPreferredSize(new Dimension(320, 320));
-        //Part esquerre
-        upUI.add(setImageList());
-        //Part dreta
-        upUI.add(setTexts());
-        // Left alignment
-        upUI.setLayout(new FlowLayout(FlowLayout.LEFT));
+    public void fillTable(ArrayList<Song> mySongs, Playlist playlistSelected) {
+        // Setting the playlist Title
+        playlistTitle.setText(playlistSelected.getName());
+        String[][] data = null;
 
-        upUI.setBackground(Color.MAGENTA);
-        return upUI;
+        if(mySongs != null){
+            data = new String[mySongs.size()][5];
+
+            // In case there is any song to show
+            // Inserting the data to each column
+
+            for (int i = 0; i < mySongs.size(); i++) {
+                data[i][0] = mySongs.get(i).getTitle();
+                data[i][1] = String.valueOf(mySongs.get(i).getGenre());
+                data[i][2] = mySongs.get(i).getAlbum();
+                data[i][3] = mySongs.get(i).getAuthor();
+                data[i][4] = mySongs.get(i).getUser();
+            }
+
+
+
+        }
+
+        tableModel.setDataVector(data, columns);
+        tableModel.fireTableDataChanged();
+
+
+        revalidate();
+        repaint();
     }
 
     /**
-     * Method that creates a BoxLayout with som texts
-     * @return the BoxLayout created inside a JPanel
+     * Method extracted from:
+     * https://es.stackoverflow.com/questions/345550/c%C3%B3mo-autoajustar-el-ancho-de-una-columna-de-un-jtable-al-contenido-que-hay-en-e
+     * @param table the JTable we are resizing
      */
-    private Component setTexts() {
-        JPanel textsFrame = new JPanel();
-        // Alignment on Y_AXIS
-        textsFrame.setLayout(new BoxLayout(textsFrame, BoxLayout.Y_AXIS));
-
-        textsFrame.add(typeText());
-        textsFrame.add(listName());
-
-        return textsFrame;
-    }
-
-    /**
-     * Method that creates the text of the type List
-     * @return the text created inside a JPanel
-     */
-    private Component typeText() {
-        JPanel jPanel = new JPanel();
-        jPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-        JLabel jLabel = new JLabel();
-        jLabel.setFont(new Font("Arial", Font.BOLD, 15));
-        jLabel.setText(PLAYLIST_TYPE);
-        jPanel.add(jLabel);
-
-        return jPanel;
-    }
-
-    /**
-     * Method that creates the text of the name List
-     * @return the text created inside a JPanel
-     */
-    private Component listName() {
-        JPanel jPanel = new JPanel();
-
-        JLabel jLabel = new JLabel();
-        jLabel.setFont(new Font("Arial", Font.BOLD, 40));
-        jLabel.setText(LIST_NAME);
-        jPanel.add(jLabel);
-
-        return jPanel;
-    }
-
-    /**
-     * Method that sets the images of the top JPanel
-     * @return JPanel with the cover image and button image
-     */
-    private Component setImageList(){
-        JPanel general = new JPanel();
-
-        JPanel frameImage = new JPanel();
-        JPanel frameButton = new JPanel();
-        frameButton.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-        general.setLayout(new BoxLayout(general, BoxLayout.Y_AXIS));
-
-        // Defining the image
-        // EN UN FUTUR S'HAURA DE TRANSFORMAR A BufferedImage PQ VINDRA DE LA DDBB
-        listImage = new JImagePanel(LOGO_IMAGE_PATH, null, null);
-        listImage.setPreferredSize(new Dimension(250, 250));
-        frameImage.add(listImage);
-
-        playButton = new JImagePanel(LOGO_PLAY_PATH, null, null);
-        playButton.setPreferredSize(new Dimension(40, 40));
-        frameButton.add(playButton);
-
-        playButton.setBackground(Color.MAGENTA);
-        // Add image to frame
-        general.add(frameImage);
-        general.add(frameButton);
-
-        frameButton.setBackground(Color.MAGENTA);
-
-        return general;
-    }
-
-
-    /**
-     * Method that makes the bottom view
-     * @return JPanel with the list of songs
-     */
-    private Component downUI() {
-        JPanel downUI = new JPanel(new GridLayout());
-        downUI.setPreferredSize(new Dimension(60,60));
-
-        downUI.setBackground(Color.GREEN);
-
-        downUI.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-        String data[][]={
-                {"101","Sachin","700000","asdf", "onsdf"},
-                {"102","Sachin","700000","asdf", "onsdf"},
-                {"103","Sachin","700000","asdf", "onsdf"},
-                {"104","Sachin","700000","asdf", "onsdf"},
-                {"105","Sachin","700000","asdf", "onsdf"},
-                {"106","Sachin","700000","asdf", "onsdf"},
-                {"107","Sachin","700000","asdf", "onsdf"}};
-        String column[]={"Title","Genre","Album","Author", "User_ID"};
-        JTable jt=new JTable(data,column);
-
-        //jt.setEnabled(false);
-        //jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        jt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        jt.setDefaultEditor(Object.class, null);
-        jt.getTableHeader().setReorderingAllowed(false);
-
-
-        ListSelectionModel model=jt.getSelectionModel();
-        model.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                String[] lsm = e.toString().split(" ");
-                String aux = lsm[3];
-                aux = aux.replace("{", "");
-                aux =aux.replace("}", "");
-                aux =aux.replace("=", "");
-                aux =aux.replace("~", "");
-
-                System.out.println(Integer.parseInt(aux));
-                // S'ha de passar al controler de musica
-                //listener.playSong(Integer.parseInt(aux));
+    private void resizeColumnWidth(JTable table) {
+        //Se obtiene el modelo de la columna
+        TableColumnModel columnModel = table.getColumnModel();
+        //Se obtiene el total de las columnas
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            //Establecemos un valor minimo para el ancho de la columna
+            int width = 150; //Min Width
+            //Obtenemos el numero de filas de la tabla
+            for (int row = 0; row < table.getRowCount(); row++) {
+                //Obtenemos el renderizador de la tabla
+                TableCellRenderer renderer = table.getCellRenderer(row, column);
+                //Creamos un objeto para preparar el renderer
+                Component comp = table.prepareRenderer(renderer, row, column);
+                //Establecemos el width segun el valor maximo del ancho de la columna
+                width = Math.max(comp.getPreferredSize().width + 1, width);
 
             }
-        });
+            //Se establece una condicion para no sobrepasar el valor de 300
+            //Esto es Opcional
+            if (width > 300) {
+                width = 300;
+            }
+            //Se establece el ancho de la columna
+            columnModel.getColumn(column).setPreferredWidth(width);
+        }
+    }
 
+    /**
+     * Method that returns the JTable with the playlist Label
+     * @return the JTable with the playlist label
+     */
+    private Component titleLabel() {
+        playlistTitle = new JLabel();
+        playlistTitle.setForeground(Color.WHITE);
+        playlistTitle.setFont(new Font("Apple Casual", Font.BOLD, 30));
+        playlistTitle.setHorizontalAlignment(JLabel.CENTER);
 
-
-        JScrollPane pane = new JScrollPane(jt);
-        downUI.add(pane);
-
-        return downUI;
+        JPanel panelSearch = new JPanel();
+        panelSearch.setBorder(BorderFactory.createEmptyBorder(5, 15, 30, 15));
+        panelSearch.setOpaque(false);
+        panelSearch.add(playlistTitle);
+        return panelSearch;
     }
 
 
     /**
-     * Method that is in charge of the top margins of the window.
-     * @return the container with the panel margin (without opacity)
+     * Method used to fill the comboBox song options
+     * @param notMySongs ArrayList with all songs from the system
      */
-    public Container northMargin() {
-        JPanel northMargin = new JPanel();
-        northMargin.setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));
-
-        northMargin.setBackground(Color.blue);
-        return northMargin;
+    public void fillSongsToAdd(ArrayList<Song> notMySongs) {
+        for (Song notMySong : notMySongs) {
+            jSelectSong.addItem(notMySong.getTitle());
+        }
+    }
+    /**
+     * Getter used to get the actual selected JComboBox
+     * @return The song index
+     */
+    public int getjSelectSong() {
+        return jSelectSong.getSelectedIndex();
     }
 
     /**
-     * Method that is in charge of the top margins of the window.
-     * @return the container with the panel margin (without opacity)
+     * Method used to set the JPanel enable or not in case the user dont' have premisses
+     * @param enable If is true the jPanel is visible, otherwise false.
      */
-    public Container westMargin() {
-        JPanel westMargin = new JPanel();
-        westMargin.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 50));
-
-        westMargin.setBackground(Color.RED);
-        return westMargin;
+    public void setModify(boolean enable){
+        panelPlaylistModify.setVisible(enable);
     }
 
-    /**
-     * Method that is in charge of the top margins of the window.
-     * @return the container with the panel margin (without opacity)
-     */
-    public Container eastMargin() {
-        JPanel eastMargin = new JPanel();
-        eastMargin.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 0));
-
-        eastMargin.setBackground(Color.CYAN);
-        return eastMargin;
+    public void notifyError(String message){
+        JOptionPane.showMessageDialog(this, message);
     }
+
+    public int getSelectedRow(){
+        return table.getSelectedRow();
+    }
+
 }

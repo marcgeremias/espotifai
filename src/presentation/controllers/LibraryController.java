@@ -48,8 +48,7 @@ public class LibraryController implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         // Single click
         if (e.getClickCount() >= 1) {
-            listener.changeView(PlayerView.PLAYLIST_DETAIL_VIEW);
-            //reproduce song
+            listener.showPlaylistDetails(myPlaylists.get(libraryView.getSelectedRow()));
         }
     }
 

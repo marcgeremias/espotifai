@@ -9,6 +9,7 @@ import presentation.views.SongListView;
 
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Timer;
 
 public class SongListController implements KeyListener, MouseListener {
 
@@ -18,6 +19,8 @@ public class SongListController implements KeyListener, MouseListener {
     private SongManager songManager;
     private PlaylistManager playlistManager;
     private ArrayList<Song> currentSongs;
+    private int songNum;
+    private long pressTime;
 
     public SongListController(PlayerViewListener listener, SongListView songListView, UserManager userManager,
                               SongManager songManager, PlaylistManager playlistManager) {
@@ -54,16 +57,24 @@ public class SongListController implements KeyListener, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         // Single click
-        if (e.getClickCount() == 1) {
+        songNum = songListView.getSongValue();
+
+        int tableCol = songListView.getTableCol();
+        int tableRow = songListView.getTableRow();
+        System.out.println("C:" + tableCol + " R:" + tableRow);
+        if (tableCol == 0) {
+            //pressTime = System.currentTimeMillis();
             System.out.println("START REPRODUCING SONG");
+            System.out.println(songNum);
+            listener.playSong(currentSongs, songNum);
             //reproduce song
-        } else {
-            // Double or more clicks
-            if (e.getClickCount() == 2) {
-                //Access to detail songs view
-                listener.changeView(PlayerView.SONG_DETAIL_VIEW);
-            }
+        } else if (tableCol > 0){
+            listener.showSongDetails(currentSongs.get(songListView.getTableRow()));
         }
+    }
+
+    public int getSongNum() {
+        return songNum;
     }
 
     @Override
