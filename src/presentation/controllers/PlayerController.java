@@ -7,6 +7,7 @@ import business.UserManager;
 import business.entities.Song;
 import business.entities.Playlist;
 import business.entities.User;
+import persistence.UserDAOException;
 import presentation.views.*;
 
 import java.awt.event.KeyListener;
@@ -131,6 +132,7 @@ public class PlayerController implements PlayerViewListener {
             case PlayerView.PLAYLIST_DETAIL_VIEW:
                 break;
             case PlayerView.USER_PROFILE_VIEW:
+                userProfileController.setNickname(userManager.getCurrentUser());
                 break;
         }
     }
@@ -159,4 +161,18 @@ public class PlayerController implements PlayerViewListener {
         playerView.changeView(PlayerView.PLAYLIST_DETAIL_VIEW);
         playlistDetailController.initView(playlistId);
     }
+
+    @Override
+    public void delete() {
+        try {
+            userManager.deleteUser();
+            userManager.logOutUser();
+            listener.changeView(MainView.CARD_LOG_IN);
+            playerView.changeView(PlayerView.DEFAULT_VIEW);
+        } catch (UserDAOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

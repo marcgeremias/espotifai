@@ -28,6 +28,7 @@ public class LoginController implements ActionListener {
         switch (e.getActionCommand()) {
             case LoginView.BTN_CREATE_ACCOUNT:
                 listener.changeView(MainView.CARD_SIGN_UP);
+                loginView.clearAllInfo();
                 break;
             case LoginView.BTN_LOG_IN:
                 onLoginClick();
