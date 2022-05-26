@@ -46,11 +46,12 @@ public class SongSQL implements SongDAO {
      * sure that all important fields are not empty.
      * @param song instance of {@link Song} containing the values to add
      * @param songFile instance of {@link File} containing the song to upload
+     * @param imageFile instance of {@link File} containing the image of the song
      * @return true (1) if the song has been created correctly or false (2) if the song hasn't been created correctly.
      * @throws SongDAOException if the query fails to execute or the database connection can't be opened
      */
     @Override
-    public boolean createSong(Song song, File songFile) throws SongDAOException {
+    public boolean createSong(Song song, File songFile, File imageFile) throws SongDAOException {
         try {
             Connection c = DBConfig.getInstance().openConnection();
 

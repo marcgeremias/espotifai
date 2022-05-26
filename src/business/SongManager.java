@@ -123,7 +123,7 @@ public class SongManager {
      * @param path: a String containing the path to the song image
      * @param user: an instance of {@link User} representing the user that adds the song
      */
-    public void addSong(File file, String title, String album, Genre genre, String author, String path, String user) throws SongDAOException, UnsupportedAudioFileException, IOException {
+    public void addSong(File file, File image, String title, String album, Genre genre, String author, String path, String user) throws SongDAOException, UnsupportedAudioFileException, IOException {
         // Extract song duration from file
         AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(file);
         Map properties = baseFileFormat.properties();
@@ -135,7 +135,7 @@ public class SongManager {
 
         Song song = new Song(title, album, genre, author, path, duration, user);
 
-        songDAO.createSong(song, file);
+        songDAO.createSong(song, file, image);
     }
 
     public int[] getNumberOfSongsByGenre() throws SongDAOException{

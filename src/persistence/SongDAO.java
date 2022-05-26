@@ -20,10 +20,11 @@ public interface SongDAO {
      * as diferent songs.
      * @param song instance of {@link Song} with the values to persist.
      * @param songFile instance of {@link File} containing the song to upload
+     * @param imageFile instance of {@link File} containing the image of the song
      * @return (1) true if the song is added correctly or (2) false if there is an error.
      * @throws SongDAOException if there is an error accessing the database.
      */
-    boolean createSong(Song song, File songFile) throws SongDAOException;
+    boolean createSong(Song song, File songFile, File imageFile) throws SongDAOException;
 
     /**
      * Gets all the stored authors.

@@ -18,6 +18,7 @@ public class AddSongController implements ActionListener {
     private UserManager userManager;
     private SongManager songManager;
     private File songFile;
+    private File imageFile;
 
     public AddSongController(PlayerViewListener listener, AddSongView addSongView, UserManager userManager,
                           SongManager songManager) {
@@ -58,6 +59,9 @@ public class AddSongController implements ActionListener {
             case AddSongView.BTN_SELECT_FILE:
                 songFile = addSongView.selectFile();
                 break;
+            case AddSongView.BTN_SELECT_IMAGE:
+                imageFile = addSongView.selectImage();
+                break;
         }
     }
 
@@ -69,6 +73,15 @@ public class AddSongController implements ActionListener {
 
     private void addSong() {
         String author = addSongView.getAuthorItem();
+        String path;
+
+        if (imageFile == null) {
+            path = "no path";
+        } else {
+            path = imageFile.getPath();
+        }
+
+        System.out.println(path);
 
         if (addSongView.newAuthorSelected()) {
             addSongView.addAuthor(addSongView.getAuthorField());
@@ -78,11 +91,12 @@ public class AddSongController implements ActionListener {
         try {
             songManager.addSong(
                     songFile,
+                    imageFile,
                     addSongView.getTitle(),
                     addSongView.getAlbum(),
                     addSongView.getGenre(),
                     author,
-                    addSongView.getAlbumCover(),
+                    path,
                     userManager.getCurrentUser());
         } catch (SongDAOException ex) {
             addSongView.showErrorDialog(CREATE_SONG_ERROR);
