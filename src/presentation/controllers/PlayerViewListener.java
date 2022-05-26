@@ -4,6 +4,8 @@ import business.entities.Song;
 
 import java.util.ArrayList;
 
+import business.entities.Playlist;
+
 public interface PlayerViewListener {
 
     void showSongDetails(Song song);
@@ -25,4 +27,6 @@ public interface PlayerViewListener {
      * @param index index representing the position of the song to be played in the playback interface
      */
     void playSong(ArrayList<Song> songs, int index);
+
+    void showPlaylistDetails(Playlist playlist);
 }

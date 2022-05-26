@@ -60,9 +60,6 @@ public class HomeView extends JPanel {
 
         table.setRowHeight(40);
         resizeColumnWidth(table);
-        /*for (int i = 0; i < column.length; i++) {
-            table.getColumnModel().getColumn(i).setResizable(false);
-        }*/
 
         table.setShowGrid(false);
         JScrollPane pane = new JScrollPane(table);
@@ -164,10 +161,6 @@ public class HomeView extends JPanel {
         panelSearch.setOpaque(false);
         panelSearch.add(searchSong);
         return panelSearch;
-    }
-
-    public int getSongValue() {
-        return selectedRow;
     }
 
     public int getSelectedRow() {

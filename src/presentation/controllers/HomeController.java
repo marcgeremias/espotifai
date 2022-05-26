@@ -51,8 +51,7 @@ public class HomeController implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         // Single click
         if (e.getClickCount() >= 1) {
-            //TODO: falten les tasques que estan a la branca del Marc, descomentar linia quan estigui tot merge
-            //listener.showPlaylistDetails(otherPlaylists.get(homeView.getSelectedRow()));
+            listener.showPlaylistDetails(otherPlaylists.get(homeView.getSelectedRow()));
         }
     }
 
