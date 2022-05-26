@@ -5,6 +5,7 @@ import presentation.views.components.*;
 import presentation.views.components.TextField;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
@@ -66,26 +67,8 @@ public class SignUpView extends JPanel {
     private Component left() {
         JPanel left = new JPanel();
         left.add(goBackButton());
-        left.add(goBackText());
         left.setOpaque(false);
         return left;
-    }
-
-    /**
-     * Method that shows a label to indicate if the user want sto go back to the login view
-     * @return the panel with the label of going back inside
-     */
-    private Component goBackText() {
-        JLabel goBackText = new JLabel("Log in");
-        goBackText.setFont(new Font("arial", Font.BOLD, 16));
-        goBackText.setForeground(Color.WHITE);
-
-        JPanel panelAux = new JPanel();
-        panelAux.setSize(goBackText.getWidth(), goBackText.getHeight());
-        panelAux.setOpaque(false);
-        panelAux.add(goBackText);
-
-        return panelAux;
     }
 
     /*
@@ -93,12 +76,12 @@ public class SignUpView extends JPanel {
      * @return the panel with the button of going back inside
      */
     private Component goBackButton() {
-        goBackButton = new JButton();
-        goBackButton.setText("<");
+        goBackButton = new HoverButton(Color.LIGHT_GRAY, Color.BLACK, "< LOG IN");
         goBackButton.setBackground(Color.BLACK);
-        goBackButton.setOpaque(true);
         goBackButton.setForeground(Color.WHITE);
-        goBackButton.setFont(new Font("Berlin Sans FB Demi", Font.BOLD, 25));
+        goBackButton.setOpaque(true);
+        goBackButton.setFont(new Font("Apple Casual", Font.BOLD, 12));
+        goBackButton.setBorderPainted(false);
 
         JPanel panelAuxGoBack = new JPanel();
         panelAuxGoBack.setOpaque(false);
@@ -295,6 +278,21 @@ public class SignUpView extends JPanel {
         emailField.setBackground(new Color(76, 76, 76));
         passwordField.setBackground(new Color(76, 76, 76));
         confirmPasswordField.setBackground(new Color(76, 76, 76));
+        incorrectInput.setVisible(false);
+    }
+
+    public void clearFields() {
+        usernameField.setText("");
+        emailField.setText("");
+        passwordField.setText("");
+        confirmPasswordField.setText("");
+        incorrectInput.setText("");
+        incorrectInput.setVisible(false);
+    }
+
+    public void clearAllInfo(){
+        clearFields();
+        resetIncorrectInputs();
         incorrectInput.setVisible(false);
     }
 }

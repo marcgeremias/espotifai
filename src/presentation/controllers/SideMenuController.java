@@ -3,6 +3,7 @@ package presentation.controllers;
 import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
+import presentation.views.MainView;
 import presentation.views.PlayerView;
 import presentation.views.SideMenuView;
 
@@ -50,6 +51,7 @@ public class SideMenuController implements ActionListener {
                 break;
             case SideMenuView.LOGOUT:
                 listener.logout();
+
                 break;
             default:
                 break;
