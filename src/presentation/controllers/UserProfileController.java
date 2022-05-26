@@ -37,8 +37,16 @@ public class UserProfileController implements ActionListener {
         switch (e.getActionCommand()){
             case UserProfileView.DELETE_ACCOUNT:
                 // Shows an external panel with the deletion confirmation
-                userProfileView.showConfirmationPanel();
-                listener.delete();
+                switch (userProfileView.showConfirmationPanel()){
+                    case 0:
+                        listener.delete();
+                        break;
+                    case 1:
+                        listener.changeView(PlayerView.USER_PROFILE_VIEW);
+                        break;
+                    default:
+                        break;
+                }
                 break;
             case UserProfileView.BACK_BUTTON:
                 listener.changeView(PlayerView.DEFAULT_VIEW);

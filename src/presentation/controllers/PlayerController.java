@@ -120,6 +120,7 @@ public class PlayerController implements PlayerViewListener {
     public void logout() {
         userManager.logOutUser();
         listener.changeView(MainView.CARD_LOG_IN);
+        playerView.changeView(PlayerView.DEFAULT_VIEW);
     }
 
     @Override
@@ -127,6 +128,8 @@ public class PlayerController implements PlayerViewListener {
         try {
             userManager.deleteUser();
             userManager.logOutUser();
+            listener.changeView(MainView.CARD_LOG_IN);
+            playerView.changeView(PlayerView.DEFAULT_VIEW);
         } catch (UserDAOException e) {
             e.printStackTrace();
         }
