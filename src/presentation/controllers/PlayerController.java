@@ -58,6 +58,10 @@ public class PlayerController implements PlayerViewListener {
         libraryView = new LibraryView();
         libraryController = new LibraryController(this, libraryView, userManager, songManager, playlistManager);
 
+        SideMenuView sideMenuView = new SideMenuView();
+        sideMenuController = new SideMenuController(this, sideMenuView, userManager, playlistManager, songManager);
+        sideMenuView.registerController(sideMenuController);
+
         AddSongView addSongView = new AddSongView(songManager.getAuthors());
         addSongController = new AddSongController(this, addSongView, userManager, songManager);
         addSongView.registerController(addSongController);
@@ -77,10 +81,6 @@ public class PlayerController implements PlayerViewListener {
         MusicPlaybackView musicPlaybackView = new MusicPlaybackView();
         musicPlaybackController = new MusicPlaybackController(musicPlaybackView, songManager, playerManager);
         musicPlaybackView.registerController(musicPlaybackController);
-
-        SideMenuView sideMenuView = new SideMenuView();
-        sideMenuController = new SideMenuController(this, sideMenuView, userManager, playlistManager, songManager);
-        sideMenuView.registerController(sideMenuController);
 
         this.playerView.setContents(musicPlaybackView, sideMenuView);
         this.playerView.initCardLayout(defaultView, songListView, libraryView, addSongView,
