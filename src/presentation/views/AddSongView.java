@@ -12,7 +12,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class AddSongView extends JPanel {
-    private JPanel centerPane;
     private PlaceholderTextField titleField;
     private PlaceholderTextField albumField;
     private PlaceholderTextField albumCover;
@@ -45,9 +44,8 @@ public class AddSongView extends JPanel {
         this.setLayout(new BorderLayout());
         this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
 
-        JPanel north = new JPanel();
-        JPanel south = new JPanel();
-        centerPane = new JPanel();
+        JPanel east = new JPanel();
+
         titleField = new PlaceholderTextField();
         albumField = new PlaceholderTextField();
         albumCover = new PlaceholderTextField();
@@ -59,10 +57,37 @@ public class AddSongView extends JPanel {
         incorrectFieldLabel = new JLabel();
         addFileButton = new JButton(BUTTON_SELECT_FILE);
 
+        east.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        east.setPreferredSize(new Dimension(
+                ((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth()) / 6, this.getHeight()
+        ));
+
+        this.add(east, BorderLayout.EAST);
+        this.add(center(authors), BorderLayout.CENTER);
+    }
+
+    /*
+    * Configures the components in the center section of the view
+    */
+    private Component center(ArrayList<String> authors) {
+        JPanel panel = new JPanel();
+        JLabel viewTitle = new JLabel(ADD_SONG_TITLE);
+        JPanel north = new JPanel();
+        JPanel south = new JPanel();
+        JPanel center = new JPanel();
+
+        panel.setLayout(new BorderLayout());
+
+        viewTitle.setForeground(Color.WHITE);
+        viewTitle.setFont(new Font("Apple Casual", Font.BOLD, 30));
+        viewTitle.setHorizontalAlignment(JLabel.CENTER);
+
         north.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         north.setPreferredSize(new Dimension(
                 this.getWidth(), ((int) Toolkit.getDefaultToolkit().getScreenSize().getHeight()) / 8
         ));
+        north.setBorder(BorderFactory.createEmptyBorder(55,15,25,15));
+        north.add(viewTitle);
 
         south.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         south.setPreferredSize(new Dimension(
@@ -72,27 +97,16 @@ public class AddSongView extends JPanel {
         incorrectFieldLabel.setVisible(false);
         south.add(incorrectFieldLabel);
 
-        setCenter(authors);
-
-        this.add(centerPane, BorderLayout.CENTER);
-        this.add(south, BorderLayout.SOUTH);
-        this.add(north, BorderLayout.NORTH);
-    }
-
-    /*
-    * Configures the components in the center section of the view
-    */
-    private void setCenter(ArrayList<String> authors) {
-        centerPane.setLayout(new BoxLayout(centerPane, BoxLayout.Y_AXIS));
-        centerPane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
-
-        JLabel panelTitle = new JLabel(ADD_SONG_TITLE);
-        panelTitle.setForeground(Color.WHITE);
+        center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+        center.setBorder(BorderFactory.createEmptyBorder(25, 120, 20, 120));
+        center.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
 
         titleField.setText(null);
         albumField.setText(null);
         authorField.setText(null);
         albumCover.setText(null);
+        addFileButton.setAlignmentX(CENTER_ALIGNMENT);
+        addSongButton.setAlignmentX(CENTER_ALIGNMENT);
 
         // Genres JComboBox initialisation
         configureGenres();
@@ -101,14 +115,19 @@ public class AddSongView extends JPanel {
         configureAuthors(authors);
 
         // Add center components
-        centerPane.add(panelTitle);
-        centerPane.add(new TextField(TITLE_FIELD_PH, titleField));
-        centerPane.add(new TextField(ALBUM_FIELD_PH, albumField));
-        centerPane.add(genreSelector);
-        centerPane.add(authorPane);
-        centerPane.add(addFileButton);
-        centerPane.add(new TextField(ALBUM_COVER_PH, albumCover));
-        centerPane.add(addSongButton);
+        center.add(new TextField(TITLE_FIELD_PH, titleField));
+        center.add(new TextField(ALBUM_FIELD_PH, albumField));
+        center.add(genreSelector);
+        center.add(authorPane);
+        center.add(addFileButton);
+        center.add(new TextField(ALBUM_COVER_PH, albumCover));
+        center.add(addSongButton);
+
+        panel.add(north, BorderLayout.NORTH);
+        panel.add(south, BorderLayout.SOUTH);
+        panel.add(center, BorderLayout.CENTER);
+
+        return panel;
     }
 
     /*
@@ -117,6 +136,7 @@ public class AddSongView extends JPanel {
     private void configureGenres() {
         genreSelector.setBackground(new Color(76, 76, 76));
         genreSelector.setForeground(Color.GRAY);
+        genreSelector.setBorder(BorderFactory.createEmptyBorder(0, 130, 0, 130));
 
         for (Genre genre : Genre.values()) {
             genreSelector.addItem(genre);
@@ -132,6 +152,7 @@ public class AddSongView extends JPanel {
         // Authors JComboBox initialisation
         authorSelector.setBackground(new Color(76, 76, 76));
         authorSelector.setForeground(Color.GRAY);
+        authorSelector.setBorder(BorderFactory.createEmptyBorder(0, 130, 0, 130));
         authorSelector.addItem(SELECT_AUTHOR_ITEM);
         authorSelector.addItem(OTHER_ITEM);
 
@@ -150,8 +171,8 @@ public class AddSongView extends JPanel {
     }
 
     /**
-     * A
-     * @param controller
+     * Adds the listeners of the AddSongView's components
+     * @param controller an instance of ActionListener
      */
     public void registerController(ActionListener controller) {
         authorSelector.addActionListener(controller);
