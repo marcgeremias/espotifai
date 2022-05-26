@@ -194,10 +194,6 @@ public class LibraryView extends JPanel {
         return panelSearch;
     }
 
-    public int getSongValue() {
-        return selectedRow;
-    }
-
     public int getSelectedRow() {
         return table.getSelectedRow();
     }

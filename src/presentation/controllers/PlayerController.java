@@ -5,6 +5,7 @@ import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
 import business.entities.Song;
+import business.entities.Playlist;
 import business.entities.User;
 import presentation.views.*;
 
@@ -160,5 +161,11 @@ public class PlayerController implements PlayerViewListener {
         defaultController.initCard();
         playerView.revalidate();
         playerView.changeView(PlayerView.DEFAULT_VIEW);
+    }
+
+    @Override
+    public void showPlaylistDetails(Playlist playlistId) {
+        playerView.changeView(PlayerView.PLAYLIST_DETAIL_VIEW);
+        playlistDetailController.initView(playlistId);
     }
 }

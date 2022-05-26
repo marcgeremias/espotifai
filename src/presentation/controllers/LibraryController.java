@@ -48,9 +48,7 @@ public class LibraryController implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         // Single click
         if (e.getClickCount() >= 1) {
-            System.out.println(libraryView.getSelectedRow());
-            //TODO: els metodes els te a la branca en Marc
-            //listener.showPlaylistDetails(myPlaylists.get(libraryView.getSelectedRow()));
+            listener.showPlaylistDetails(myPlaylists.get(libraryView.getSelectedRow()));
         }
     }
 
