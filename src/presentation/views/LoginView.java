@@ -215,4 +215,11 @@ public class LoginView extends JPanel {
         userField.setText("");
         passwordField.setText("");
     }
+
+    public void clearAllInfo() {
+        clearFields();
+        userField.setBackground(new Color(76, 76, 76));
+        passwordField.setBackground(new Color(76, 76, 76));
+        incorrectInput.setVisible(false);
+    }
 }

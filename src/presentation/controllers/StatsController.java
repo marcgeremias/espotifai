@@ -9,23 +9,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class StatsController implements ActionListener {
-    private PlayerViewListener listener;
-    private StatsView statsView;
-    private UserManager userManager;
-    private SongManager songManager;
-    private PlaylistManager playlistManager;
 
-    public StatsController(PlayerViewListener listener, StatsView statsView, UserManager userManager,
-                             SongManager songManager, PlaylistManager playlistManager) {
-        this.listener = listener;
+    private StatsView statsView;
+    private SongManager songManager;
+
+    public StatsController(StatsView statsView, SongManager songManager) {
         this.statsView = statsView;
-        this.userManager = userManager;
         this.songManager = songManager;
-        this.playlistManager = playlistManager;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
+    }
+
+    public void refreshView() {
+        //Actualitza la vista amb info nova pel grafic
     }
 }

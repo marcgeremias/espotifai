@@ -26,11 +26,11 @@ public class SingUpController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case SignUpView.BTN_GO_BACK:
+                signUpView.clearAllInfo();
                 listener.changeView(MainView.CARD_LOG_IN);
                 break;
             case SignUpView.BTN_JOIN:
                 onJoinClick();
-
                 break;
             default:
                 System.err.println("Unknown action command " + e.getActionCommand());
@@ -55,7 +55,6 @@ public class SingUpController implements ActionListener {
             if (validationResult == UserManager.WRONG_EMAIL) {
                 // Show wrong email error
                 signUpView.incorrectEmail();
-
             } else {
 
                 if (validationResult == UserManager.WRONG_PASSWORD) {
@@ -68,7 +67,9 @@ public class SingUpController implements ActionListener {
                         signUpView.incorrectConfirmPassword();
                     } else {
                         // Validation completed, show playerView
+                        userManager.setCurrentUser(signUpView.getUsernameField());
                         signUpView.resetIncorrectInputs();
+                        signUpView.clearFields();
                         listener.changeView(MainView.CARD_PLAYER);
                     }
                 }

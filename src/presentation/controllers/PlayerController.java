@@ -4,15 +4,8 @@ import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
 import business.entities.User;
+import persistence.UserDAOException;
 import presentation.views.*;
-import presentation.views.components.JSliderUI;
-import presentation.views.components.SliderListener;
-
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class PlayerController implements PlayerViewListener {
 
@@ -20,15 +13,11 @@ public class PlayerController implements PlayerViewListener {
     // If a logout is performed we want to change the view to the login one
     private MainViewListener listener;
 
-    // Is this legal?
-    User userLoggedIn;
-
     // Pane controllers
-    private final HomeController homeController;
+    private final DefaultController defaultController;
     private final SongListController songListController;
     private final LibraryController libraryController;
     private final AddSongController addSongController;
-    private final StatsController statsController;
     private final SongDetailController songDetailController;
     private final PlaylistDetailController playlistDetailController;
     private final UserProfileController userProfileController;
@@ -51,9 +40,10 @@ public class PlayerController implements PlayerViewListener {
         this.listener = listener;
         this.playerView = playerView;
         this.userManager = userManager;
-        HomeView homeView = new HomeView();
-        homeController = new HomeController(this, homeView, userManager, songManager, playlistManager);
-        homeView.registerController(homeController);
+        DefaultView defaultView = new DefaultView();
+
+        defaultController = new DefaultController(defaultView, userManager, songManager, playlistManager);
+        defaultView.registerController(defaultController);
 
         songListView =  new SongListView();
         songListController = new SongListController(this, songListView, userManager, songManager, playlistManager);
@@ -66,10 +56,6 @@ public class PlayerController implements PlayerViewListener {
         AddSongView addSongView = new AddSongView(songManager.getAuthors());
         addSongController = new AddSongController(this, addSongView, userManager, songManager);
         addSongView.registerController(addSongController);
-
-        StatsView statsView = new StatsView();
-        statsController = new StatsController(this, statsView, userManager, songManager, playlistManager);
-        statsView.registerController(statsController);
 
         SongDetailView songDetailView = new SongDetailView();
         songDetailController = new SongDetailController(this, songDetailView, userManager, songManager, playlistManager);
@@ -92,9 +78,9 @@ public class PlayerController implements PlayerViewListener {
         sideMenuView.registerController(sideMenuController);
 
         this.playerView.setContents(musicPlaybackView, sideMenuView);
-        this.playerView.initCardLayout(homeView, songListView, libraryView, addSongView, statsView,
+        this.playerView.initCardLayout(defaultView, songListView, libraryView, addSongView,
                                         songDetailView, playlistDetailView, userProfileView);
-        this.playerView.changeView(PlayerView.HOME_VIEW);
+        this.playerView.changeView(PlayerView.DEFAULT_VIEW);
     }
 
     @Override
@@ -109,7 +95,7 @@ public class PlayerController implements PlayerViewListener {
      */
     private void initCard(String card) {
         switch (card){
-            case PlayerView.HOME_VIEW:
+            case PlayerView.DEFAULT_VIEW:
                 break;
             case PlayerView.SONG_LIST_VIEW:
                 songListController.initView();
@@ -120,13 +106,12 @@ public class PlayerController implements PlayerViewListener {
                 break;
             case PlayerView.ADD_SONG_VIEW:
                 break;
-            case PlayerView.STATS_VIEW:
-                break;
             case PlayerView.SONG_DETAIL_VIEW:
                 break;
             case PlayerView.PLAYLIST_DETAIL_VIEW:
                 break;
             case PlayerView.USER_PROFILE_VIEW:
+                userProfileController.setNickname(userManager.getCurrentUser());
                 break;
         }
     }
@@ -135,5 +120,20 @@ public class PlayerController implements PlayerViewListener {
     public void logout() {
         userManager.logOutUser();
         listener.changeView(MainView.CARD_LOG_IN);
+        playerView.changeView(PlayerView.DEFAULT_VIEW);
     }
+
+    @Override
+    public void delete() {
+        try {
+            userManager.deleteUser();
+            userManager.logOutUser();
+            listener.changeView(MainView.CARD_LOG_IN);
+            playerView.changeView(PlayerView.DEFAULT_VIEW);
+        } catch (UserDAOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
