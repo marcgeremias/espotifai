@@ -96,13 +96,13 @@ public class SongListView extends JPanel {
         }
         tableSongs.setOpaque(false);
 
-        /*if (notFirstTime) {
+        if (notFirstTime) {
             System.out.println(table.getRowCount() + " vs " + currentSongs.size());
             if (table.getRowCount() != currentSongs.size()) {
                 tableModel = new DefaultTableModel(data, column);
                 table = new JTable(tableModel);
             }
-        } else {
+       /* } else {
             tableModel = new DefaultTableModel(data, column);
             table = new JTable(tableModel);
         }*/
@@ -121,8 +121,8 @@ public class SongListView extends JPanel {
         }*/
 
         tableModel = new DefaultTableModel(data, column);
-        table = new JTable(tableModel);
-
+        //table = new JTable(tableModel);
+        table.setModel(tableModel);
         tableModel.fireTableDataChanged();
         // Saving the selected Row to know what song is
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
@@ -193,6 +193,9 @@ public class SongListView extends JPanel {
 
         tableSongs.add(pane);
         notFirstTime = true;
+
+        revalidate();
+        repaint();
     }
 
     /*
@@ -246,5 +249,13 @@ public class SongListView extends JPanel {
 
     public int getSongValue() {
         return selectedRow;
+    }
+
+    public int getTableRow(){
+        return table.getSelectedRow();
+    }
+
+    public int getTableCol(){
+        return table.getSelectedColumn();
     }
 }

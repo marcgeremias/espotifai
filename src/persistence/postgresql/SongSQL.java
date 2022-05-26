@@ -14,10 +14,12 @@ import persistence.config.APIConfig;
 import persistence.config.DBConstants;
 import persistence.config.DBConfig;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import static persistence.config.APIConfig.COVERS_ROOT_FOLDER;
 import static persistence.config.APIConfig.SONGS_ROOT_FOLDER;
 
 /**
@@ -39,6 +42,7 @@ import static persistence.config.APIConfig.SONGS_ROOT_FOLDER;
 public class SongSQL implements SongDAO {
 
     private static final String SONG_FORMAT = "mp3";
+    private static final String IMAGE_FORMAT = "jpg";
 
     /**
      * Public method to create a new song in the database. An instance of {@link Song} is passed as a parameter and
@@ -70,13 +74,13 @@ public class SongSQL implements SongDAO {
 
             if (rs.next()) {
                 c.close();
-                //return uploadSong(songFile, rs.getInt(1)); todo: uncomment for delivery
-                return true;
+                return uploadSong(songFile, rs.getInt(1)); //todo: uncomment for delivery
+                //return true;
             } else {
                 c.close();
                 return false;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DbxException | IOException e) {
             throw new SongDAOException(e.getMessage());
         }
     }
@@ -284,7 +288,7 @@ public class SongSQL implements SongDAO {
             ArrayList<Song> songs = new ArrayList<>();
 
             String selectSongsSQL = "SELECT * FROM " + DBConstants.TABLE_SONG
-                    + " WHERE " + DBConstants.SONG_COL_GENRE + " = ?";
+                    + " WHERE " + " UPPER( " + DBConstants.SONG_COL_GENRE + ") = ?";
 
             PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
             selectSongsSTMT.setString(1, String.valueOf(genre));
@@ -394,28 +398,49 @@ public class SongSQL implements SongDAO {
         try {
             //This seems like is not following 'Tell, don't ask rule' but it is actually very polite
             DbxClientV2 client = APIConfig.getInstance().getClient();
-            DbxDownloader<FileMetadata> downloader = client.files().download(SONGS_ROOT_FOLDER + "/" + songID + "." + SONG_FORMAT);
+            //DbxDownloader<FileMetadata> downloader = client.files().download(SONGS_ROOT_FOLDER + "/" + songID + "." + SONG_FORMAT);
 
             // This Byte output stream will contain the downloaded song
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
             //Method to download the song
-            downloader.download(baos);
+            //downloader.download(baos);
+            FileMetadata metadata = client.files().downloadBuilder(SONGS_ROOT_FOLDER + "/" + songID +"." + SONG_FORMAT).download(baos);
 
             //Convert the ByteOutputStream to an AudioInputStream
             ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-            AudioInputStream ais = AudioSystem.getAudioInputStream(bais);
 
-            //This method is called for the conversion from mp3 to wav and returns the AudioInputStream ready to be reproduced
-            return mp3ToWav(ais);
+            return mp3ToWav(AudioSystem.getAudioInputStream(bais));
         } catch (DbxException | IOException | UnsupportedAudioFileException e) {
             throw new SongDAOException(e.getMessage());
         }
     }
 
+    @Override
+    public BufferedImage downloadCoverImage(int songID) throws SongDAOException {
+        try {
+            //This seems like is not following 'Tell, don't ask rule' but it is actually very polite
+            DbxClientV2 client = APIConfig.getInstance().getClient();
+            //DbxDownloader<FileMetadata> downloader = client.files().download(COVERS_ROOT_FOLDER + "/" + songID + "." + IMAGE_FORMAT);
+
+            // This Byte output stream will contain the downloaded file
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            //Method to download the file
+            //downloader.download(baos);
+            FileMetadata metadata = client.files().downloadBuilder("/covers/1.jpg").download(baos);
+
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+
+            return ImageIO.read(bais);
+        } catch (DbxException | IOException e){
+            throw new SongDAOException(e.getMessage());
+        }
+    }
+
     /*
-    Private method to upload a song to the DropboxAPI
-     */
+        Private method to upload a song to the DropboxAPI
+         */
     private boolean uploadSong(File song, int songID) throws DbxException, IOException {
         InputStream in = new FileInputStream(song);
         DbxClientV2 client = APIConfig.getInstance().getClient();
@@ -477,6 +502,11 @@ public class SongSQL implements SongDAO {
                 sourceFormat.getChannels() * 2,
                 sourceFormat.getSampleRate(),
                 false);
+
+        //System.out.println(convertFormat.getFrameSize());
+
+        AudioInputStream ais = AudioSystem.getAudioInputStream(convertFormat, mp3Stream);
+        //ais.getFrameLength();
         // Returns the new reconstructed input stream
         return AudioSystem.getAudioInputStream(convertFormat, mp3Stream);
     }

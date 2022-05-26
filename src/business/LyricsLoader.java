@@ -25,7 +25,7 @@ public class LyricsLoader extends Thread{
             lyricsListener.notifyLyricsDone(lyrics);
 
         } catch (Exception e) {
-            lyricsListener.notifyError();
+            lyricsListener.notifyError(e.getMessage());
 
             e.printStackTrace();
         }

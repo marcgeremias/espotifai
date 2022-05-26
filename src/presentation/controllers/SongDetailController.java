@@ -50,7 +50,7 @@ public class SongDetailController implements ActionListener, LyricsListener {
         System.out.println(currentSong.getTitle());
         System.out.println(currentSong.getAuthor());
         //songManager.getLyrics(this, currentSong.getTitle(), currentSong.getAuthor());
-        songManager.getLyrics(this, currentSong.getTitle(), "Bad Bunny");
+        songManager.getLyrics(this, currentSong.getTitle(), currentSong.getAuthor());
 
         //System.out.println(songLyrics);
 
@@ -81,6 +81,9 @@ public class SongDetailController implements ActionListener, LyricsListener {
 
             case SongDetailView.BTN_PLAY_IMAGE:
                 System.out.println("REPRODUCE MUSICCC");
+                ArrayList<Song> listSong = new ArrayList<>();
+                listSong.add(currentSong);
+                listener.playSong(listSong, 0);
                 break;
         }
     }
@@ -91,7 +94,7 @@ public class SongDetailController implements ActionListener, LyricsListener {
     }
 
     @Override
-    public void notifyError() {
-        songDetailView.lyricsError();
+    public void notifyError(String message) {
+        songDetailView.lyricsError(message);
     }
 }
