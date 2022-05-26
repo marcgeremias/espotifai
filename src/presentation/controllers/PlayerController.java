@@ -3,6 +3,7 @@ package presentation.controllers;
 import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
+import business.entities.Playlist;
 import business.entities.User;
 import presentation.views.*;
 
@@ -63,7 +64,7 @@ public class PlayerController implements PlayerViewListener {
         songDetailController = new SongDetailController(this, songDetailView, userManager, songManager, playlistManager);
         songDetailView.registerController(songDetailController);
 
-        PlaylistDetailView playlistDetailView = new PlaylistDetailView(this);
+        PlaylistDetailView playlistDetailView = new PlaylistDetailView();
         playlistDetailController = new PlaylistDetailController(this, playlistDetailView, userManager, songManager, playlistManager);
         playlistDetailView.registerController(playlistDetailController);
 
@@ -125,5 +126,11 @@ public class PlayerController implements PlayerViewListener {
     public void logout() {
         userManager.logOutUser();
         listener.changeView(MainView.CARD_LOG_IN);
+    }
+
+    @Override
+    public void showPlaylistDetails(Playlist playlistId) {
+        playerView.changeView(PlayerView.PLAYLIST_DETAIL_VIEW);
+        playlistDetailController.initView(playlistId);
     }
 }

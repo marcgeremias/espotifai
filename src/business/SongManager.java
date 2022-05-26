@@ -61,6 +61,18 @@ public class SongManager {
     }
 
     /**
+     * Gets all songs from a playlist
+     * @return an ArrayList of Songs containing all songs
+     */
+    public ArrayList<Song> getAllPlaylistSongs(int playlistId) {
+        try {
+            return songDAO.getSongsByPlaylistID(playlistId);
+        } catch (SongDAOException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    /**
      * Checks whether the song's attributes are correct
      * @param title: a String containing the title of the song
      * @param album: a String containing the album of the song
@@ -133,4 +145,8 @@ public class SongManager {
 
         songDAO.createSong(song, file);
     }
+
+
+
+
 }
