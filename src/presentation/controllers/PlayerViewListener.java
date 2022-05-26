@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public interface PlayerViewListener {
 
+    void showSongDetails(Song song);
+
     /**
      * This method will pass a String containing a key identifier for a card in order to switch the card layout.
      * @param card

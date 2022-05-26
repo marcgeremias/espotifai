@@ -12,7 +12,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class AddSongView extends JPanel {
-    private JPanel centerPane;
     private PlaceholderTextField titleField;
     private PlaceholderTextField albumField;
     private PlaceholderTextField albumCover;
@@ -23,16 +22,19 @@ public class AddSongView extends JPanel {
     private JButton addSongButton;
     private JLabel incorrectFieldLabel;
     private JButton addFileButton;
+    private JButton addImageButton;
 
     public static final String COMBOBOX_AUTHOR = "COMBOBOX_AUTHOR";
     public static final String BTN_ADD_SONG = "BTN_ADD_SONG";
     public static final String BTN_SELECT_FILE = "SELECT FILE";
+    public static final String BTN_SELECT_IMAGE = "SELECT IMAGE";
 
     private final String ADD_SONG_TITLE = "Add Song";
     private final String BUTTON_ADD_MSG = "Add";
     private final String SELECT_AUTHOR_ITEM = "Select author";
     private final String OTHER_ITEM = "Other";
     private final String BUTTON_SELECT_FILE = "Select file";
+    private final String BUTTON_ADD_IMAGE = "Add image";
     private final String TITLE_FIELD_PH = "Title";
     private final String ALBUM_FIELD_PH = "Album";
     private final String ALBUM_COVER_PH = "Cover path";
@@ -45,12 +47,11 @@ public class AddSongView extends JPanel {
         this.setLayout(new BorderLayout());
         this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
 
-        JPanel north = new JPanel();
-        JPanel south = new JPanel();
-        centerPane = new JPanel();
+        JPanel east = new JPanel();
+
         titleField = new PlaceholderTextField();
         albumField = new PlaceholderTextField();
-        albumCover = new PlaceholderTextField();
+        //albumCover = new PlaceholderTextField();
         genreSelector = new JComboBox<Genre>();
         authorPane = new JPanel();
         authorSelector = new JComboBox<String>();
@@ -58,11 +59,39 @@ public class AddSongView extends JPanel {
         addSongButton = new JButton(BUTTON_ADD_MSG);
         incorrectFieldLabel = new JLabel();
         addFileButton = new JButton(BUTTON_SELECT_FILE);
+        addImageButton = new JButton(BUTTON_ADD_IMAGE);
+
+        east.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        east.setPreferredSize(new Dimension(
+                ((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth()) / 6, this.getHeight()
+        ));
+
+        this.add(east, BorderLayout.EAST);
+        this.add(center(authors), BorderLayout.CENTER);
+    }
+
+    /*
+    * Configures the components in the center section of the view
+    */
+    private Component center(ArrayList<String> authors) {
+        JPanel panel = new JPanel();
+        JLabel viewTitle = new JLabel(ADD_SONG_TITLE);
+        JPanel north = new JPanel();
+        JPanel south = new JPanel();
+        JPanel center = new JPanel();
+
+        panel.setLayout(new BorderLayout());
+
+        viewTitle.setForeground(Color.WHITE);
+        viewTitle.setFont(new Font("Apple Casual", Font.BOLD, 30));
+        viewTitle.setHorizontalAlignment(JLabel.CENTER);
 
         north.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         north.setPreferredSize(new Dimension(
                 this.getWidth(), ((int) Toolkit.getDefaultToolkit().getScreenSize().getHeight()) / 8
         ));
+        north.setBorder(BorderFactory.createEmptyBorder(55,15,25,15));
+        north.add(viewTitle);
 
         south.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         south.setPreferredSize(new Dimension(
@@ -72,27 +101,17 @@ public class AddSongView extends JPanel {
         incorrectFieldLabel.setVisible(false);
         south.add(incorrectFieldLabel);
 
-        setCenter(authors);
-
-        this.add(centerPane, BorderLayout.CENTER);
-        this.add(south, BorderLayout.SOUTH);
-        this.add(north, BorderLayout.NORTH);
-    }
-
-    /*
-    * Configures the components in the center section of the view
-    */
-    private void setCenter(ArrayList<String> authors) {
-        centerPane.setLayout(new BoxLayout(centerPane, BoxLayout.Y_AXIS));
-        centerPane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
-
-        JLabel panelTitle = new JLabel(ADD_SONG_TITLE);
-        panelTitle.setForeground(Color.WHITE);
+        center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+        center.setBorder(BorderFactory.createEmptyBorder(25, 120, 20, 120));
+        center.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
 
         titleField.setText(null);
         albumField.setText(null);
         authorField.setText(null);
-        albumCover.setText(null);
+        //albumCover.setText(null);
+        addFileButton.setAlignmentX(CENTER_ALIGNMENT);
+        addImageButton.setAlignmentX(CENTER_ALIGNMENT);
+        addSongButton.setAlignmentX(CENTER_ALIGNMENT);
 
         // Genres JComboBox initialisation
         configureGenres();
@@ -101,14 +120,20 @@ public class AddSongView extends JPanel {
         configureAuthors(authors);
 
         // Add center components
-        centerPane.add(panelTitle);
-        centerPane.add(new TextField(TITLE_FIELD_PH, titleField));
-        centerPane.add(new TextField(ALBUM_FIELD_PH, albumField));
-        centerPane.add(genreSelector);
-        centerPane.add(authorPane);
-        centerPane.add(addFileButton);
-        centerPane.add(new TextField(ALBUM_COVER_PH, albumCover));
-        centerPane.add(addSongButton);
+        center.add(new TextField(TITLE_FIELD_PH, titleField));
+        center.add(new TextField(ALBUM_FIELD_PH, albumField));
+        center.add(genreSelector);
+        center.add(authorPane);
+        center.add(addFileButton);
+        center.add(addImageButton);
+        //center.add(new TextField(ALBUM_COVER_PH, albumCover));
+        center.add(addSongButton);
+
+        panel.add(north, BorderLayout.NORTH);
+        panel.add(south, BorderLayout.SOUTH);
+        panel.add(center, BorderLayout.CENTER);
+
+        return panel;
     }
 
     /*
@@ -117,6 +142,7 @@ public class AddSongView extends JPanel {
     private void configureGenres() {
         genreSelector.setBackground(new Color(76, 76, 76));
         genreSelector.setForeground(Color.GRAY);
+        genreSelector.setBorder(BorderFactory.createEmptyBorder(0, 130, 0, 130));
 
         for (Genre genre : Genre.values()) {
             genreSelector.addItem(genre);
@@ -132,6 +158,7 @@ public class AddSongView extends JPanel {
         // Authors JComboBox initialisation
         authorSelector.setBackground(new Color(76, 76, 76));
         authorSelector.setForeground(Color.GRAY);
+        authorSelector.setBorder(BorderFactory.createEmptyBorder(0, 130, 0, 130));
         authorSelector.addItem(SELECT_AUTHOR_ITEM);
         authorSelector.addItem(OTHER_ITEM);
 
@@ -150,8 +177,8 @@ public class AddSongView extends JPanel {
     }
 
     /**
-     * A
-     * @param controller
+     * Adds the listeners of the AddSongView's components
+     * @param controller an instance of ActionListener
      */
     public void registerController(ActionListener controller) {
         authorSelector.addActionListener(controller);
@@ -162,6 +189,9 @@ public class AddSongView extends JPanel {
 
         addFileButton.addActionListener(controller);
         addFileButton.setActionCommand(BTN_SELECT_FILE);
+
+        addImageButton.addActionListener(controller);
+        addImageButton.setActionCommand(BTN_SELECT_IMAGE);
     }
 
     private final FileNameExtensionFilter MP3_FILTER = new FileNameExtensionFilter("MP3 file (.mp3)", "mp3");
@@ -173,6 +203,26 @@ public class AddSongView extends JPanel {
     public File selectFile() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(MP3_FILTER);
+
+        int returnValue = fileChooser.showOpenDialog(this);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
+        }
+
+        return null;
+    }
+
+    private final FileNameExtensionFilter PNG_FILTER = new FileNameExtensionFilter("PNG file (.png)", "png");
+
+    /**
+     * Opens a JFileChooser dialog to select an image
+     * @return the selected file or null if no file selected
+     */
+    public File selectImage() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(PNG_FILTER);
+
         int returnValue = fileChooser.showOpenDialog(this);
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -233,12 +283,12 @@ public class AddSongView extends JPanel {
         titleField.setText(null);
         albumField.setText(null);
         authorField.setText(null);
-        albumCover.setText(null);
+        //albumCover.setText(null);
 
         titleField.setBackground(new Color(76, 76, 76));
         albumField.setBackground(new Color(76, 76, 76));
         authorField.setBackground(new Color(76, 76, 76));
-        albumCover.setBackground(new Color(76, 76, 76));
+        //albumCover.setBackground(new Color(76, 76, 76));
         addFileButton.setForeground(Color.BLACK);
 
         this.revalidate();

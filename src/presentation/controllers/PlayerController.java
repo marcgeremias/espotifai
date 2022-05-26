@@ -8,6 +8,7 @@ import business.entities.Song;
 import business.entities.User;
 import presentation.views.*;
 
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 public class PlayerController implements PlayerViewListener {
@@ -56,9 +57,15 @@ public class PlayerController implements PlayerViewListener {
         songListView =  new SongListView();
         songListController = new SongListController(this, songListView, userManager, songManager, playlistManager);
         songListView.registerKeyController(songListController);
+        songListView.registerMouseController(songListController);
 
         libraryView = new LibraryView();
         libraryController = new LibraryController(this, libraryView, userManager, songManager, playlistManager);
+        libraryView.registerMouseController(libraryController);
+
+        SideMenuView sideMenuView = new SideMenuView();
+        sideMenuController = new SideMenuController(this, sideMenuView, userManager, playlistManager, songManager);
+        sideMenuView.registerController(sideMenuController);
 
         AddSongView addSongView = new AddSongView(songManager.getAuthors());
         addSongController = new AddSongController(this, addSongView, userManager, songManager);
@@ -80,10 +87,6 @@ public class PlayerController implements PlayerViewListener {
         musicPlaybackController = new MusicPlaybackController(musicPlaybackView, songManager, playerManager);
         musicPlaybackView.registerController(musicPlaybackController);
 
-        SideMenuView sideMenuView = new SideMenuView();
-        sideMenuController = new SideMenuController(this, sideMenuView, userManager, playlistManager, songManager);
-        sideMenuView.registerController(sideMenuController);
-
         CreatePlaylistView createPlaylistView = new CreatePlaylistView();
         createPlaylistController = new CreatePlaylistController(this, createPlaylistView, userManager, songManager, playlistManager);
         addSongView.registerController(addSongController);
@@ -95,8 +98,16 @@ public class PlayerController implements PlayerViewListener {
     }
 
     @Override
+    public void showSongDetails(Song song) {
+        songDetailController.initView(song);
+        playerView.revalidate();
+        playerView.changeView(PlayerView.SONG_DETAIL_VIEW);
+    }
+
+    @Override
     public void changeView(String card) {
         initCard(card);
+        playerView.revalidate();
         playerView.changeView(card);
     }
 
@@ -111,17 +122,16 @@ public class PlayerController implements PlayerViewListener {
                 break;
             case PlayerView.SONG_LIST_VIEW:
                 songListController.initView();
-                // We need to register the controller every time due to the dynamic JTable
-                songListView.registerMouseController(songListController);
                 break;
             case PlayerView.LIBRARY_VIEW:
                 libraryController.initView();
                 // We need to register the controller every time due to the dynamic JTable
-                libraryView.registerMouseController(libraryController);
                 break;
             case PlayerView.ADD_SONG_VIEW:
                 break;
             case PlayerView.SONG_DETAIL_VIEW:
+                //System.out.println("SONG DETAIL VIEW");
+                //songDetailController.initView(songListController.getSongNum());
                 break;
             case PlayerView.PLAYLIST_DETAIL_VIEW:
                 break;
@@ -138,10 +148,17 @@ public class PlayerController implements PlayerViewListener {
         userManager.logOutUser();
         playerManager.clearData();
         listener.changeView(MainView.CARD_LOG_IN);
+        playerView.changeView(DefaultView.HOME_VIEW);
     }
 
     @Override
     public void playSong(ArrayList<Song> songs, int index) {
         musicPlaybackController.initSongPlaylist(songs, index);
+    }
+
+    public void initHomeView() {
+        defaultController.initCard();
+        playerView.revalidate();
+        playerView.changeView(PlayerView.DEFAULT_VIEW);
     }
 }

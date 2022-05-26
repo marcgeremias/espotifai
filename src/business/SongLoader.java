@@ -32,6 +32,10 @@ public class SongLoader extends Thread{
         this.songManager = songManager;
         songsSavedIndex = new ArrayList<>();
         File directory = new File(SONGS_DIRECTORY);
+        if (!directory.exists()){
+            directory.mkdir();
+        }
+
         for (String file : Objects.requireNonNull(directory.list())){
             songsSavedIndex.add(Integer.parseInt(file.split("\\.")[0]));
         }
