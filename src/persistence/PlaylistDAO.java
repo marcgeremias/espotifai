@@ -32,12 +32,10 @@ public interface PlaylistDAO {
 
     /**
      * This method will return all playlists stored in the system.
-     * @param userDAO DataAccessObject of {@link business.entities.User} to reconstruct playlist object.
-     * @param songDAO DataAccessObject of {@link business.entities.Song} to reconstruct playlist object.
      * @return (1) List of {@link Playlist} or <b>null</b>
      * @throws Exception if there is an error storing the data.
      */
-    ArrayList<Playlist> getAllPlaylists(UserDAO userDAO, SongDAO songDAO) throws PlaylistDAOException;
+    ArrayList<Playlist> getAllPlaylists() throws PlaylistDAOException;
 
     /**
      * This method will search all the matches in the storage system given the title of the album. If the title

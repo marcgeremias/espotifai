@@ -4,6 +4,7 @@ import business.entities.Genre;
 import business.entities.Song;
 
 import javax.sound.sampled.AudioInputStream;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -20,10 +21,11 @@ public interface SongDAO {
      * as diferent songs.
      * @param song instance of {@link Song} with the values to persist.
      * @param songFile instance of {@link File} containing the song to upload
+     * @param imageFile instance of {@link File} containing the image of the song
      * @return (1) true if the song is added correctly or (2) false if there is an error.
      * @throws SongDAOException if there is an error accessing the database.
      */
-    boolean createSong(Song song, File songFile) throws SongDAOException;
+    boolean createSong(Song song, File songFile, File imageFile) throws SongDAOException;
 
     /**
      * Gets all the stored authors.
@@ -130,4 +132,12 @@ public interface SongDAO {
      * @throws SongDAOException if the song couldn't be downloaded.
      */
     AudioInputStream downloadSong(int songID) throws SongDAOException;
+
+    /**
+     * This method will download the cover image associated with the song in the storage system
+     * @param songID unique identifier of the song
+     * @return BufferedImage instance with the song or null
+     * @throws SongDAOException if the image can't be retrieved from the system or doesn't exist
+     */
+    BufferedImage downloadCoverImage(int songID) throws SongDAOException;
 }

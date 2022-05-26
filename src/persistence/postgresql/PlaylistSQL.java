@@ -97,13 +97,11 @@ public class PlaylistSQL implements PlaylistDAO {
 
     /**
      * Public method to get all instances of {@link Playlist} saved in the database.
-     * @param userDAO DataAccessObject for reconstructing the User (owner of playlist) in the Playlist object
-     * @param songDAO DataAccessObject for reconstructing the List of Song in the Playlist object
      * @return list of instances of Playlist with all the data filled (included User and list of Song) or <b>null</b>.
      * @throws PlaylistDAOException if the query fails to execute or the database connection can't be opened.
      */
     @Override
-    public ArrayList<Playlist> getAllPlaylists(UserDAO userDAO, SongDAO songDAO) throws PlaylistDAOException {
+    public ArrayList<Playlist> getAllPlaylists() throws PlaylistDAOException {
         try {
             Connection c = DBConfig.getInstance().openConnection();
             ArrayList<Playlist> playlists = new ArrayList<>();

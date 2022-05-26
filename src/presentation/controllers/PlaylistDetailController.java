@@ -53,6 +53,9 @@ public class PlaylistDetailController implements ActionListener {
     }
 
 
+    /**
+     * Method that updates the songs from the actual playlist
+     */
     private void updateActualPlaylist(){
         mySongs = songManager.getAllPlaylistSongs(actualPlaylist.getId());
         playlistDetailView.fillTable(mySongs, actualPlaylist);
@@ -84,11 +87,12 @@ public class PlaylistDetailController implements ActionListener {
 
             case PlaylistDetailView.BTN_DELATE_SONG:
                 try {
-                    if(playlistDetailView.getSelectedRow() > 0){
-                        if(playlistManager.isSongInsidePlaylist(allSongs.get(playlistDetailView.getSelectedRow()).getId()
+                    if(playlistDetailView.getSelectedRow() >= 0){
+                        if(playlistManager.isSongInsidePlaylist(mySongs.get(playlistDetailView.getSelectedRow()).getId()
                                 ,songManager.getAllPlaylistSongs(actualPlaylist.getId()))){
+
                             playlistManager.deleteSongFromPlaylist(actualPlaylist.getId(),
-                                    mySongs.get(playlistDetailView.getjSelectSong()).getId());
+                                    mySongs.get(playlistDetailView.getSelectedRow()).getId());
                             updateActualPlaylist();
                         }
                     }

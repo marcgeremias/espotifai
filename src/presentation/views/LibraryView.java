@@ -16,11 +16,12 @@ public class LibraryView extends JPanel {
     private JTable table;
     private JPanel tableSongs;
     DefaultTableModel tableModel;
-    private int selectedRow;
-
 
     // Boolean indicating if it's the first time acceding to the view
     private boolean notFirstTime;
+    private int selectedRow;
+
+    private static final String[] columns = {"Name"};
 
     public LibraryView() {
         this.setLayout(new BorderLayout());
@@ -37,48 +38,11 @@ public class LibraryView extends JPanel {
      */
     private Component center() {
         tableSongs = new JPanel(new GridLayout());
-        JPanel center = new JPanel();
-        center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
-        center.add(tableSongs);
-        center.setOpaque(false);
-        return center;
-    }
-
-    /**
-     * Method to adds the listener to the song list view JTable columns to acceding or reproducing songs
-     */
-    public void registerMouseController(MouseListener mouseListener) {
-        table.addMouseListener(mouseListener);
-    }
-
-    /**
-     * Method that fills the JTable with the playlist of the current user in the JTable
-     * @param myPlaylists an arraylist of songs that are currently in the system
-     */
-    public void fillTable(ArrayList<Playlist> myPlaylists) {
-
-        if (tableModel != null) {
-            tableModel.fireTableDataChanged();
-        }
         tableModel = new DefaultTableModel();
         table = new JTable(tableModel);
         table.getTableHeader().setReorderingAllowed(false);
         table.setOpaque(false);
-        tableModel.addColumn("Name");
-
-        // Inserting the data to each column
-        String[][] data = new String[myPlaylists.size()][2];
-
-        for (int i = 0; i < myPlaylists.size(); i++) {
-            data[i][0] = myPlaylists.get(i).getName();
-            data[i][1] = String.valueOf(myPlaylists.get(i).getOwner());
-            tableModel.insertRow(i, new Object[] {data[i][0]});
-            //System.out.println(myPlaylists.get(i).getName());
-            //System.out.println(myPlaylists.get(i).getOwner());
-        }
-        // Inserting the column titles
-        String[] column = {"Name","Owner"};
-
+        tableModel.setDataVector(null, columns);
         // Creating and personalizing JTable
         if (notFirstTime) {
             tableSongs = new JPanel(new GridLayout());
@@ -104,10 +68,11 @@ public class LibraryView extends JPanel {
 
 
         table.setShowGrid(false);
+        table.setFillsViewportHeight(true);
+
         JScrollPane pane = new JScrollPane(table);
         pane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         pane.setBorder(BorderFactory.createEmptyBorder());
-        table.setFillsViewportHeight(true);
         pane.getViewport().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         pane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
             @Override
@@ -121,8 +86,45 @@ public class LibraryView extends JPanel {
         tableSongs.add(pane);
         notFirstTime = true;
 
+
+
+
+        JPanel center = new JPanel();
+        center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+        center.add(tableSongs);
+        center.setOpaque(false);
+        return center;
+    }
+
+    /**
+     * Method to adds the listener to the song list view JTable columns to acceding or reproducing songs
+     */
+    public void registerMouseController(MouseListener mouseListener) {
+        table.addMouseListener(mouseListener);
+    }
+
+    /**
+     * Method that fills the JTable with the playlist of the current user in the JTable
+     * @param myPlaylists an arraylist of songs that are currently in the system
+     */
+    public void fillTable(ArrayList<Playlist> myPlaylists) {
+        // Inserting the data to each column
+        String[][] data = new String[myPlaylists.size()][2];
+
+        for (int i = 0; i < myPlaylists.size(); i++) {
+            data[i][0] = myPlaylists.get(i).getName();
+            data[i][1] = String.valueOf(myPlaylists.get(i).getOwner());
+            //tableModel.insertRow(i, new Object[] {data[i][0]});
+            //System.out.println(myPlaylists.get(i).getName());
+            //System.out.println(myPlaylists.get(i).getOwner());
+        }
+        tableModel.setDataVector(data, columns);
+
+        revalidate();
+        repaint();
+
         // Saving the selected Row to know what song is
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+        /*table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent event) {
                 if (event.getValueIsAdjusting()) {
                     // If it's the first time, the table says the selected row
@@ -140,9 +142,7 @@ public class LibraryView extends JPanel {
                 }
                 System.out.println("EVENT: " + selectedRow);
             }
-        });
-
-
+        });*/
     }
 
     /*
@@ -194,8 +194,7 @@ public class LibraryView extends JPanel {
         return panelSearch;
     }
 
-    public int getSelectedRow(){
+    public int getSelectedRow() {
         return table.getSelectedRow();
     }
-
 }

@@ -49,7 +49,7 @@ public class SideMenuView extends JPanel {
         configurePanel();
     }
 
-    /**
+    /*
      * Method that configures the settings of the side panel
      */
     private void configurePanel() {
@@ -57,7 +57,7 @@ public class SideMenuView extends JPanel {
         this.add(bufferMenu(), BorderLayout.CENTER);
     }
 
-    /**
+    /*
      * Method that creates a buffer panel that structures the elements of the side panel of the view
      * @return A panel containing all the elements of the side menu
      */
@@ -73,7 +73,7 @@ public class SideMenuView extends JPanel {
         return actualPanel;
     }
 
-    /**
+    /*
      * Method that specifies all the elements that are located in the center of the panel
      * @return A panel with the components of the center of the panel
      */
@@ -89,7 +89,7 @@ public class SideMenuView extends JPanel {
         return center;
     }
 
-    /**
+    /*
      * Method that structures the three options of the top of the side menu
      * @return A panel containing the top section elements of the side menu
      */
@@ -135,7 +135,7 @@ public class SideMenuView extends JPanel {
         return home;
     }
 
-    /**
+    /*
      * Method that structures the middle section of the side menu
      * @return A panel containing the top section elements of the side menu
      */
@@ -186,7 +186,7 @@ public class SideMenuView extends JPanel {
         return playlistJPanel;
     }
 
-    /**
+    /*
      * Method that structures the bottom section of the side menu
      * @return A panel containing the botttom section elements of the side menu
      */

@@ -2,6 +2,7 @@ package presentation.views;
 
 import business.entities.Playlist;
 import business.entities.Song;
+import presentation.controllers.PlayerViewListener;
 import presentation.views.components.HoverButton;
 
 import javax.swing.*;
@@ -34,6 +35,8 @@ public class PlaylistDetailView extends JPanel {
     public static final String BTN_DELATE_SONG = "BTN DELETE SONG";
     public static final String JCOMBOX_SONG = "JCOMBOX_SONG";
 
+    private PlayerViewListener listener;
+
 
     private JButton delateSong;
     private JComboBox<String> jSelectSong;
@@ -59,7 +62,8 @@ public class PlaylistDetailView extends JPanel {
 
 
 
-    public PlaylistDetailView() {
+    public PlaylistDetailView(PlayerViewListener listener) {
+        this.listener = listener;
         this.setLayout(new BorderLayout());
         this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         this.add(titleLabel(), BorderLayout.NORTH);
@@ -169,23 +173,30 @@ public class PlaylistDetailView extends JPanel {
     public void fillTable(ArrayList<Song> mySongs, Playlist playlistSelected) {
         // Setting the playlist Title
         playlistTitle.setText(playlistSelected.getName());
+        String[][] data = null;
 
-        String[][] data = new String[mySongs.size()][5];
+        if(mySongs != null){
+            data = new String[mySongs.size()][5];
 
-        // In case there is any song to show
-        // Inserting the data to each column
+            // In case there is any song to show
+            // Inserting the data to each column
 
-        for (int i = 0; i < mySongs.size(); i++) {
-            data[i][0] = mySongs.get(i).getTitle();
-            data[i][1] = String.valueOf(mySongs.get(i).getGenre());
-            data[i][2] = mySongs.get(i).getAlbum();
-            data[i][3] = mySongs.get(i).getAuthor();
-            data[i][4] = mySongs.get(i).getUser();
+            for (int i = 0; i < mySongs.size(); i++) {
+                data[i][0] = mySongs.get(i).getTitle();
+                data[i][1] = String.valueOf(mySongs.get(i).getGenre());
+                data[i][2] = mySongs.get(i).getAlbum();
+                data[i][3] = mySongs.get(i).getAuthor();
+                data[i][4] = mySongs.get(i).getUser();
+            }
+
+
+
         }
 
         tableModel.setDataVector(data, columns);
-
         tableModel.fireTableDataChanged();
+
+
         revalidate();
         repaint();
     }

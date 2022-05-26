@@ -9,13 +9,17 @@ import persistence.config.APILyrics;
 import presentation.controllers.LyricsListener;
 
 import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
 public class SongManager {
+    private static int NUMBER_OF_GENRES = 16;
+
     private SongDAO songDAO;
     private UserDAO userDAO;
     //private ArrayList<String> authors; // get authors from beginning then add when new author?
@@ -86,6 +90,8 @@ public class SongManager {
         try {
             ArrayList<Song> existingSongs = songDAO.getSongsByAlbum(album);
 
+            if (existingSongs == null) return true;
+
             for (Song existingSong : existingSongs) {
                 if (existingSong.getTitle().equalsIgnoreCase(title)) {
                     return false;
@@ -131,7 +137,7 @@ public class SongManager {
      * @param path: a String containing the path to the song image
      * @param user: an instance of {@link User} representing the user that adds the song
      */
-    public void addSong(File file, String title, String album, Genre genre, String author, String path, String user) throws SongDAOException, UnsupportedAudioFileException, IOException {
+    public void addSong(File file, File image, String title, String album, Genre genre, String author, String path, String user) throws SongDAOException, UnsupportedAudioFileException, IOException {
         // Extract song duration from file
         AudioFileFormat baseFileFormat = new MpegAudioFileReader().getAudioFileFormat(file);
         Map properties = baseFileFormat.properties();
@@ -143,7 +149,29 @@ public class SongManager {
 
         Song song = new Song(title, album, genre, author, path, duration, user);
 
-        songDAO.createSong(song, file);
+        songDAO.createSong(song, file, image);
+    }
+
+    public AudioInputStream getSongStream(Song song) throws SongDAOException{
+        return songDAO.downloadSong(song.getId());
+    }
+
+    public BufferedImage getCoverImage(int songID) throws SongDAOException {
+        return songDAO.downloadCoverImage(songID);
+    }
+
+    public int[] getNumberOfSongsByGenre() throws SongDAOException{
+        int i = 0;
+        int[] data = new int[NUMBER_OF_GENRES];
+
+        for (Genre genre : Genre.values()){
+            ArrayList<Song> array = songDAO.getSongsByGenre(genre);
+            data[i] = array == null ? 0 : array.size();
+            System.out.println(data[i]);
+            i++;
+        }
+
+        return data;
     }
 
 
