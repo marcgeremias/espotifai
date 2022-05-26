@@ -23,34 +23,32 @@ import java.util.ArrayList;
  */
 public class SongDetailView extends JPanel {
 
+    private static final String[] column = {"Title","Genre","Album","Author", "Uploaded By", "Time"};
+
     // Image from the list of songs
     private JImagePanel playButton;
     public static final String BTN_PLAY_IMAGE = "BTN PLAY IMAGE";
     public static final String BTN_ADD_PLAYLIST = "BTN ADD PLAYLIST";
-
     public static final String LOGO_PLAY_PATH = "res/icons/play-button.png";
+
+    private static final String FETCHING_LYRICS_PALCEHOLDER = "Fetching the lyrics... This might take a while!";
 
     private JTable table;
     private JPanel tableSong;
-    private boolean notFirstTime;
     private JComboBox<String> playlistSelector;
     private JPanel playlistPane;
     private HoverButton addPlaylistButton;
     private JScrollPane lyricsScrollPane;
     private DefaultTableModel tableModel;
+    private JTextArea textArea;
 
     /**
      * Constructor method to set up the view
      */
     public SongDetailView() {
         this.setLayout(new BorderLayout());
-        tableSong = new JPanel(new GridLayout());
-        table = new JTable();
-        tableModel = new DefaultTableModel();
-        tableSong.setBorder(new EmptyBorder(50, 50, 0, 50));
         this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
-
-        this.add(tableSong, BorderLayout.NORTH);
+        this.add(north(), BorderLayout.NORTH);
         this.add(westMargin(), BorderLayout.WEST);
         this.add(eastMargin(), BorderLayout.EAST);
         this.add(center(), BorderLayout.CENTER);
@@ -67,15 +65,86 @@ public class SongDetailView extends JPanel {
         addPlaylistButton.addActionListener(controller);
     }
 
+    private Component north(){
+        playlistSelector = new JComboBox<String>();
+        playlistPane = new JPanel();
+        addPlaylistButton = new HoverButton(Color.DARK_GRAY, Color.BLACK, "ADD");
+        tableSong = new JPanel(new GridLayout());
+        table = new JTable();
+        tableModel = new DefaultTableModel(null, column);
+        tableSong.setBorder(new EmptyBorder(50, 50, 0, 50));
+
+        tableSong.setOpaque(true);
+        tableSong.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        table.setModel(tableModel);
+
+        table.getTableHeader().setReorderingAllowed(false);
+        table.setOpaque(false);
+        //tableModel.fireTableDataChanged();
+        //table.repaint();
+        table.setModel(tableModel);
+        tableModel.fireTableDataChanged();
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setDefaultEditor(Object.class, null);
+
+        // Personalizing UI
+        table.setFocusable(false);
+        table.setRowSelectionAllowed(false);
+        //table.setPreferredSize(new Dimension(70, 70));
+        table.getTableHeader().setFont(new Font("arial", Font.BOLD, 15));
+        table.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        table.setForeground(Color.WHITE);
+        table.setFont(new Font("arial", Font.PLAIN, 15));
+        table.getTableHeader().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        table.getTableHeader().setForeground(Color.WHITE);
+
+        table.setRowHeight(40);
+        resizeColumnWidth(table);
+        /*for (int i = 0; i < column.length; i++) {
+            table.getColumnModel().getColumn(i).setResizable(false);
+        }*/
+
+        table.setShowGrid(false);
+        table.setIntercellSpacing(new Dimension(0, 0));
+        table.setFillsViewportHeight(true);
+        table.setBorder(null);
+
+        JScrollPane pane = new JScrollPane(table);
+        pane.setPreferredSize(new Dimension(table.getWidth(), 62));
+        pane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        pane.setBorder(BorderFactory.createEmptyBorder());
+        tableSong.add(pane);
+
+        JPanel north = new JPanel();
+        north.setLayout(new BoxLayout(north, BoxLayout.Y_AXIS));
+        north.setOpaque(true);
+        north.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+
+        JPanel accionablesPane = new JPanel();
+        accionablesPane.setOpaque(false);
+        accionablesPane.setLayout(new BoxLayout(accionablesPane, BoxLayout.X_AXIS));
+        accionablesPane.add(setPlayImage());
+
+        JPanel addSongToPlaylistPane = new JPanel();
+        addSongToPlaylistPane.setOpaque(false);
+        //addSongToPlaylistPane.setLayout(new BoxLayout(addSongToPlaylistPane, BoxLayout.X_AXIS));
+        addSongToPlaylistPane.add(addPanelLabel("ADD TO PLAYLIST"));
+        addSongToPlaylistPane.add(playlistPane);
+        addSongToPlaylistPane.add(addPlaylistButton());
+
+        accionablesPane.add(addSongToPlaylistPane);
+        north.add(tableSong);
+        north.add(accionablesPane);
+
+        return north;
+    }
 
     /**
      * Method to configure all the center components and containers of the PlaylistDetail view
      * @return the JPanel with all the center of the PlaylistDetail view
      */
     private Component center() {
-        playlistSelector = new JComboBox<String>();
-        playlistPane = new JPanel();
-        addPlaylistButton = new HoverButton(Color.DARK_GRAY, Color.BLACK, "ADD");
+
         lyricsScrollPane = new JScrollPane();
 
         //JPanel center config
@@ -84,13 +153,34 @@ public class SongDetailView extends JPanel {
         center.setOpaque(true);
         center.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
 
-        //center.add(tableSong);
-        center.add(addPanelLabel("LYRICS"));
+        textArea = new JTextArea(FETCHING_LYRICS_PALCEHOLDER, 10, 10);
+        textArea.setEditable(false);
+        textArea.setForeground(Color.WHITE);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        textArea.setFont(new Font("Apple Casual", Font.BOLD, 12));
+        textArea.setHighlighter(null);
+        textArea.setWrapStyleWord(true);
+
+        lyricsScrollPane.setViewportView(textArea);
+        lyricsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPanePersonalized(lyricsScrollPane);
+        //lyricsScrollPane.setPreferredSize(new Dimension(100, 100));
+
+        JLabel searchSong = new JLabel("LYRICS");
+        searchSong.setForeground(Color.WHITE);
+        searchSong.setFont(new Font("Apple Casual", Font.BOLD, 16));
+        searchSong.setHorizontalAlignment(JLabel.CENTER);
+
+        JPanel panelSearch = new JPanel();
+        //panelSearch.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        panelSearch.setOpaque(false);
+        panelSearch.add(searchSong);
+
+        //center.add(panelSearch);
         center.add(lyricsScrollPane);
-        center.add(setPlayImage());
-        center.add(addPanelLabel("ADD SONG INTO A PLAYLIST"));
-        center.add(playlistPane);
-        center.add(addPlaylistButton());
+
 
         return center;
     }
@@ -107,7 +197,7 @@ public class SongDetailView extends JPanel {
         addPlaylistButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
         addPlaylistButton.setPreferredSize(new Dimension(100,25));
 
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 4, 20, 6));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         buttonPanel.add(addPlaylistButton);
 
         return buttonPanel;
@@ -116,32 +206,18 @@ public class SongDetailView extends JPanel {
     private Component addPanelLabel(String message) {
         JLabel searchSong = new JLabel(message);
         searchSong.setForeground(Color.WHITE);
-        searchSong.setFont(new Font("Apple Casual", Font.BOLD, 20));
+        searchSong.setFont(new Font("Apple Casual", Font.BOLD, 16));
         searchSong.setHorizontalAlignment(JLabel.CENTER);
 
         JPanel panelSearch = new JPanel();
-        panelSearch.setBorder(BorderFactory.createEmptyBorder(40,15,0,15));
+        panelSearch.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         panelSearch.setOpaque(false);
         panelSearch.add(searchSong);
         return panelSearch;
     }
 
     public void setSongLyrics(String lyrics) {
-        JTextArea textArea = new JTextArea(lyrics, 10, 10);
-        textArea.setEditable(false);
-        textArea.setForeground(Color.WHITE);
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
-        textArea.setFont(new Font("Apple Casual", Font.BOLD, 12));
-        textArea.setHighlighter(null);
-        textArea.setWrapStyleWord(true);
-
-        lyricsScrollPane.setViewportView(textArea);
-        lyricsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPanePersonalized(lyricsScrollPane);
-        lyricsScrollPane.setPreferredSize(new Dimension(100, 100));
-
+        textArea.setText(lyrics);
         revalidate();
         repaint();
     }
@@ -153,7 +229,7 @@ public class SongDetailView extends JPanel {
     private Component setPlayImage(){
         JPanel playPanel = new JPanel();
         playPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        playPanel.setBorder(new EmptyBorder(2, 2, 20, 2));
+        playPanel.setBorder(BorderFactory.createEmptyBorder(10, 4, 20, 6));
         playButton = new JImagePanel(LOGO_PLAY_PATH, null, null);
         playButton.setPreferredSize(new Dimension(40, 40));
         playPanel.add(playButton);
@@ -180,89 +256,16 @@ public class SongDetailView extends JPanel {
         int minutes = (totalSecs % 3600) / 60;
         int seconds = totalSecs % 60;
 
-        if (totalSecs >= 3600) {
-            int hours = totalSecs / 3600;
-            data[0][5] = String.format("%02d:%02d:%02d", hours, minutes, seconds);;
-        } else {
-            data[0][5] = String.format("%02d:%02d", minutes, seconds);;
-        }
+        data[0][5] = String.format("%02d:%02d", minutes, seconds);;
 
-        // Inserting the column titles
-        String[] column = {"Title","Genre","Album","Author", "User Uploaded", "Time"};
 
-        if (notFirstTime) {
-            // Resetting view
-            //table = null;
-            //tableSong = null;
-            //tableSong = new JPanel(new GridLayout());
-            //repaint();
-            //revalidate();
-        }
+        tableModel.setDataVector(data, column);
 
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            tableModel.removeRow(i);
-        }
-
-        /*if (notFirstTime) {
-            tableSong = new JPanel(new GridLayout());
-        }
-
-        tableModel = new DefaultTableModel(data, column);
-        table = new JTable(tableModel);*/
-
-        for (int i = 0; i < data[0].length; i++) {
-            tableModel.addRow(new String[]{data[0][i]});
-            tableModel.addColumn(column[i]);
-        }
-                //= new DefaultTableModel(data, column);
         tableModel.fireTableDataChanged();
 
-        tableSong.setOpaque(true);
-        tableSong.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
-        table.setModel(tableModel);
+        // Update the text inside the lyrics textarea
+        textArea.setText(FETCHING_LYRICS_PALCEHOLDER);
 
-        table.getTableHeader().setReorderingAllowed(false);
-        table.setOpaque(false);
-        //tableModel.fireTableDataChanged();
-        table.repaint();
-        table.setModel(tableModel);
-        tableModel.fireTableDataChanged();
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setDefaultEditor(Object.class, null);
-
-        // Personalizing UI
-        table.setFocusable(false);
-        table.setRowSelectionAllowed(false);
-        //table.setPreferredSize(new Dimension(70, 70));
-        table.getTableHeader().setForeground(Color.BLACK);
-        table.getTableHeader().setBackground(Color.WHITE);
-        table.getTableHeader().setFont(new Font("arial", Font.BOLD, 15));
-        table.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
-        table.setForeground(Color.WHITE);
-        table.setFont(new Font("arial", Font.PLAIN, 15));
-        table.getTableHeader().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
-        table.getTableHeader().setForeground(Color.WHITE);
-
-        table.setRowHeight(40);
-        resizeColumnWidth(table);
-        for (int i = 0; i < column.length; i++) {
-            table.getColumnModel().getColumn(i).setResizable(false);
-        }
-
-        table.setShowGrid(false);
-        table.setFillsViewportHeight(true);
-
-        JScrollPane pane = new JScrollPane(table);
-        pane.setPreferredSize(new Dimension(table.getWidth(), 62));
-        pane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
-        pane.setBorder(BorderFactory.createEmptyBorder());
-        tableSong.add(pane);
-
-        /*if (notFirstTime) {
-            this.add(tableSong, BorderLayout.NORTH);
-        }*/
-
-        notFirstTime = true;
         revalidate();
         repaint();
 
@@ -352,6 +355,7 @@ public class SongDetailView extends JPanel {
 
         // Author pane components
         playlistPane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        playlistPane.setBorder(BorderFactory.createEmptyBorder(20, 4, 20, 6));
         playlistPane.add(playlistSelector);
     }
 
@@ -374,6 +378,7 @@ public class SongDetailView extends JPanel {
     }
 
     public void lyricsError(String message) {
+        textArea.setText("Error loading lyrics");
         JOptionPane.showMessageDialog(this,message);
     }
 }

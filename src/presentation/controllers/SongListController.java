@@ -69,12 +69,7 @@ public class SongListController implements KeyListener, MouseListener {
             listener.playSong(currentSongs, songNum);
             //reproduce song
         } else if (tableCol > 0){
-            // Double or more clicks
-            //if (e.getClickCount() == 2) {
-
-                //Access to detail songs view
-                listener.changeView(PlayerView.SONG_DETAIL_VIEW);
-            //}
+            listener.showSongDetails(currentSongs.get(songListView.getTableRow()));
         }
     }
 
