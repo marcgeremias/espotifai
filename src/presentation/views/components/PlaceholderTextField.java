@@ -10,38 +10,15 @@ import java.awt.*;
  */
 public class PlaceholderTextField extends JTextField {
 
+    // The placeholder we are going to set
     private String placeholder;
 
     public PlaceholderTextField() {
-
-    }
-
-    public PlaceholderTextField(
-            final Document pDoc,
-            final String pText,
-            final int pColumns)
-    {
-        super(pDoc, pText, pColumns);
-    }
-
-    public PlaceholderTextField(final int pColumns) {
-        super(pColumns);
-    }
-
-    public PlaceholderTextField(final String pText) {
-        super(pText);
-    }
-
-    public PlaceholderTextField(final String pText, final int pColumns) {
-        super(pText, pColumns);
-    }
-
-    public String getPlaceholder() {
-        return placeholder;
     }
 
     @Override
     protected void paintComponent(final Graphics pG) {
+        // We override the paint component to se the placeholder inside
         super.paintComponent(pG);
 
         if (placeholder == null || placeholder.length() == 0 || getText().length() > 0) {
@@ -57,8 +34,11 @@ public class PlaceholderTextField extends JTextField {
                 .getMaxAscent() + getInsets().top);
     }
 
-    public void setPlaceholder(final String s) {
-        placeholder = s;
+    /**
+     * Setter of the placeholder
+     * @param placeholder the placeholder
+     */
+    public void setPlaceholder(final String placeholder) {
+        this.placeholder = placeholder;
     }
-
 }

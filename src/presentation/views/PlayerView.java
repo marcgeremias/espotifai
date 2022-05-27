@@ -8,13 +8,14 @@ import java.awt.*;
  */
 public class PlayerView extends JPanel {
 
-    public static final String DEFAULT_VIEW = "deafult_view";
+    public static final String DEFAULT_VIEW = "default_view";
     public static final String SONG_LIST_VIEW = "song_list_view";
     public static final String LIBRARY_VIEW = "library_view";
     public static final String ADD_SONG_VIEW = "add_song_view";
     public static final String SONG_DETAIL_VIEW = "song_detail_view";
     public static final String PLAYLIST_DETAIL_VIEW = "playlist_detail_view";
     public static final String USER_PROFILE_VIEW = "user_profile_view";
+    public static final String CREATE_PLAYLIST = "create_playlist_view";
 
     public static final Color CENTER_BACKGROUND_COLOR = new Color(35, 35, 35);
 
@@ -25,7 +26,7 @@ public class PlayerView extends JPanel {
     /**
      * Public constructor that prepares the view
      */
-    public PlayerView(){
+    public PlayerView() {
         super();
         cardManager = new CardLayout();
         centerPane = new JPanel(cardManager);
@@ -54,7 +55,8 @@ public class PlayerView extends JPanel {
      */
     public void initCardLayout(DefaultView defaultView, SongListView songListView, LibraryView libraryView,
                                AddSongView addSongView, SongDetailView songDetailView,
-                               PlaylistDetailView playlistDetailView, UserProfileView userProfileView){
+                               PlaylistDetailView playlistDetailView, UserProfileView userProfileView,
+                               CreatePlaylistView createPlaylistView){
         centerPane.add(defaultView, DEFAULT_VIEW);
         centerPane.add(songListView, SONG_LIST_VIEW);
         centerPane.add(libraryView, LIBRARY_VIEW);
@@ -62,6 +64,7 @@ public class PlayerView extends JPanel {
         centerPane.add(songDetailView, SONG_DETAIL_VIEW);
         centerPane.add(playlistDetailView, PLAYLIST_DETAIL_VIEW);
         centerPane.add(userProfileView, USER_PROFILE_VIEW);
+        centerPane.add(createPlaylistView, CREATE_PLAYLIST);
     }
 
     /**

@@ -4,12 +4,9 @@ import business.entities.*;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import persistence.SongDAO;
 import persistence.SongDAOException;
-import persistence.UserDAO;
-import persistence.config.APILyrics;
 import presentation.controllers.LyricsListener;
 
 import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -31,8 +28,8 @@ public class SongManager {
     }
 
     /**
-     * Inicializa the getLyrics thread.
-     * @param lyricsListener listner for grt lyrics.
+     * Initializes the getLyrics thread.
+     * @param lyricsListener listener for grt lyrics.
      * @param songTitle song title.
      * @param songAuthor song author.
      */

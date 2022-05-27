@@ -110,12 +110,27 @@ public class JImagePanel extends JPanel implements MouseListener {
         this.actionCommand = command;
     }
 
+    /**
+     * This method will return true if primary image is selected
+     * @return true or false
+     */
     public boolean isPrimarySelected(){
         return !showSecondary;
     }
 
+    /**
+     * This method sets the current image to the secondary one or the primary one
+     * @param showSecondary if true it will show secondary, if false it will show primary
+     */
     public void setShowSecondary(boolean showSecondary) {
         this.showSecondary = showSecondary;
+    }
+
+    /**
+     * This method will attach a buffered image to the primary image attirbute
+     */
+    public void attachImage(BufferedImage image){
+        this.primaryIcon = image;
     }
 
     @Override

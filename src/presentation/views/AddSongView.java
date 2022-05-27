@@ -213,7 +213,7 @@ public class AddSongView extends JPanel {
         return null;
     }
 
-    private final FileNameExtensionFilter PNG_FILTER = new FileNameExtensionFilter("PNG file (.png)", "png");
+    private final FileNameExtensionFilter JPG_FILTER = new FileNameExtensionFilter("JPG file (.jpg)", "jpg");
 
     /**
      * Opens a JFileChooser dialog to select an image
@@ -221,7 +221,7 @@ public class AddSongView extends JPanel {
      */
     public File selectImage() {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(PNG_FILTER);
+        fileChooser.setFileFilter(JPG_FILTER);
 
         int returnValue = fileChooser.showOpenDialog(this);
 

@@ -243,7 +243,7 @@ public class MusicPlaybackView extends JPanel {
         this.currentSongDuration = songDuration;
         this.songTitle.setText(songTitle);
         this.authorName.setText(authorName);
-        this.songCoverImage = new JImagePanel(cover);
+        this.songCoverImage.attachImage(cover);
         revalidate();
         repaint();
     }
@@ -295,11 +295,17 @@ public class MusicPlaybackView extends JPanel {
      * @param cover image containing the cover of the song
      */
     public void setSongDetails(Song currentSong, BufferedImage cover) {
-        songTitle.setText(currentSong.getTitle());
-        authorName.setText(currentSong.getAuthor());
-        songCoverImage = new JImagePanel(cover);
-        revalidate();
-        repaint();
+        if (currentSong != null && cover != null) {
+            songTitle.setText(currentSong.getTitle());
+            authorName.setText(currentSong.getAuthor());
+            songCoverImage.attachImage(cover);
+            revalidate();
+            repaint();
+        } else {
+            songTitle.setText("Song Title Here");
+            authorName.setText("Author Name Here");
+            songCoverImage.attachImage(null);
+        }
     }
 
     /**

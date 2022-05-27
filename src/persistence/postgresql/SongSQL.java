@@ -75,13 +75,12 @@ public class SongSQL implements SongDAO {
 
             if (rs.next()) {
                 c.close();
-                //return uploadSong(songFile, rs.getInt(1)); //todo: uncomment for delivery
-                return true;
+                return uploadSong(songFile, rs.getInt(1)) && uploadCoverImage(imageFile, rs.getInt(1));
             } else {
                 c.close();
                 return false;
             }
-        } catch (SQLException e){// | DbxException | IOException e) {
+        } catch (SQLException | DbxException | IOException e) {
             throw new SongDAOException(e.getMessage());
         }
     }
@@ -374,6 +373,7 @@ public class SongSQL implements SongDAO {
             Connection c = DBConfig.getInstance().openConnection();
 
             if (!deleteSongFile(songID)) return false;
+            if (!deleteCoverImageFile(songID)) return false;
 
             String deleteSongSQL = "DELETE FROM " + DBConstants.TABLE_SONG + " WHERE " + DBConstants.COL_ID_SONG + " = ?";
             PreparedStatement deleteSongSTMT = c.prepareStatement(deleteSongSQL);
@@ -429,7 +429,7 @@ public class SongSQL implements SongDAO {
 
             //Method to download the file
             //downloader.download(baos);
-            FileMetadata metadata = client.files().downloadBuilder("/covers/1.jpg").download(baos);
+            FileMetadata metadata = client.files().downloadBuilder(COVERS_ROOT_FOLDER + "/"+ songID +"." + IMAGE_FORMAT).download(baos);
 
             ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
 
@@ -437,6 +437,18 @@ public class SongSQL implements SongDAO {
         } catch (DbxException | IOException e){
             throw new SongDAOException(e.getMessage());
         }
+    }
+
+    private boolean uploadCoverImage(File cover, int songID) throws DbxException, IOException {
+        InputStream in = new FileInputStream(cover);
+        DbxClientV2 client = APIConfig.getInstance().getClient();
+
+        FileMetadata metadata = client.files().uploadBuilder(COVERS_ROOT_FOLDER+"/"+songID+"."+IMAGE_FORMAT)
+                .withMode(WriteMode.ADD)
+                .withClientModified(new Date(cover.lastModified()))
+                .uploadAndFinish(in);
+
+        return true;
     }
 
     /*
@@ -460,6 +472,13 @@ public class SongSQL implements SongDAO {
     private boolean deleteSongFile(int songID) throws DbxException {
         DbxClientV2 client = APIConfig.getInstance().getClient();
         DeleteResult metadata = client.files().deleteV2(SONGS_ROOT_FOLDER+"/"+songID+"."+SONG_FORMAT);
+        // Will only reach here if delete operation is successful
+        return true;
+    }
+
+    private boolean deleteCoverImageFile(int songID) throws DbxException {
+        DbxClientV2 client = APIConfig.getInstance().getClient();
+        DeleteResult metadata = client.files().deleteV2(COVERS_ROOT_FOLDER+"/"+songID+"."+IMAGE_FORMAT);
         // Will only reach here if delete operation is successful
         return true;
     }

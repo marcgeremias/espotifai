@@ -167,6 +167,10 @@ public class UserManager {
         return isDigit && isUpperCase && isLowerCase;
     }
 
+    /**
+     * Setter of currentUser
+     * @param user the actual user
+     */
     public void setCurrentUser(String user) {
         currentUser = user;
     }
@@ -180,10 +184,16 @@ public class UserManager {
     }
 
     /**
-     * Method that deletes the current user from RAM
+     * Method that deletes the current user from RAM (logs out)
      */
     public void logOutUser(){
         this.currentUser = null;
     }
 
+    /**
+     * Method that deletes the user from the program
+     */
+    public void deleteUser() throws UserDAOException{
+        userDAO.deleteUser(currentUser);
+    }
 }

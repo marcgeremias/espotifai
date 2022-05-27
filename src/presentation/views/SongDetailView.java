@@ -12,7 +12,6 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class SongDetailView extends JPanel {
     public static final String LOGO_PLAY_PATH = "res/icons/play-button.png";
     public static final String BTN_DELETE_SONG = "BTN DELETE SONG";
 
-    private static final String FETCHING_LYRICS_PALCEHOLDER = "Fetching the lyrics... This might take a while!";
+    private static final String FETCHING_LYRICS_PLACEHOLDER = "Fetching the lyrics... This might take a while!";
 
     private JTable table;
     private JPanel tableSong;
@@ -70,7 +69,11 @@ public class SongDetailView extends JPanel {
         deleteSongButton.addActionListener(controller);
     }
 
+    /*
+     * Method that configures all the north side of the view
+     */
     private Component north(){
+        // We create all the attributes
         playlistSelector = new JComboBox<String>();
         playlistPane = new JPanel();
         addPlaylistButton = new HoverButton(Color.DARK_GRAY, Color.BLACK, "ADD");
@@ -85,8 +88,6 @@ public class SongDetailView extends JPanel {
 
         table.getTableHeader().setReorderingAllowed(false);
         table.setOpaque(false);
-        //tableModel.fireTableDataChanged();
-        //table.repaint();
         table.setModel(tableModel);
         tableModel.fireTableDataChanged();
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -95,7 +96,6 @@ public class SongDetailView extends JPanel {
         // Personalizing UI
         table.setFocusable(false);
         table.setRowSelectionAllowed(false);
-        //table.setPreferredSize(new Dimension(70, 70));
         table.getTableHeader().setFont(new Font("arial", Font.BOLD, 15));
         table.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         table.setForeground(Color.WHITE);
@@ -105,9 +105,6 @@ public class SongDetailView extends JPanel {
 
         table.setRowHeight(40);
         resizeColumnWidth(table);
-        /*for (int i = 0; i < column.length; i++) {
-            table.getColumnModel().getColumn(i).setResizable(false);
-        }*/
 
         table.setShowGrid(false);
         table.setIntercellSpacing(new Dimension(0, 0));
@@ -132,7 +129,6 @@ public class SongDetailView extends JPanel {
 
         JPanel addSongToPlaylistPane = new JPanel();
         addSongToPlaylistPane.setOpaque(false);
-        //addSongToPlaylistPane.setLayout(new BoxLayout(addSongToPlaylistPane, BoxLayout.X_AXIS));
         addSongToPlaylistPane.add(addPanelLabel("ADD TO PLAYLIST"));
         addSongToPlaylistPane.add(playlistPane);
         addSongToPlaylistPane.add(addPlaylistButton());
@@ -144,9 +140,9 @@ public class SongDetailView extends JPanel {
         return north;
     }
 
-    /**
-     * Method to configure all the center components and containers of the PlaylistDetail view
-     * @return the JPanel with all the center of the PlaylistDetail view
+    /*
+     * Method to configure all the center components and containers of the SongDetail view
+     * @return the JPanel with all the center of the SongtDetail view
      */
     private Component center() {
         lyricsScrollPane = new JScrollPane();
@@ -158,7 +154,7 @@ public class SongDetailView extends JPanel {
         center.setOpaque(true);
         center.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
 
-        textArea = new JTextArea(FETCHING_LYRICS_PALCEHOLDER, 10, 10);
+        textArea = new JTextArea(FETCHING_LYRICS_PLACEHOLDER, 10, 10);
         textArea.setEditable(false);
         textArea.setForeground(Color.WHITE);
         textArea.setLineWrap(true);
@@ -171,7 +167,6 @@ public class SongDetailView extends JPanel {
         lyricsScrollPane.setViewportView(textArea);
         lyricsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPanePersonalized(lyricsScrollPane);
-        //lyricsScrollPane.setPreferredSize(new Dimension(100, 100));
 
         JLabel searchSong = new JLabel("LYRICS");
         searchSong.setForeground(Color.WHITE);
@@ -179,17 +174,19 @@ public class SongDetailView extends JPanel {
         searchSong.setHorizontalAlignment(JLabel.CENTER);
 
         JPanel panelSearch = new JPanel();
-        //panelSearch.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         panelSearch.setOpaque(false);
         panelSearch.add(searchSong);
 
-        //center.add(panelSearch);
         center.add(lyricsScrollPane);
         center.add(deleteSongButton());
 
         return center;
     }
 
+    /*
+     * Method that adds the playlist button
+     * @return a panel with the playlist button inside
+     */
     private Component addPlaylistButton() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
@@ -197,6 +194,7 @@ public class SongDetailView extends JPanel {
         addPlaylistButton.setBackground(Color.BLACK);
         addPlaylistButton.setForeground(Color.LIGHT_GRAY);
         addPlaylistButton.setFont(new Font("Apple Casual", Font.BOLD, 10));
+
         //Border Settings
         addPlaylistButton.setBorderPainted(true);
         addPlaylistButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
@@ -226,6 +224,9 @@ public class SongDetailView extends JPanel {
         return buttonPanel;
     }
 
+    /*
+     * Method that adds the label of the title of the view
+     */
     private Component addPanelLabel(String message) {
         JLabel searchSong = new JLabel(message);
         searchSong.setForeground(Color.WHITE);
@@ -239,6 +240,10 @@ public class SongDetailView extends JPanel {
         return panelSearch;
     }
 
+    /**
+     * Method that set the lyrics of the song
+     * @param lyrics the lyrics of the song
+     */
     public void setSongLyrics(String lyrics) {
         textArea.setText(lyrics);
         revalidate();
@@ -285,13 +290,13 @@ public class SongDetailView extends JPanel {
         tableModel.fireTableDataChanged();
 
         // Update the text inside the lyrics textarea
-        textArea.setText(FETCHING_LYRICS_PALCEHOLDER);
+        textArea.setText(FETCHING_LYRICS_PLACEHOLDER);
 
         revalidate();
         repaint();
     }
 
-    /**
+    /*
      * Method that is in charge of the top margins of the window.
      * @return the container with the panel margin (without opacity)
      */
@@ -333,28 +338,19 @@ public class SongDetailView extends JPanel {
      * @param table the JTable we are resizing
      */
     private void resizeColumnWidth(JTable table) {
-        //Se obtiene el modelo de la columna
         TableColumnModel columnModel = table.getColumnModel();
-        //Se obtiene el total de las columnas
-        for (int column = 0; column < table.getColumnCount(); column++) {
-            //Establecemos un valor minimo para el ancho de la columna
-            int width = 150; //Min Width
-            //Obtenemos el numero de filas de la tabla
-            for (int row = 0; row < table.getRowCount(); row++) {
-                //Obtenemos el renderizador de la tabla
-                TableCellRenderer renderer = table.getCellRenderer(row, column);
-                //Creamos un objeto para preparar el renderer
-                Component comp = table.prepareRenderer(renderer, row, column);
-                //Establecemos el width segun el valor maximo del ancho de la columna
-                width = Math.max(comp.getPreferredSize().width + 1, width);
 
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            int width = 150;
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer renderer = table.getCellRenderer(row, column);
+                Component comp = table.prepareRenderer(renderer, row, column);
+                width = Math.max(comp.getPreferredSize().width + 1, width);
             }
-            //Se establece una condicion para no sobrepasar el valor de 300
-            //Esto es Opcional
+
             if (width > 300) {
                 width = 300;
             }
-            //Se establece el ancho de la columna
             columnModel.getColumn(column).setPreferredWidth(width);
         }
     }
@@ -379,10 +375,17 @@ public class SongDetailView extends JPanel {
         playlistPane.add(playlistSelector);
     }
 
+    /**
+     * Method that gets the playlist index selected
+     * @return the playlist index selected -1 because the first index is not valid
+     */
     public int getPlaylistIndexSelected() {
         return playlistSelector.getSelectedIndex() - 1;
     }
 
+    /*
+     * Method that personalize the scroll pane bar
+     */
     private void scrollPanePersonalized(JScrollPane scrollPane) {
         scrollPane.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -397,12 +400,17 @@ public class SongDetailView extends JPanel {
         scrollPane.getHorizontalScrollBar().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
     }
 
+    /**
+     * Method that shows an error message dialog when the lyrics didn't fetch correctly
+     * @param message the message of the error we are going to display
+     */
     public void lyricsError(String message) {
         textArea.setText("Error loading lyrics");
         JOptionPane.showMessageDialog(this,message);
     }
 
     private final String DELETE_SONG_DIALOG_TITLE = "Delete song";
+
     /**
      * Opens a dialog to confirm song deletion
      * @param message a String containing the message of the dialog
