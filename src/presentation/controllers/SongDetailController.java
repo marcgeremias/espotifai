@@ -31,8 +31,8 @@ public class SongDetailController implements ActionListener, LyricsListener {
     }
 
     /**
-     * Method that initializes the songListView by getting all current songs of the system
-     * and passing them to the JTable of all songs in the system
+     * Method that initializes the songDetailView by getting all current songs of the system
+     * and passing the selected one to the table
      */
     public void initView(Song song) {
         // Get song selected

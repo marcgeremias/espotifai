@@ -29,8 +29,7 @@ public class HomeController implements MouseListener {
     }
 
     /**
-     * Method that initializes the songListView by getting all current songs of the system
-     * and passing them to the JTable of all songs in the system
+     * Method that initializes the homeControllerView by filling the table with the other playlist values
      */
     public void initView() {
         // We get the current user

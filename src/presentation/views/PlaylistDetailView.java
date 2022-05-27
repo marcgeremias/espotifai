@@ -35,16 +35,25 @@ public class PlaylistDetailView extends JPanel {
     public static final String BTN_DELATE_SONG = "BTN DELETE SONG";
     public static final String JCOMBOX_SONG = "JCOMBOX_SONG";
 
-    private PlayerViewListener listener;
-
 
     private JButton delateSong;
     private JComboBox<String> jSelectSong;
     private JButton addSong;
 
 
+
+    public PlaylistDetailView() {
+        this.setLayout(new BorderLayout());
+        this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        this.add(titleLabel(), BorderLayout.NORTH);
+        this.add(center(), BorderLayout.CENTER);
+        this.add(down(), BorderLayout.SOUTH);
+        this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        this.setOpaque(true);
+    }
+
     /**
-     * Method to add the listener to the Login view buttons
+     * Method to add the listener to the Playlist detail view buttons
      */
     public void registerController(ActionListener controller) {
         // Action listener for delate song
@@ -60,18 +69,6 @@ public class PlaylistDetailView extends JPanel {
         jSelectSong.setActionCommand(JCOMBOX_SONG);
     }
 
-
-
-    public PlaylistDetailView(PlayerViewListener listener) {
-        this.listener = listener;
-        this.setLayout(new BorderLayout());
-        this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
-        this.add(titleLabel(), BorderLayout.NORTH);
-        this.add(center(), BorderLayout.CENTER);
-        this.add(down(), BorderLayout.SOUTH);
-        this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        this.setOpaque(true);
-    }
 
     private Container down() {
         panelPlaylistModify = new JPanel();
@@ -201,34 +198,24 @@ public class PlaylistDetailView extends JPanel {
         repaint();
     }
 
-    /**
+    /*
      * Method extracted from:
      * https://es.stackoverflow.com/questions/345550/c%C3%B3mo-autoajustar-el-ancho-de-una-columna-de-un-jtable-al-contenido-que-hay-en-e
      * @param table the JTable we are resizing
      */
     private void resizeColumnWidth(JTable table) {
-        //Se obtiene el modelo de la columna
         TableColumnModel columnModel = table.getColumnModel();
-        //Se obtiene el total de las columnas
         for (int column = 0; column < table.getColumnCount(); column++) {
-            //Establecemos un valor minimo para el ancho de la columna
-            int width = 150; //Min Width
-            //Obtenemos el numero de filas de la tabla
+            int width = 150;
             for (int row = 0; row < table.getRowCount(); row++) {
-                //Obtenemos el renderizador de la tabla
                 TableCellRenderer renderer = table.getCellRenderer(row, column);
-                //Creamos un objeto para preparar el renderer
                 Component comp = table.prepareRenderer(renderer, row, column);
-                //Establecemos el width segun el valor maximo del ancho de la columna
                 width = Math.max(comp.getPreferredSize().width + 1, width);
-
             }
-            //Se establece una condicion para no sobrepasar el valor de 300
-            //Esto es Opcional
+
             if (width > 300) {
                 width = 300;
             }
-            //Se establece el ancho de la columna
             columnModel.getColumn(column).setPreferredWidth(width);
         }
     }

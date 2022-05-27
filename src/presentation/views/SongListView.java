@@ -5,8 +5,6 @@ import presentation.views.components.PlaceholderTextField;
 import presentation.views.components.TextField;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.*;
 import java.awt.*;
@@ -22,7 +20,6 @@ public class SongListView extends JPanel {
     private TableRowSorter<DefaultTableModel> sorter;
     private JTable table;
     private JPanel tableSongs;
-    private int selectedRow;
     private DefaultTableModel tableModel;
 
     // Boolean indicating if it's the first time acceding to the view
@@ -84,7 +81,6 @@ public class SongListView extends JPanel {
         pane.getHorizontalScrollBar().setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
 
         tableSongs.add(pane);
-
 
         JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
@@ -160,28 +156,18 @@ public class SongListView extends JPanel {
      * @param table the JTable we are resizing
      */
     private void resizeColumnWidth(JTable table) {
-        //Se obtiene el modelo de la columna
         TableColumnModel columnModel = table.getColumnModel();
-        //Se obtiene el total de las columnas
         for (int column = 0; column < table.getColumnCount(); column++) {
-            //Establecemos un valor minimo para el ancho de la columna
-            int width = 150; //Min Width
-            //Obtenemos el numero de filas de la tabla
+            int width = 150;
             for (int row = 0; row < table.getRowCount(); row++) {
-                //Obtenemos el renderizador de la tabla
                 TableCellRenderer renderer = table.getCellRenderer(row, column);
-                //Creamos un objeto para preparar el renderer
                 Component comp = table.prepareRenderer(renderer, row, column);
-                //Establecemos el width segun el valor maximo del ancho de la columna
                 width = Math.max(comp.getPreferredSize().width + 1, width);
-
             }
-            //Se establece una condicion para no sobrepasar el valor de 300
-            //Esto es Opcional
+
             if (width > 300) {
                 width = 300;
             }
-            //Se establece el ancho de la columna
             columnModel.getColumn(column).setPreferredWidth(width);
         }
     }
@@ -203,14 +189,26 @@ public class SongListView extends JPanel {
         return panelSearch;
     }
 
+    /**
+     * Method that gets the selected row of the table
+     * @return the selected row of the table
+     */
     public int getTableRow(){
         return table.getSelectedRow();
     }
 
+    /**
+     * Method that gets the selected column of the table
+     * @return the selected column of the table
+     */
     public int getTableCol(){
         return table.getSelectedColumn();
     }
 
+    /**
+     * Method that gets the table value at the current row and column selected
+     * @return the table value at the current row and column selected
+     */
     public String getTableValue(int row, int col){
         return (String) table.getValueAt(row, col);
     }

@@ -22,7 +22,6 @@ public class SongManager {
 
     private SongDAO songDAO;
     private UserDAO userDAO;
-    //private ArrayList<String> authors; // get authors from beginning then add when new author?
 
     public SongManager(SongDAO songDAO, UserDAO userDAO) {
         this.songDAO = songDAO;

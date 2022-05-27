@@ -46,7 +46,7 @@ public class SignUpView extends JPanel {
     }
 
     /**
-     * Method to add the listener to the Login view buttons
+     * Method to add the listener to the sign up view buttons
      */
     public void registerController(ActionListener controller) {
         // Action listener for Join button
@@ -70,7 +70,7 @@ public class SignUpView extends JPanel {
     }
 
     /*
-     * Method that shows a button to indicate if the user wants to go back to the login view
+     * Method that shows a button to indicate if the user wants to go back to the sign up view
      * @return the panel with the button of going back inside
      */
     private Component goBackButton() {
@@ -148,7 +148,7 @@ public class SignUpView extends JPanel {
     }
 
     /*
-     * Method to configure the image of the logo inside the center of the Login view
+     * Method to configure the image of the logo inside the center of the sign up view
      * @return a JPanel with the logo image well configured
      */
     private Component logoImage() {
@@ -175,11 +175,11 @@ public class SignUpView extends JPanel {
         return downMargin;
     }
 
-    /**
+    /*
      * Method that is in charge of the top margins of the window.
      * @return the container with the panel margin (without opacity)
      */
-    public Container upMargin() {
+    private Container upMargin() {
         JPanel upMargin = new JPanel();
         upMargin.setOpaque(false);
         upMargin.setBorder(BorderFactory.createEmptyBorder(150, 0, 0, 0));
@@ -187,11 +187,11 @@ public class SignUpView extends JPanel {
         return upMargin;
     }
 
-    /**
+    /*
      * Method that is in charge of the bottom of the window.
      * @return the container with the panel (without opacity) and the incorrect input label
      */
-    public Container down() {
+    private Container down() {
         JPanel downMargin = new JPanel();
         downMargin.setOpaque(false);
         downMargin.setBorder(BorderFactory.createEmptyBorder(0, 0, 120, 0));

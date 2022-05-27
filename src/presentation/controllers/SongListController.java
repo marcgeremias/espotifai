@@ -65,6 +65,9 @@ public class SongListController implements KeyListener, MouseListener {
         }
     }
 
+    /*
+     * Method that calculates the real index of the song by the song attribute
+     */
     private int findSongIndexBySongAttribute(int row){
         String songName = songListView.getTableValue(row, 0);
         String songAuthor = songListView.getTableValue(row, 3);

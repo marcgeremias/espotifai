@@ -184,7 +184,7 @@ public class UserManager {
     }
 
     /**
-     * Method that deletes the current user from RAM
+     * Method that deletes the current user from RAM (logs out)
      */
     public void logOutUser(){
         this.currentUser = null;

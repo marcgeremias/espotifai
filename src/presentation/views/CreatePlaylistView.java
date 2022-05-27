@@ -32,7 +32,7 @@ public class CreatePlaylistView extends JPanel{
     }
 
     /**
-     * Method to add the listener to the add playlist button
+     * Method to add the listener to the create playlist button
      */
     public void registerController(ActionListener controller) {
         createButton.setActionCommand(BTN_CREATE_PLAYLIST);
@@ -92,6 +92,7 @@ public class CreatePlaylistView extends JPanel{
         panelSearch.setBorder(BorderFactory.createEmptyBorder(40,15,0,15));
         panelSearch.setOpaque(false);
         panelSearch.add(searchSong);
+
         return panelSearch;
     }
 
@@ -104,7 +105,7 @@ public class CreatePlaylistView extends JPanel{
     }
 
     /*
-     * Method that makes the south margin to compact all the other components on top
+     * Method that makes the south margin to compact all the other components on south
      */
     private Component southMargin() {
         JPanel southMargin = new JPanel();

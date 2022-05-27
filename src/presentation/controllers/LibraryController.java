@@ -29,8 +29,8 @@ public class LibraryController implements MouseListener {
     }
 
     /**
-     * Method that initializes the songListView by getting all current songs of the system
-     * and passing them to the JTable of all songs in the system
+     * Method that initializes the libraryView by getting the current user playlists
+     * and passing them to the JTable
      */
     public void initView() {
         String currentUser = userManager.getCurrentUser();
