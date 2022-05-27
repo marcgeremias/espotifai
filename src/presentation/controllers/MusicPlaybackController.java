@@ -193,4 +193,11 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
         songSecondPos = 0;
     }
 
+    /**
+     * This method clears all the information in the music playback container
+     */
+    public void clearData() {
+        musicPlaybackView.setSliderPos(0);
+        musicPlaybackView.setSongDetails(null, null);
+    }
 }

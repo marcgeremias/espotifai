@@ -95,4 +95,20 @@ public class PlaylistManager {
         
         return false;
     }
+
+    /**
+     * This method will determine the index in a given list given two parameters of a song
+     * @param currentSongs list with all the songs
+     * @param songName String containing song name
+     * @param songAuthor String containing song author
+     * @return index where the song is located in the list, -1 if song wasn't found
+     */
+    public int findSongIndex(ArrayList<Song> currentSongs, String songName, String songAuthor) {
+        for (int i = 0; i < currentSongs.size(); i++){
+            if (currentSongs.get(i).getTitle().equals(songName) && currentSongs.get(i).getAuthor().equals(songAuthor)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }

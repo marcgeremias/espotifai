@@ -4,12 +4,10 @@ import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
 import business.entities.Song;
-import presentation.views.PlayerView;
 import presentation.views.SongListView;
 
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Timer;
 
 public class SongListController implements KeyListener, MouseListener {
 
@@ -19,8 +17,6 @@ public class SongListController implements KeyListener, MouseListener {
     private SongManager songManager;
     private PlaylistManager playlistManager;
     private ArrayList<Song> currentSongs;
-    private int songNum;
-    private long pressTime;
 
     public SongListController(PlayerViewListener listener, SongListView songListView, UserManager userManager,
                               SongManager songManager, PlaylistManager playlistManager) {
@@ -57,24 +53,22 @@ public class SongListController implements KeyListener, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         // Single click
-        songNum = songListView.getSongValue();
 
         int tableCol = songListView.getTableCol();
-        int tableRow = songListView.getTableRow();
-        System.out.println("C:" + tableCol + " R:" + tableRow);
+        int songIndex = findSongIndexBySongAttribute(songListView.getTableRow());
         if (tableCol == 0) {
             //pressTime = System.currentTimeMillis();
-            System.out.println("START REPRODUCING SONG");
-            System.out.println(songNum);
-            listener.playSong(currentSongs, songNum);
+            listener.playSong(currentSongs, songIndex);
             //reproduce song
         } else if (tableCol > 0){
             listener.showSongDetails(currentSongs.get(songListView.getTableRow()));
         }
     }
 
-    public int getSongNum() {
-        return songNum;
+    private int findSongIndexBySongAttribute(int row){
+        String songName = songListView.getTableValue(row, 0);
+        String songAuthor = songListView.getTableValue(row, 3);
+        return playlistManager.findSongIndex(currentSongs, songName, songAuthor);
     }
 
     @Override

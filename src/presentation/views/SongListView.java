@@ -46,26 +46,8 @@ public class SongListView extends JPanel {
         tableSongs.setOpaque(false);
         searchField = new PlaceholderTextField();
         table = new JTable();
-        tableModel = new DefaultTableModel(new String[][]{{"test", "test", "test", "test", "test"}}, column);
-        // Saving the selected Row to know what song is
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-            public void valueChanged(ListSelectionEvent event) {
-                if (event.getValueIsAdjusting()) {
-                    // If it's the first time, the table says the selected row
-                    if (!notFirstTime) {
-                        selectedRow = table.getSelectedRow();
-                    } else {
-                        // If it's not the first time, if the first index has not changed, the new selected row
-                        // it's the last index and the same for last index.
-                        if (selectedRow == event.getFirstIndex()) {
-                            selectedRow = event.getLastIndex();
-                        } else {
-                            selectedRow = event.getFirstIndex();
-                        }
-                    }
-                }
-            }
-        });
+        tableModel = new DefaultTableModel(null, column);
+
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setDefaultEditor(Object.class, null);
 
@@ -85,9 +67,6 @@ public class SongListView extends JPanel {
 
         table.setRowHeight(40);
         resizeColumnWidth(table);
-        /*for (int i = 0; i < column.length; i++) {
-            table.getColumnModel().getColumn(i).setResizable(false);
-        }*/
 
         table.setShowGrid(false);
         JScrollPane pane = new JScrollPane(table);
@@ -224,15 +203,15 @@ public class SongListView extends JPanel {
         return panelSearch;
     }
 
-    public int getSongValue() {
-        return selectedRow;
-    }
-
     public int getTableRow(){
         return table.getSelectedRow();
     }
 
     public int getTableCol(){
         return table.getSelectedColumn();
+    }
+
+    public String getTableValue(int row, int col){
+        return (String) table.getValueAt(row, col);
     }
 }
