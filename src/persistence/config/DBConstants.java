@@ -26,6 +26,7 @@ public class DBConstants {
 
     // Columns for PLAYLIST table
     public static final String PLAYLIST_COL_TITLE = "title";
+    public static final String PLAYLIST_COL_ORDER = "order";
 
 
 }

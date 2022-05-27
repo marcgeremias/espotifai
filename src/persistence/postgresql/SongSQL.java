@@ -155,7 +155,7 @@ public class SongSQL implements SongDAO {
 
             String selectSongsSQL = "SELECT s.* FROM " + DBConstants.TABLE_SONG + " s, " + DBConstants.TABLE_SONG_PLAYLIST + " ps " +
                     "WHERE s." + DBConstants.COL_ID_SONG + " = ps." + DBConstants.COL_ID_SONG
-                    + " AND ps." + DBConstants.COL_ID_PLAYLIST + " = ?";
+                    + " AND ps." + DBConstants.COL_ID_PLAYLIST + " = ? ORDER BY ps." + DBConstants.PLAYLIST_COL_ORDER + " ASC";
             PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
             selectSongsSTMT.setInt(1, playlistID);
             return getSongs(c, songs, selectSongsSTMT);
