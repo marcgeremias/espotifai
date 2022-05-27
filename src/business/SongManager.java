@@ -50,13 +50,39 @@ public class SongManager {
         }
     }
 
+    public static final int SONG_ID_ATTRIBUTE_INDEX = 0;
+    public static final int SONG_TITLE_ATTRIBUTE_INDEX = 1;
+    public static final int SONG_ALBUM_ATTRIBUTE_INDEX = 2;
+    public static final int SONG_AUTHOR_ATTRIBUTE_INDEX = 3;
+    public static final int SONG_DURATION_ATTRIBUTE_INDEX = 4;
+    public static final int SONG_USER_ATTRIBUTE_INDEX = 5;
+    public static final int SONG_GENRE_ATTRIBUTE_INDEX = 6;
+    public static final int SONG_IMAGE_ATTRIBUTE_INDEX = 7;
+
     /**
      * Gets all songs in the system
-     * @return an ArrayList of Songs containing all songs
+     * @return an Arraylist of an ArrayList of String containing all the songs' attributes
      */
-    public ArrayList<Song> getAllSongs() {
+    public ArrayList<ArrayList<String>> getAllSongs() {
         try {
-            return songDAO.getAllSongs();
+            ArrayList<Song> songs = songDAO.getAllSongs();
+            ArrayList<ArrayList<String>> songsStr = new ArrayList<>();
+
+            for (Song s : songs) {
+                ArrayList<String> attributes = new ArrayList<>();
+                attributes.add(SONG_ID_ATTRIBUTE_INDEX, Integer.toString(s.getId()));
+                attributes.add(SONG_TITLE_ATTRIBUTE_INDEX, s.getTitle());
+                attributes.add(SONG_ALBUM_ATTRIBUTE_INDEX, s.getAlbum());
+                attributes.add(SONG_AUTHOR_ATTRIBUTE_INDEX, s.getAuthor());
+                attributes.add(SONG_DURATION_ATTRIBUTE_INDEX, Integer.toString(s.getDuration()));
+                attributes.add(SONG_USER_ATTRIBUTE_INDEX, s.getUser());
+                attributes.add(SONG_GENRE_ATTRIBUTE_INDEX, String.valueOf(s.getGenre()));
+                attributes.add(SONG_IMAGE_ATTRIBUTE_INDEX, s.getImagePath());
+
+                songsStr.add(attributes);
+            }
+
+            return songsStr;
         } catch (SongDAOException e) {
             return new ArrayList<>();
         }
@@ -64,11 +90,30 @@ public class SongManager {
 
     /**
      * Gets all songs from a playlist
-     * @return an ArrayList of Songs containing all songs
+     * @return an ArrayList of an Arraylist of String containing all the songs' attributes
      */
-    public ArrayList<Song> getAllPlaylistSongs(int playlistId) {
+    public ArrayList<ArrayList<String>> getAllPlaylistSongs(int playlistId) {
         try {
-            return songDAO.getSongsByPlaylistID(playlistId);
+            ArrayList<Song> songs = songDAO.getSongsByPlaylistID(playlistId);
+            ArrayList<ArrayList<String>> songsStr = new ArrayList<>();
+
+            if (songs != null) {
+                for (Song s : songs) {
+                    ArrayList<String> attributes = new ArrayList<>();
+                    attributes.add(SONG_ID_ATTRIBUTE_INDEX, Integer.toString(s.getId()));
+                    attributes.add(SONG_TITLE_ATTRIBUTE_INDEX, s.getTitle());
+                    attributes.add(SONG_ALBUM_ATTRIBUTE_INDEX, s.getAlbum());
+                    attributes.add(SONG_AUTHOR_ATTRIBUTE_INDEX, s.getAuthor());
+                    attributes.add(SONG_DURATION_ATTRIBUTE_INDEX, Integer.toString(s.getDuration()));
+                    attributes.add(SONG_USER_ATTRIBUTE_INDEX, s.getUser());
+                    attributes.add(SONG_GENRE_ATTRIBUTE_INDEX, String.valueOf(s.getGenre()));
+                    attributes.add(SONG_IMAGE_ATTRIBUTE_INDEX, s.getImagePath());
+
+                    songsStr.add(attributes);
+                }
+            }
+
+            return songsStr;
         } catch (SongDAOException e) {
             return new ArrayList<>();
         }
@@ -76,9 +121,9 @@ public class SongManager {
 
     /**
      * Checks whether the song's attributes are correct
-     * @param title: a String containing the title of the song
-     * @param album: a String containing the album of the song
-     * @return a boolean indicating whether the song is already defined in the album
+     * @param title a String containing the title of the song
+     * @param album a String containing the album of the song
+     * @return a boolean indicating whether the song is already defined in album
      */
     public boolean newSongInfoIsCorrect(String title, String album) {
         if (title.isBlank() || album.isBlank()) {
@@ -105,7 +150,7 @@ public class SongManager {
 
     /**
      * Checks whether a new author does not exist already
-     * @param author: a String containing the name of the author
+     * @param author a String containing the name of the author
      * @return a boolean indicating whether the author is correct
      */
     public boolean newAuthorIsValid(String author) {
@@ -128,12 +173,14 @@ public class SongManager {
 
     /**
      * Adds a new song to the system
-     * @param title: a String containing the title of the song
-     * @param album: a String containing the album of the song
-     * @param genre: an item in the {@link Genre} enumeration
-     * @param author: a String containing the name of the author of the song
-     * @param path: a String containing the path to the song image
-     * @param user: an instance of {@link User} representing the user that adds the song
+     * @param file an instance of File containing the MP3 file
+     * @param image an instance of File containing the JPEG image
+     * @param title a String containing the title of the song
+     * @param album a String containing the album of the song
+     * @param genre an item in the {@link Genre} enumeration
+     * @param author a String containing the name of the author of the song
+     * @param path a String containing the path to the song image
+     * @param user an instance of {@link User} representing the user that adds the song
      */
     public void addSong(File file, File image, String title, String album, Genre genre, String author, String path, String user) throws SongDAOException, UnsupportedAudioFileException, IOException {
         // Extract song duration from file

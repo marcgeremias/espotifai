@@ -16,7 +16,7 @@ public class SongListController implements KeyListener, MouseListener {
     private UserManager userManager;
     private SongManager songManager;
     private PlaylistManager playlistManager;
-    private ArrayList<Song> currentSongs;
+    private ArrayList<ArrayList<String>> currentSongs;
 
     public SongListController(PlayerViewListener listener, SongListView songListView, UserManager userManager,
                               SongManager songManager, PlaylistManager playlistManager) {

@@ -102,7 +102,7 @@ public class PlayerController implements PlayerViewListener {
     }
 
     @Override
-    public void showSongDetails(Song song) {
+    public void showSongDetails(ArrayList<String> song) {
         songDetailController.initView(song);
         playerView.revalidate();
         playerView.changeView(PlayerView.SONG_DETAIL_VIEW);
@@ -158,7 +158,7 @@ public class PlayerController implements PlayerViewListener {
     }
 
     @Override
-    public void playSong(ArrayList<Song> songs, int index) {
+    public void playSong(ArrayList<ArrayList<String>> songs, int index) {
         musicPlaybackController.initSongPlaylist(songs, index);
     }
 

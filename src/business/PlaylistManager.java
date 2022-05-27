@@ -82,10 +82,10 @@ public class PlaylistManager {
      * Method that checks if the current jComboBox song is in the actual playlist
      * @return True in case the song is inside the playlist, otherwise false
      */
-    public boolean isSongInsidePlaylist(int songId, ArrayList<Song> songs){
+    public boolean isSongInsidePlaylist(int songId, ArrayList<ArrayList<String>> songs){
         if(songs != null){
-            for (int i=0; i< songs.size(); i++) {
-                if(songId == songs.get(i).getId()){
+            for (int i = 0; i < songs.size(); i++) {
+                if(songId == Integer.parseInt(songs.get(i).get(SongManager.SONG_ID_ATTRIBUTE_INDEX))){
                     return true;
                 }
             }
@@ -112,9 +112,10 @@ public class PlaylistManager {
      * @param songAuthor String containing song author
      * @return index where the song is located in the list, -1 if song wasn't found
      */
-    public int findSongIndex(ArrayList<Song> currentSongs, String songName, String songAuthor) {
+    public int findSongIndex(ArrayList<ArrayList<String>> currentSongs, String songName, String songAuthor) {
         for (int i = 0; i < currentSongs.size(); i++){
-            if (currentSongs.get(i).getTitle().equals(songName) && currentSongs.get(i).getAuthor().equals(songAuthor)) {
+            if (currentSongs.get(i).get(SongManager.SONG_TITLE_ATTRIBUTE_INDEX).equals(songName)
+                    && currentSongs.get(i).get(SongManager.SONG_AUTHOR_ATTRIBUTE_INDEX).equals(songAuthor)) {
                 return i;
             }
         }

@@ -1,5 +1,6 @@
 package presentation.views;
 
+import business.SongManager;
 import business.entities.Song;
 import presentation.views.components.PlaceholderTextField;
 import presentation.views.components.TextField;
@@ -115,16 +116,15 @@ public class SongListView extends JPanel {
      * Method that fills the JTable with the songs in the system and personalize the JTable
      * @param currentSongs an arraylist of songs that are currently in the system
      */
-    //TODO: change encapsulation
-    public void fillTable(ArrayList<Song> currentSongs) {
+    public void fillTable(ArrayList<ArrayList<String>> currentSongs) {
         // Inserting the data to each column
         String[][] data = new String[currentSongs.size()][5];
         for (int i = 0; i < currentSongs.size(); i++) {
-            data[i][0] = currentSongs.get(i).getTitle();
-            data[i][1] = String.valueOf(currentSongs.get(i).getGenre());
-            data[i][2] = currentSongs.get(i).getAlbum();
-            data[i][3] = currentSongs.get(i).getAuthor();
-            data[i][4] = currentSongs.get(i).getUser();
+            data[i][0] = currentSongs.get(i).get(SongManager.SONG_TITLE_ATTRIBUTE_INDEX);
+            data[i][1] = currentSongs.get(i).get(SongManager.SONG_GENRE_ATTRIBUTE_INDEX);
+            data[i][2] = currentSongs.get(i).get(SongManager.SONG_ALBUM_ATTRIBUTE_INDEX);
+            data[i][3] = currentSongs.get(i).get(SongManager.SONG_AUTHOR_ATTRIBUTE_INDEX);
+            data[i][4] = currentSongs.get(i).get(SongManager.SONG_USER_ATTRIBUTE_INDEX);
         }
 
 
