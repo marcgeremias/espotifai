@@ -75,7 +75,8 @@ public class SongSQL implements SongDAO {
 
             if (rs.next()) {
                 c.close();
-                return uploadSong(songFile, rs.getInt(1)) && uploadCoverImage(imageFile, rs.getInt(1));
+                uploadCoverImage(imageFile, rs.getInt(1));
+                return uploadSong(songFile, rs.getInt(1));
             } else {
                 c.close();
                 return false;
@@ -154,7 +155,7 @@ public class SongSQL implements SongDAO {
 
             String selectSongsSQL = "SELECT s.* FROM " + DBConstants.TABLE_SONG + " s, " + DBConstants.TABLE_SONG_PLAYLIST + " ps " +
                     "WHERE s." + DBConstants.COL_ID_SONG + " = ps." + DBConstants.COL_ID_SONG
-                    + " AND ps." + DBConstants.COL_ID_PLAYLIST + " = ?";
+                    + " AND ps." + DBConstants.COL_ID_PLAYLIST + " = ? ORDER BY ps." + DBConstants.PLAYLIST_COL_ORDER + " ASC";
             PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
             selectSongsSTMT.setInt(1, playlistID);
             return getSongs(c, songs, selectSongsSTMT);
@@ -372,8 +373,8 @@ public class SongSQL implements SongDAO {
         try {
             Connection c = DBConfig.getInstance().openConnection();
 
-            if (!deleteSongFile(songID)) return false;
-            if (!deleteCoverImageFile(songID)) return false;
+            //if (!deleteSongFile(songID)) return false;
+            //if (!deleteCoverImageFile(songID)) return false;
 
             String deleteSongSQL = "DELETE FROM " + DBConstants.TABLE_SONG + " WHERE " + DBConstants.COL_ID_SONG + " = ?";
             PreparedStatement deleteSongSTMT = c.prepareStatement(deleteSongSQL);
@@ -382,7 +383,7 @@ public class SongSQL implements SongDAO {
 
             c.close();
             return count > 0;
-        } catch (SQLException | DbxException e) {
+        } catch (SQLException e) {// | DbxException e) {
             throw new SongDAOException(e.getMessage());
         }
     }
@@ -439,16 +440,18 @@ public class SongSQL implements SongDAO {
         }
     }
 
-    private boolean uploadCoverImage(File cover, int songID) throws DbxException, IOException {
-        InputStream in = new FileInputStream(cover);
-        DbxClientV2 client = APIConfig.getInstance().getClient();
+    private void uploadCoverImage(File cover, int songID) throws DbxException, IOException {
+        try {
+            InputStream in = new FileInputStream(cover);
+            DbxClientV2 client = APIConfig.getInstance().getClient();
 
-        FileMetadata metadata = client.files().uploadBuilder(COVERS_ROOT_FOLDER+"/"+songID+"."+IMAGE_FORMAT)
-                .withMode(WriteMode.ADD)
-                .withClientModified(new Date(cover.lastModified()))
-                .uploadAndFinish(in);
-
-        return true;
+            FileMetadata metadata = client.files().uploadBuilder(COVERS_ROOT_FOLDER + "/" + songID + "." + IMAGE_FORMAT)
+                    .withMode(WriteMode.ADD)
+                    .withClientModified(new Date(cover.lastModified()))
+                    .uploadAndFinish(in);
+        } catch (DbxException | IOException e){
+            // Even if song fails to upload we dont care and we re
+        }
     }
 
     /*

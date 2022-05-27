@@ -35,25 +35,22 @@ public class PlaylistDetailView extends JPanel {
     public static final String BTN_DELATE_SONG = "BTN DELETE SONG";
     public static final String JCOMBOX_SONG = "JCOMBOX_SONG";
 
+    public static final String BTN_MOVE_UP = "BTN MOVE UP";
+    public static final String BTN_MOVE_DOWN = "BTN MOVE DOWN";
+
+    private PlayerViewListener listener;
+
 
     private JButton delateSong;
     private JComboBox<String> jSelectSong;
     private JButton addSong;
 
+    private JButton upButton;
+    private JButton downButton;
 
-
-    public PlaylistDetailView() {
-        this.setLayout(new BorderLayout());
-        this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
-        this.add(titleLabel(), BorderLayout.NORTH);
-        this.add(center(), BorderLayout.CENTER);
-        this.add(down(), BorderLayout.SOUTH);
-        this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        this.setOpaque(true);
-    }
 
     /**
-     * Method to add the listener to the Playlist detail view buttons
+     * Method to add the listener to the Login view buttons
      */
     public void registerController(ActionListener controller) {
         // Action listener for delate song
@@ -67,8 +64,29 @@ public class PlaylistDetailView extends JPanel {
         // Action listener for select songs
         jSelectSong.addActionListener(controller);
         jSelectSong.setActionCommand(JCOMBOX_SONG);
+
+
+        // Action listener for move down
+        downButton.addActionListener(controller);
+        downButton.setActionCommand(BTN_MOVE_DOWN);
+
+        // Action listener for move up
+        upButton.addActionListener(controller);
+        upButton.setActionCommand(BTN_MOVE_UP);
     }
 
+
+
+    public PlaylistDetailView(PlayerViewListener listener) {
+        this.listener = listener;
+        this.setLayout(new BorderLayout());
+        this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+        this.add(titleLabel(), BorderLayout.NORTH);
+        this.add(center(), BorderLayout.CENTER);
+        this.add(down(), BorderLayout.SOUTH);
+        this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        this.setOpaque(true);
+    }
 
     private Container down() {
         panelPlaylistModify = new JPanel();
@@ -102,10 +120,33 @@ public class PlaylistDetailView extends JPanel {
         addSong.setPreferredSize(new Dimension(100,25));
 
 
+        upButton = new HoverButton(Color.DARK_GRAY, Color.BLACK, "Move Up");
+        upButton.setBackground(Color.BLACK);
+        upButton.setForeground(Color.LIGHT_GRAY);
+        upButton.setFont(new Font("Apple Casual", Font.BOLD, 10));
+        //Border Settings
+        upButton.setBorderPainted(true);
+        upButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
+        upButton.setPreferredSize(new Dimension(100,25));
+
+        downButton = new HoverButton(Color.DARK_GRAY, Color.BLACK, "Move Down");
+        downButton.setBackground(Color.BLACK);
+        downButton.setForeground(Color.LIGHT_GRAY);
+        downButton.setFont(new Font("Apple Casual", Font.BOLD, 10));
+        //Border Settings
+        downButton.setBorderPainted(true);
+        downButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
+        downButton.setPreferredSize(new Dimension(100,25));
+
+
 
         panelPlaylistModify.add(delateSong);
         panelPlaylistModify.add(addSong);
         panelPlaylistModify.add(jSelectSong);
+
+        panelPlaylistModify.add(downButton);
+        panelPlaylistModify.add(upButton);
+
 
         return panelPlaylistModify;
     }
@@ -185,9 +226,6 @@ public class PlaylistDetailView extends JPanel {
                 data[i][3] = mySongs.get(i).getAuthor();
                 data[i][4] = mySongs.get(i).getUser();
             }
-
-
-
         }
 
         tableModel.setDataVector(data, columns);
@@ -198,7 +236,7 @@ public class PlaylistDetailView extends JPanel {
         repaint();
     }
 
-    /*
+    /**
      * Method extracted from:
      * https://es.stackoverflow.com/questions/345550/c%C3%B3mo-autoajustar-el-ancho-de-una-columna-de-un-jtable-al-contenido-que-hay-en-e
      * @param table the JTable we are resizing
@@ -216,6 +254,7 @@ public class PlaylistDetailView extends JPanel {
             if (width > 300) {
                 width = 300;
             }
+            //Se establece el ancho de la columna
             columnModel.getColumn(column).setPreferredWidth(width);
         }
     }

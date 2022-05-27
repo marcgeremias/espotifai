@@ -37,8 +37,8 @@ public class StatsView extends PlayerView {
     }
 
     /**
-     * Method that 
-     * @param data
+     * Method that loads all the data from the persistence to the statistics data chart
+     * @param data: Array of Integers containing the number of songs for each genre.
      */
     public void loadData(int[] data) {
         dataChart.loadData(data);

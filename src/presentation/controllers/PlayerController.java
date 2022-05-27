@@ -77,7 +77,7 @@ public class PlayerController implements PlayerViewListener {
         songDetailController = new SongDetailController(this, songDetailView, userManager, songManager, playlistManager);
         songDetailView.registerController(songDetailController);
 
-        PlaylistDetailView playlistDetailView = new PlaylistDetailView();
+        PlaylistDetailView playlistDetailView = new PlaylistDetailView(this);
         playlistDetailController = new PlaylistDetailController(this, playlistDetailView, userManager, songManager, playlistManager);
         playlistDetailView.registerController(playlistDetailController);
 
@@ -180,9 +180,12 @@ public class PlayerController implements PlayerViewListener {
             listener.changeView(MainView.CARD_LOG_IN);
             playerView.changeView(PlayerView.DEFAULT_VIEW);
         } catch (UserDAOException e) {
-            e.printStackTrace();
         }
     }
 
-
+    @Override
+    public void songWasDeleted() {
+        playerManager.clearData();
+        musicPlaybackController.clearData();
+    }
 }

@@ -161,8 +161,70 @@ public class SongManager {
         for (Genre genre : Genre.values()){
             ArrayList<Song> array = songDAO.getSongsByGenre(genre);
             data[i] = array == null ? 0 : array.size();
-            System.out.println(data[i]);
             i++;
+        }
+
+        return data;
+    }
+
+    public int[] getNumberOfSongs() throws SongDAOException{
+        int[] data = new int[NUMBER_OF_GENRES];
+        ArrayList<Song> songs = songDAO.getAllSongs();
+        System.out.println(songs.size());
+
+        for (int i = 0; i < songs.size(); i++) {
+            switch (songs.get(i).getGenre()){
+                case ROCK:
+                    data[0]++;
+                    break;
+                case POP:
+                    data[1]++;
+                    break;
+                case RAP:
+                    data[2]++;
+                    break;
+                case TRAP:
+                    data[3]++;
+                    break;
+                case DEMBOW:
+                    data[4]++;
+                    break;
+                case DISCO:
+                    data[5]++;
+                    break;
+                case RB:
+                    data[6]++;
+                    break;
+                case SOUL:
+                    data[7]++;
+                    break;
+                case COUNTRY:
+                    data[8]++;
+                    break;
+                case REGGAE:
+                    data[9]++;
+                    break;
+                case TECHNO:
+                    data[10]++;
+                    break;
+                case BLUES:
+                    data[11]++;
+                    break;
+                case JAZZ:
+                    data[12]++;
+                    break;
+                case METAL:
+                    data[13]++;
+                    break;
+                case PUNK:
+                    data[14]++;
+                    break;
+                case SWING:
+                    data[15]++;
+                    break;
+                default:
+                    break;
+            }
         }
 
         return data;
@@ -172,20 +234,11 @@ public class SongManager {
      * Checks whether the song to delete is currently playing and whether it belongs
      * to the currently logged-in user
      * @param songID an integer representing the ID of the song to delete
-     * @param currentUser a String containing the username of the current user
      * @return a boolean indicating whether the song can be deleted
      */
-    public boolean songCanBeDeleted(int songID, String currentUser) {
-        try {
-            Song song = songDAO.getSongByID(songID);
-            // check song not playing
-            if (playerManager.getCurrentSong() == songID) System.out.println("Song is playing");
-            // check song user is current user
-            //return song.getUser().equals(currentUser) && !isPlaying();
-            return playerManager.getCurrentSong() != songID && song.getUser().equals(currentUser);
-        } catch (SongDAOException e) {
-            return false;
-        }
+    public boolean songCanBeDeleted(int songID) {
+        // check song not playing (user already checked)
+        return playerManager.getCurrentSong() != songID;
     }
 
     /**

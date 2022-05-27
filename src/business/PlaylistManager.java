@@ -46,15 +46,8 @@ public class PlaylistManager {
         return allPlaylists == null ? new ArrayList<>() : allPlaylists;
     }
 
-    /**
-     * Method that adds a song into a playlist
-     * @param playlistID the id of the playlist
-     * @param songID the id of the song
-     * @return true if the song has correctly added to the database and false if not
-     * @throws PlaylistDAOException
-     */
-    public boolean addSongToPlaylist(int playlistID, int songID) throws PlaylistDAOException{
-        return playlistDAO.addSongToPlaylist(playlistID, songID);
+    public boolean addSongToPlaylist(int playlistID, int songID, int order) throws PlaylistDAOException{
+        return playlistDAO.addSongToPlaylist(playlistID, songID, order);
     }
 
     /**
@@ -94,6 +87,10 @@ public class PlaylistManager {
         }
 
         return false;
+    }
+
+    public ArrayList<Integer> getPlaylistSongsOrder(int id) throws PlaylistDAOException {
+        return playlistDAO.getSongOrderByPlaylistId(id);
     }
 
     /**

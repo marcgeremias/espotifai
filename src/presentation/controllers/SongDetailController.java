@@ -21,7 +21,7 @@ public class SongDetailController implements ActionListener, LyricsListener {
     private UserManager userManager;
     private PlaylistManager playlistManager;
     private Song currentSong;
-    ArrayList<Playlist> allPlaylists;
+    private ArrayList<Playlist> allPlaylists;
 
     public SongDetailController(PlayerViewListener listener, SongDetailView songDetailView, UserManager userManager,
                              SongManager songManager, PlaylistManager playlistManager) {
@@ -41,6 +41,12 @@ public class SongDetailController implements ActionListener, LyricsListener {
         currentSong = song;
         songDetailView.fillTable(currentSong);
 
+        if (currentSong.getUser().equals(userManager.getCurrentUser())) {
+            songDetailView.enableDeleteSongButton();
+        } else {
+            songDetailView.disableDeleteSongButton();
+        }
+
         // Get all playlists
         try {
             allPlaylists = playlistManager.getAllPlaylists();
@@ -52,6 +58,8 @@ public class SongDetailController implements ActionListener, LyricsListener {
         songManager.getLyrics(this, currentSong.getTitle(), currentSong.getAuthor());
     }
 
+    private final String DELETE_SONG_CONFIRMATION_MSG = "Are you sure you want to permanently delete the song?";
+    private final String ERROR_DELETE_SONG_MSG = "Cannot delete this song!";
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
@@ -64,7 +72,13 @@ public class SongDetailController implements ActionListener, LyricsListener {
                     Playlist playlist = allPlaylists.get(playlistIndex);
 
                     try {
-                        if (playlistManager.addSongToPlaylist(playlist.getId(), currentSong.getId())) {
+                        ArrayList<Integer> arrayListOrder = playlistManager.getPlaylistSongsOrder(playlist.getId());
+                        int maxOrder=0;
+                        if(arrayListOrder.size() > 0){
+                            maxOrder = arrayListOrder.get(arrayListOrder.size()-1);
+                        }
+
+                        if (playlistManager.addSongToPlaylist(playlist.getId(), currentSong.getId(), maxOrder+1)) {
                             System.out.println("THE SONG HAS CORRECTLY ADDED");
                         }
 
@@ -80,14 +94,16 @@ public class SongDetailController implements ActionListener, LyricsListener {
                 listener.playSong(listSong, 0);
                 break;
             case SongDetailView.BTN_DELETE_SONG:
-                if (songDetailView.confirmSongDeletion("Are you sure you want to permanently delete the song?") == JOptionPane.YES_OPTION) {
-                    if (songManager.songCanBeDeleted(currentSong.getId(), userManager.getCurrentUser())) {
+                if (songDetailView.confirmSongDeletion(DELETE_SONG_CONFIRMATION_MSG) == JOptionPane.YES_OPTION) {
+                    if (songManager.songCanBeDeleted(currentSong.getId())) {
                         if (songManager.deleteSong(currentSong.getId())) {
-                            playlistManager.removeSongFromPlaylists(currentSong.getId());
+                            listener.songWasDeleted();
                             listener.changeView(PlayerView.SONG_LIST_VIEW);
+                        } else {
+                            songDetailView.showErrorDialog("Unexpected error");
                         }
                     } else {
-                        songDetailView.showErrorDialog("Cannot delete this song!");
+                        songDetailView.showErrorDialog(ERROR_DELETE_SONG_MSG);
                     }
                 }
                 break;

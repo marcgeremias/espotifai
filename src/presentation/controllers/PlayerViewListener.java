@@ -34,4 +34,9 @@ public interface PlayerViewListener {
      * This method is called when a user wants to delete its account
      */
     void delete();
+
+    /**
+     * Notifies that a song has been deleted
+     */
+    void songWasDeleted();
 }

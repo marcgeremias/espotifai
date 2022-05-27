@@ -202,7 +202,7 @@ public class PlayerManager {
      */
     public void killSong() {
         if (player != null) {
-            if (player.isRunning()) {
+            //if (player.isRunning()) {
                 player.stop();
                 player.close();
                 player.flush();
@@ -210,7 +210,7 @@ public class PlayerManager {
                 player = null;
                 songTimer.stop();
                 songTimer = null;
-            }
+            //}
         }
     }
 
@@ -293,6 +293,10 @@ public class PlayerManager {
      * @return an integer representing the song
      */
     public int getCurrentSong() {
+        if (songs.isEmpty() || !player.isRunning()) {
+            //killSong();
+            return -1;
+        }
         return songs.get(currentSongIndex).getId();
     }
 }

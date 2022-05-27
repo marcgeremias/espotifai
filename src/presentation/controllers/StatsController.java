@@ -26,7 +26,8 @@ public class StatsController {
      */
     public void refreshView() {
         try {
-            int[] data = songManager.getNumberOfSongsByGenre();
+            //int[] data = songManager.getNumberOfSongsByGenre();
+            int[] data = songManager.getNumberOfSongs();
             statsView.loadData(data);
         } catch (SongDAOException e) {
             e.printStackTrace();

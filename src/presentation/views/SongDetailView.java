@@ -218,6 +218,8 @@ public class SongDetailView extends JPanel {
         deleteSongButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
         deleteSongButton.setPreferredSize(new Dimension(100,25));
 
+        deleteSongButton.setVisible(false);
+
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         buttonPanel.add(deleteSongButton);
 
@@ -409,6 +411,20 @@ public class SongDetailView extends JPanel {
         JOptionPane.showMessageDialog(this,message);
     }
 
+    /**
+     * Activates the button to delete a song
+     */
+    public void enableDeleteSongButton() {
+        deleteSongButton.setVisible(true);
+    }
+
+    /**
+     * Deactivates the button to delete a song
+     */
+    public void disableDeleteSongButton() {
+        deleteSongButton.setVisible(false);
+    }
+
     private final String DELETE_SONG_DIALOG_TITLE = "Delete song";
 
     /**
@@ -420,6 +436,10 @@ public class SongDetailView extends JPanel {
         return JOptionPane.showConfirmDialog(null, message, DELETE_SONG_DIALOG_TITLE, JOptionPane.YES_NO_OPTION);
     }
 
+    /**
+     * Opens an error dialog
+     * @param message a String containing the error message
+     */
     public void showErrorDialog(String message) {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
