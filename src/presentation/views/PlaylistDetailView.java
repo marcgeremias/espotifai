@@ -226,6 +226,7 @@ public class PlaylistDetailView extends JPanel {
      * @param mySongs Songs from the actual playlist
      * @param playlistSelected Actual playlist selected
      */
+    //TODO: change encapsulation
     public void fillTable(ArrayList<Song> mySongs, Playlist playlistSelected) {
         // Setting the playlist Title
         playlistTitle.setText(playlistSelected.getName());
@@ -299,6 +300,7 @@ public class PlaylistDetailView extends JPanel {
      * Method used to fill the comboBox song options
      * @param notMySongs ArrayList with all songs from the system
      */
+    //TODO: change encapsulation
     public void fillSongsToAdd(ArrayList<Song> notMySongs) {
         jSelectSong.removeAllItems();
         for (Song notMySong : notMySongs) {

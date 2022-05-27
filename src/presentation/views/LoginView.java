@@ -20,6 +20,9 @@ public class LoginView extends JPanel {
     public static final String BTN_CREATE_ACCOUNT = "BTN CREATE ACCOUNT";
     public static final String BTN_LOG_IN = "BTN LOG IN";
 
+    private static final Color DEFAULT_BTN_BG = new Color(76, 76, 76);
+    private static final Color DEFAULT_ERROR_BG = new Color(220, 60, 25);
+
     // Text fields of the username or email and password of the user
     private PlaceholderTextField userField;
     private PlaceholderPasswordField passwordField;
@@ -179,8 +182,8 @@ public class LoginView extends JPanel {
      */
     public void incorrectUser() {
         incorrectInput.setText("Username or email could not be found");
-        passwordField.setBackground(new Color(76, 76, 76));
-        userField.setBackground(new Color(220, 60, 25));
+        passwordField.setBackground(DEFAULT_BTN_BG);
+        userField.setBackground(DEFAULT_ERROR_BG);
         incorrectInput.setVisible(true);
     }
 
@@ -189,8 +192,8 @@ public class LoginView extends JPanel {
      */
     public void incorrectPassword() {
         incorrectInput.setText("Wrong password. Try again.");
-        userField.setBackground(new Color(76, 76, 76));
-        passwordField.setBackground(new Color(220, 60, 25));
+        userField.setBackground(DEFAULT_BTN_BG);
+        passwordField.setBackground(DEFAULT_ERROR_BG);
         incorrectInput.setVisible(true);
     }
 
@@ -198,8 +201,8 @@ public class LoginView extends JPanel {
      * Method called when all credentials are correct, to revert the possible previous incorrect messages
      */
     public void correctCredentials() {
-        userField.setBackground(new Color(76, 76, 76));
-        passwordField.setBackground(new Color(76, 76, 76));
+        userField.setBackground(DEFAULT_BTN_BG);
+        passwordField.setBackground(DEFAULT_BTN_BG);
         incorrectInput.setVisible(false);
     }
 
@@ -225,8 +228,8 @@ public class LoginView extends JPanel {
      */
     public void clearAllInfo() {
         clearFields();
-        userField.setBackground(new Color(76, 76, 76));
-        passwordField.setBackground(new Color(76, 76, 76));
+        userField.setBackground(DEFAULT_BTN_BG);
+        passwordField.setBackground(DEFAULT_BTN_BG);
         incorrectInput.setVisible(false);
     }
 }

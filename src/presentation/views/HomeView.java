@@ -91,6 +91,7 @@ public class HomeView extends JPanel {
      * Method that fills the JTable with the other playlists of the other users in the JTable
      * @param othersPlaylists an arraylist of songs that are currently in the system
      */
+    //TODO: fix encapsulation
     public void fillTable(ArrayList<Playlist> othersPlaylists) {
         String[][] data = new String[othersPlaylists.size()][2];
 

@@ -30,9 +30,9 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
     public static final String BTN_SOUND = "btn_sound";
     public static final String TMR_INTERRUPT = "timer_int";
 
-    private MusicPlaybackView musicPlaybackView;
-    private SongManager songManager;
-    private PlayerManager playerManager;
+    private final MusicPlaybackView musicPlaybackView;
+    private final SongManager songManager;
+    private final PlayerManager playerManager;
 
     private int songSecondPos;
 
@@ -86,8 +86,7 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
                         // just let the user see that clicking backwards will do nothing
 
                     }
-                } catch (SongDAOException | LineUnavailableException | IOException | UnsupportedAudioFileException ex){
-                    musicPlaybackView.notifySongError("Couldn't skip back");
+                } catch (SongDAOException | LineUnavailableException | IOException | UnsupportedAudioFileException ignored){
                 }
             }
             case BTN_SKIP_NEXT -> {
@@ -95,8 +94,7 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
                     playerManager.killSong();
                     try {
                         prepareNewSong();
-                    } catch (SongDAOException | LineUnavailableException | IOException | UnsupportedAudioFileException ex) {
-                        musicPlaybackView.notifySongError("Couldn't load song");
+                    } catch (SongDAOException | LineUnavailableException | IOException | UnsupportedAudioFileException ignored) {
                     }
                 }
                 // We decided that if there are no more songs in the playlist we don't say anything
@@ -120,15 +118,13 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
                         playerManager.killSong();
                         try {
                             prepareNewSong();
-                        } catch (SongDAOException | LineUnavailableException | IOException | UnsupportedAudioFileException ex) {
-                            ex.printStackTrace();
+                        } catch (SongDAOException | LineUnavailableException | IOException | UnsupportedAudioFileException ignored) {
                         }
                     } else if (playerManager.generateNextIndex()){
                         playerManager.killSong();
                         try {
                             prepareNewSong();
-                        } catch (SongDAOException | IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
-                            musicPlaybackView.notifySongError("Couldn't load song");
+                        } catch (SongDAOException | IOException | LineUnavailableException | UnsupportedAudioFileException ignored) {
                         }
                     } else {
                         playerManager.killSong();
@@ -175,8 +171,8 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
                 playerManager.killSong();
             }
             prepareNewSong();
-        } catch (SongDAOException | IOException | LineUnavailableException | UnsupportedAudioFileException e) {
-            musicPlaybackView.notifySongError(e.getMessage());
+        } catch (SongDAOException | IOException | LineUnavailableException | UnsupportedAudioFileException ignored) {
+            //We ignore whatever exception
         }
     }
 

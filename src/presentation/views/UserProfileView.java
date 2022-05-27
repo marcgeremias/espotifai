@@ -303,4 +303,12 @@ public class UserProfileView extends JPanel {
                 options,
                 options[0]);
     }
+
+    /**
+     * Opens an error dialog
+     * @param message a String containing the error message
+     */
+    public void showErrorDialog(String message){
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
 }

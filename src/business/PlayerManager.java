@@ -132,7 +132,8 @@ public class PlayerManager {
      * @return instance of {@link Song}
      */
     public Song getCurrentSongAttributes() {
-        return songs.get(currentSongIndex);
+        if (songs.size() > 0) return songs.get(currentSongIndex);
+        else return null;
     }
 
     /**
@@ -219,7 +220,9 @@ public class PlayerManager {
      * @param decibelsReduce value ranging from -80 to 6 corresponding to the dB reduce
      */
     public void setAudioControlLevel(float decibelsReduce) {
-        audioControl.setValue(decibelsReduce);
+        if (audioControl != null) {
+            audioControl.setValue(decibelsReduce);
+        }
     }
 
     /**

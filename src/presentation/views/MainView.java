@@ -14,6 +14,10 @@ public class MainView extends JFrame {
     public static final String CARD_PLAYER = "CARD PLAYER";
     public static final String LOGO_IMAGE_PATH = "./res/images/logo.jpeg";
 
+    private static final String FRAME_TITLE = "Espotifai";
+    private static final int DEFAULT_WIDTH = 1280;
+    private static final int DEFAULT_HEIGHT = 720;
+
     public MainView() {
         cardManager = new CardLayout();
         this.setLayout(cardManager);
@@ -25,10 +29,10 @@ public class MainView extends JFrame {
      * Method to configure the window panel of the view
      */
     private void configureWindow() {
-        setTitle("Espotifai");
+        setTitle(FRAME_TITLE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(Color.BLACK);
-        setSize(1280, 720);
+        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         //setResizable(false);
         setLocationRelativeTo(null);
     }

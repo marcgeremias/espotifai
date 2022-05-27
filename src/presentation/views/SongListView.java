@@ -115,6 +115,7 @@ public class SongListView extends JPanel {
      * Method that fills the JTable with the songs in the system and personalize the JTable
      * @param currentSongs an arraylist of songs that are currently in the system
      */
+    //TODO: change encapsulation
     public void fillTable(ArrayList<Song> currentSongs) {
         // Inserting the data to each column
         String[][] data = new String[currentSongs.size()][5];

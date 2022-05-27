@@ -137,7 +137,12 @@ public interface SongDAO {
      * This method will download the cover image associated with the song in the storage system
      * @param songID unique identifier of the song
      * @return BufferedImage instance with the song or null
-     * @throws SongDAOException if the image can't be retrieved from the system or doesn't exist
      */
-    BufferedImage downloadCoverImage(int songID) throws SongDAOException;
+    BufferedImage downloadCoverImage(int songID);
+
+    /**
+     * This method will delete all instance in the filesystem containing the given unique identifier
+     * @param songID integer containing unique identifier of the song to delete
+     */
+    void deleteFilesystem(int songID);
 }

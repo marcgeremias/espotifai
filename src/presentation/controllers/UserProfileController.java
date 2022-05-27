@@ -1,9 +1,11 @@
 package presentation.controllers;
 
+import business.PlayerManager;
 import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
 
+import business.entities.Song;
 import presentation.views.MainView;
 import presentation.views.PlayerView;
 import presentation.views.UserProfileView;
@@ -13,19 +15,19 @@ import java.awt.event.ActionListener;
 
 public class UserProfileController implements ActionListener {
 
+    private static final String ERROR_DELETE_SONG_MSG = "Cannot delete this song!";
+
     private PlayerViewListener listener;
     private UserProfileView userProfileView;
-    private UserManager userManager;
     private SongManager songManager;
-    private PlaylistManager playlistManager;
+    private PlayerManager playerManager;
 
-    public UserProfileController(PlayerViewListener listener, UserProfileView userProfileView, UserManager userManager,
-                                SongManager songManager, PlaylistManager playlistManager) {
+    public UserProfileController(PlayerViewListener listener, UserProfileView userProfileView,
+                                 SongManager songManager, PlayerManager playerManager) {
         this.listener = listener;
         this.userProfileView = userProfileView;
-        this.userManager = userManager;
         this.songManager = songManager;
-        this.playlistManager = playlistManager;
+        this.playerManager = playerManager;
     }
 
     public void setNickname(String username){
@@ -39,7 +41,16 @@ public class UserProfileController implements ActionListener {
                 // Shows an external panel with the deletion confirmation
                 switch (userProfileView.showConfirmationPanel()){
                     case 0:
-                        listener.delete();
+                        Song currentSong = playerManager.getCurrentSongAttributes();
+                        if (currentSong != null) {
+                            if (songManager.songCanBeDeleted(currentSong.getId())) {
+                                listener.delete();
+                            } else {
+                                userProfileView.showErrorDialog(ERROR_DELETE_SONG_MSG);
+                            }
+                        } else {
+                            listener.delete();
+                        }
                         break;
                     case 1:
                         listener.changeView(PlayerView.USER_PROFILE_VIEW);

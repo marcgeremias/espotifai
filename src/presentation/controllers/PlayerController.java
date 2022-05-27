@@ -7,6 +7,7 @@ import business.UserManager;
 import business.entities.Song;
 import business.entities.Playlist;
 import business.entities.User;
+import persistence.SongDAOException;
 import persistence.UserDAOException;
 import presentation.views.*;
 
@@ -15,9 +16,9 @@ import java.util.ArrayList;
 
 public class PlayerController implements PlayerViewListener {
 
-    private PlayerView playerView;
+    private final PlayerView playerView;
     // If a logout is performed we want to change the view to the login one
-    private MainViewListener listener;
+    private final MainViewListener listener;
 
     // Pane controllers
     private final DefaultController defaultController;
@@ -31,11 +32,9 @@ public class PlayerController implements PlayerViewListener {
     private final SideMenuController sideMenuController;
     private final CreatePlaylistController createPlaylistController;
 
-    private UserManager userManager;
-    private PlayerManager playerManager;
-    // We need to make the view an attribute due to a dynamic JTable
-    private SongListView songListView;
-    private LibraryView libraryView;
+    private final UserManager userManager;
+    private final PlayerManager playerManager;
+    private final SongManager songManager;
 
     /**
      * This method initializes all the view necessary for the Main execution of the program
@@ -51,17 +50,19 @@ public class PlayerController implements PlayerViewListener {
         this.playerView = playerView;
         this.userManager = userManager;
         this.playerManager = playerManager;
+        this.songManager = songManager;
         DefaultView defaultView = new DefaultView();
 
         defaultController = new DefaultController(this, defaultView, userManager, songManager, playlistManager);
         defaultView.registerController(defaultController);
 
-        songListView =  new SongListView();
+        // We need to make the view an attribute due to a dynamic JTable
+        SongListView songListView = new SongListView();
         songListController = new SongListController(this, songListView, userManager, songManager, playlistManager);
         songListView.registerKeyController(songListController);
         songListView.registerMouseController(songListController);
 
-        libraryView = new LibraryView();
+        LibraryView libraryView = new LibraryView();
         libraryController = new LibraryController(this, libraryView, userManager, songManager, playlistManager);
         libraryView.registerMouseController(libraryController);
 
@@ -83,7 +84,7 @@ public class PlayerController implements PlayerViewListener {
         playlistDetailView.registerMouseController(playlistDetailController);
 
         UserProfileView userProfileView = new UserProfileView();
-        userProfileController = new UserProfileController(this, userProfileView, userManager, songManager, playlistManager);
+        userProfileController = new UserProfileController(this, userProfileView, songManager, playerManager);
         userProfileView.registerController(userProfileController);
 
         MusicPlaybackView musicPlaybackView = new MusicPlaybackView();
@@ -176,11 +177,14 @@ public class PlayerController implements PlayerViewListener {
     @Override
     public void delete() {
         try {
+            songManager.deleteAllSongsFromUser(userManager.getCurrentUser());
+            playerManager.clearData();
+            musicPlaybackController.clearData();
             userManager.deleteUser();
             userManager.logOutUser();
             listener.changeView(MainView.CARD_LOG_IN);
             playerView.changeView(PlayerView.DEFAULT_VIEW);
-        } catch (UserDAOException e) {
+        } catch (UserDAOException | SongDAOException ignored) {
         }
     }
 

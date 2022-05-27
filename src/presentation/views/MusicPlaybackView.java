@@ -48,7 +48,10 @@ public class MusicPlaybackView extends JPanel {
     private static final Font AUTHOR_NAME_STYLE = new Font("Roboto", Font.PLAIN, 10);
     private static final Color PRIMARY_TEXT_COLOR = Color.WHITE;
     private static final Color SECONDARY_TEXT_COLOR = Color.WHITE;
-    private static final int MAX_VOLUME_TICS = 100;
+    private static final Dimension SLDR_MUSIC_DIM = new Dimension(400, 15);
+    private static final Dimension SONG_COVER_SIZE = new Dimension(60, 60);
+    private static final String SONG_NAME_PLACEHOLDER = "Song Title Here";
+    private static final String SONG_AUTHOR_PLACEHOLDER = "Author Name Here";
 
     private JImagePanel btn_play;
     private JImagePanel btn_random;
@@ -56,7 +59,6 @@ public class MusicPlaybackView extends JPanel {
     private JImagePanel btn_loop_playlist;
     private JImagePanel btn_skip_next;
     private JImagePanel btn_skip_back;
-    //private JImagePanel btn_lyrics;
     private JImagePanel btn_sound;
     private JSliderCustom sldr_music;
     private JSliderCustom sldr_volume;
@@ -66,8 +68,6 @@ public class MusicPlaybackView extends JPanel {
     private JImagePanel songCoverImage;
     private JLabel songTitle;
     private JLabel authorName;
-
-    private int currentSongDuration;
 
     /**
      * Public constructor for the music playback panel
@@ -132,14 +132,15 @@ public class MusicPlaybackView extends JPanel {
         musicProgress.setOpaque(false);
         musicProgress.setBorder(BorderFactory.createEmptyBorder(2, 0, 10, 0));
 
-        sldr_music = new JSliderCustom(0, currentSongDuration, 0, MusicPlaybackController.SLDR_SONG);
-        sldr_music.setPreferredSize(new Dimension(400, 15));
+        // Init value will always be zero
+        sldr_music = new JSliderCustom(0, 0, 0, MusicPlaybackController.SLDR_SONG);
+        sldr_music.setPreferredSize(SLDR_MUSIC_DIM);
 
         currentTime = new JLabel();
         currentTime.setText(INITIAL_SLIDER_VALUE);
         currentTime.setForeground(TIME_PROGRESS_FONT_COLOR);
         totalTime = new JLabel();
-        totalTime.setText((currentSongDuration/60) % 60 + ":" + String.format("%02d",currentSongDuration % 60));
+        totalTime.setText(INITIAL_SLIDER_VALUE);
         totalTime.setForeground(TIME_PROGRESS_FONT_COLOR);
 
         musicProgress.add(currentTime);
@@ -152,21 +153,21 @@ public class MusicPlaybackView extends JPanel {
     private Component coverImagePane(){
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setOpaque(false);
-        panel.setPreferredSize(new Dimension(400, panel.getHeight()));
+        panel.setPreferredSize(new Dimension(300, panel.getHeight()));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         ((FlowLayout)panel.getLayout()).setHgap(16);
 
         songCoverImage = new JImagePanel(null);
-        songCoverImage.setPreferredSize(new Dimension(60, 60));
+        songCoverImage.setPreferredSize(SONG_COVER_SIZE);
         songCoverImage.setOpaque(false);
 
         JPanel rightSide = new JPanel();
         rightSide.setOpaque(false);
         rightSide.setLayout(new BoxLayout(rightSide, BoxLayout.Y_AXIS));
-        songTitle = new JLabel("Song Title Here");
+        songTitle = new JLabel(SONG_NAME_PLACEHOLDER);
         songTitle.setFont(SONG_TITLE_STYLE);
         songTitle.setForeground(PRIMARY_TEXT_COLOR);
-        authorName = new JLabel("Author Name Here");
+        authorName = new JLabel(SONG_AUTHOR_PLACEHOLDER);
         authorName.setFont(AUTHOR_NAME_STYLE);
         authorName.setForeground(SECONDARY_TEXT_COLOR);
 
@@ -232,40 +233,6 @@ public class MusicPlaybackView extends JPanel {
     }
 
     /**
-     * This method will update all the values in the MusicPlayback panel to match the new parameters given.
-     * @param songTitle String containing the new song title
-     * @param authorName String containing the new author title
-     * @param songDuration integer containing the song duration
-     * @param cover BufferedImage with the cover image to display
-     */
-    //TODO: Remove if not used
-    public void setCurrentSongValues(String songTitle, String authorName, int songDuration, BufferedImage cover) {
-        this.currentSongDuration = songDuration;
-        this.songTitle.setText(songTitle);
-        this.authorName.setText(authorName);
-        this.songCoverImage.attachImage(cover);
-        revalidate();
-        repaint();
-    }
-
-    /**
-     * This method will swap the sound button on or off
-     */
-    //TODO: Remove if not used
-    public void toggleSoundButton(){
-        btn_sound.swapSecondary();
-        repaint();
-    }
-
-    /**
-     * This method is called to notify through a pop up of some error to the user.
-     * @param message message to display in the popup
-     */
-    public void notifySongError(String message) {
-        JOptionPane.showMessageDialog(this, message, "Song Loading Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    /**
      * This method will update the slider position given a value
      * @param frame integer containing the value of the desired position of the slider
      */
@@ -296,17 +263,17 @@ public class MusicPlaybackView extends JPanel {
      * @param cover image containing the cover of the song
      */
     public void setSongDetails(String songName, String author, BufferedImage cover) {
-        if (songName != null && cover != null) {
+        if (songName != null && author != null) {
             songTitle.setText(songName);
             authorName.setText(author);
             songCoverImage.attachImage(cover);
             revalidate();
             repaint();
         } else {
-            songTitle.setText("Song Title Here");
-            authorName.setText("Author Name Here");
-            currentTime.setText("0:00");
-            totalTime.setText("0:00");
+            songTitle.setText(SONG_NAME_PLACEHOLDER);
+            authorName.setText(SONG_AUTHOR_PLACEHOLDER);
+            currentTime.setText(INITIAL_SLIDER_VALUE);
+            totalTime.setText(INITIAL_SLIDER_VALUE);
             songCoverImage.attachImage(null);
         }
     }
@@ -327,15 +294,6 @@ public class MusicPlaybackView extends JPanel {
         btn_play.setShowSecondary(pause);
     }
 
-    /**
-     * This method sets the sound slider position to the desired value
-     * @param pos value to set the slider to
-     */
-    //TODO: Remove if not used
-    public void setSoundSliderPos(int pos) {
-        sldr_volume.setValue(pos);
-        repaint();
-    }
 
     /**
      * Method to check button mute state

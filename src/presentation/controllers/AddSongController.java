@@ -82,8 +82,6 @@ public class AddSongController implements ActionListener {
             path = imageFile.getPath();
         }
 
-        System.out.println(path);
-
         if (addSongView.newAuthorSelected()) {
             addSongView.addAuthor(addSongView.getAuthorField());
             author = addSongView.getAuthorField();

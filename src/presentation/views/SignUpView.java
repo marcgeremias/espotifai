@@ -11,6 +11,8 @@ import static presentation.views.MainView.LOGO_IMAGE_PATH;
 
 public class SignUpView extends JPanel {
 
+    //TODO: add private static constants for all final values
+
     // Buttons connected with an Action Listener and their constants
     private JButton joinButton;
     private JButton goBackButton;

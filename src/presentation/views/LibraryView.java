@@ -106,6 +106,7 @@ public class LibraryView extends JPanel {
      * Method that fills the JTable with the playlist of the current user in the JTable
      * @param myPlaylists an arraylist of songs that are currently in the system
      */
+    //TODO: fix encapsulation
     public void fillTable(ArrayList<Playlist> myPlaylists) {
         // Inserting the data to each column
         String[][] data = new String[myPlaylists.size()][2];

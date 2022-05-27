@@ -373,8 +373,8 @@ public class SongSQL implements SongDAO {
         try {
             Connection c = DBConfig.getInstance().openConnection();
 
-            //if (!deleteSongFile(songID)) return false;
-            //if (!deleteCoverImageFile(songID)) return false;
+            if (!deleteSongFile(songID)) return false;
+            if (!deleteCoverImageFile(songID)) return false;
 
             String deleteSongSQL = "DELETE FROM " + DBConstants.TABLE_SONG + " WHERE " + DBConstants.COL_ID_SONG + " = ?";
             PreparedStatement deleteSongSTMT = c.prepareStatement(deleteSongSQL);
@@ -383,7 +383,7 @@ public class SongSQL implements SongDAO {
 
             c.close();
             return count > 0;
-        } catch (SQLException e) {// | DbxException e) {
+        } catch (SQLException | DbxException e) {// | DbxException e) {
             throw new SongDAOException(e.getMessage());
         }
     }
@@ -418,8 +418,13 @@ public class SongSQL implements SongDAO {
         }
     }
 
+    /**
+     * This method will download the cover image associated with the given unique identifier
+     * @param songID unique identifier of the song
+     * @return image if found, null otherwise
+     */
     @Override
-    public BufferedImage downloadCoverImage(int songID) throws SongDAOException {
+    public BufferedImage downloadCoverImage(int songID) {
         try {
             //This seems like is not following 'Tell, don't ask rule' but it is actually very polite
             DbxClientV2 client = APIConfig.getInstance().getClient();
@@ -436,11 +441,30 @@ public class SongSQL implements SongDAO {
 
             return ImageIO.read(bais);
         } catch (DbxException | IOException e){
-            throw new SongDAOException(e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * This method will delete all instance in the filesystem containing the given unique identifier
+     * @param songID integer containing unique identifier of the song to delete
+     * @throws SongDAOException if there is an error deleting file from dropbox
+     */
+    @Override
+    public void deleteFilesystem(int songID) {
+        try {
+            deleteSongFile(songID);
+        } catch (DbxException ignored) {
+        }
+        try {
+            deleteCoverImageFile(songID);
+        } catch (DbxException ignored) {
+
         }
     }
 
     private void uploadCoverImage(File cover, int songID) {
+        if (cover == null) return;
         try {
             InputStream in = new FileInputStream(cover);
             DbxClientV2 client = APIConfig.getInstance().getClient();
@@ -451,6 +475,7 @@ public class SongSQL implements SongDAO {
                     .uploadAndFinish(in);
         } catch (DbxException | IOException e){
             // Even if song fails to upload we dont care and we re
+            System.out.println("Failed to save cover image");
         }
     }
 

@@ -150,7 +150,7 @@ public class SongManager {
         songDAO.createSong(song, file, image);
     }
 
-    public BufferedImage getCoverImage(int songID) throws SongDAOException {
+    public BufferedImage getCoverImage(int songID) {
         return songDAO.downloadCoverImage(songID);
     }
 
@@ -254,5 +254,15 @@ public class SongManager {
         } catch (SongDAOException e) {
             return false;
         }
+    }
+
+    /**
+     * This method will start a thread that will delete all related
+     * @param currentUser String containing unique identifier of current user
+     */
+    public void deleteAllSongsFromUser(String currentUser) throws SongDAOException{
+        ArrayList<Song> songs = songDAO.getSongsByUserID(currentUser);
+        SongUnloader songUnloader = new SongUnloader(songs, songDAO);
+        songUnloader.start();
     }
 }

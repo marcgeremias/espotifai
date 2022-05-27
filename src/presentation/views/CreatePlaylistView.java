@@ -9,6 +9,9 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * This class expends from JPanel to implement the view for the create playlist form
+ */
 public class CreatePlaylistView extends JPanel{
 
     // The button to create playlist
@@ -18,7 +21,9 @@ public class CreatePlaylistView extends JPanel{
     private HoverButton createButton;
     private PlaceholderTextField nameField;
 
-
+    /**
+     * Constructor for playlist creation view
+     */
     public CreatePlaylistView() {
         this.setLayout(new BorderLayout());
         this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
