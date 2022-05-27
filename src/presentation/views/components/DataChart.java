@@ -9,10 +9,7 @@ import java.awt.geom.Rectangle2D;
 public class DataChart extends JComponent {
     public final static Integer DATA_X = 300;
     public final static Integer TEXT_X = 200;
-    public final static Integer WEIGHT = 0;
     public final static Integer HEIGTH = 20;
-
-    public final static Integer MULTIPLIER = 10;
     public final static Integer DISTANCE = 26;
     public final static Integer DATA_Y_DISTANCE = 50;
 
