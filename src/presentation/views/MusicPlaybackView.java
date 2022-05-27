@@ -291,13 +291,14 @@ public class MusicPlaybackView extends JPanel {
 
     /**
      * This method will set the song details and updated the view
-     * @param currentSong instance of {@link Song} to be displayed
+     * @param songName String containing song name
+     * @param author String containing author name
      * @param cover image containing the cover of the song
      */
-    public void setSongDetails(Song currentSong, BufferedImage cover) {
-        if (currentSong != null && cover != null) {
-            songTitle.setText(currentSong.getTitle());
-            authorName.setText(currentSong.getAuthor());
+    public void setSongDetails(String songName, String author, BufferedImage cover) {
+        if (songName != null && cover != null) {
+            songTitle.setText(songName);
+            authorName.setText(author);
             songCoverImage.attachImage(cover);
             revalidate();
             repaint();

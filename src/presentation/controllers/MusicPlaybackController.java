@@ -189,7 +189,7 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
         musicPlaybackView.setBtnPause(true);
         musicPlaybackView.setSliderValues(0, playerManager.getCurrentSongLength());
         Song currentSong = playerManager.getCurrentSongAttributes();
-        musicPlaybackView.setSongDetails(currentSong, songManager.getCoverImage(currentSong.getId()));
+        musicPlaybackView.setSongDetails(currentSong.getTitle(), currentSong.getAuthor(), songManager.getCoverImage(currentSong.getId()));
         songSecondPos = 0;
     }
 
@@ -198,6 +198,6 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
      */
     public void clearData() {
         musicPlaybackView.setSliderPos(0);
-        musicPlaybackView.setSongDetails(null, null);
+        musicPlaybackView.setSongDetails(null, null, null);
     }
 }

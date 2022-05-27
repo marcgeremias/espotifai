@@ -440,7 +440,7 @@ public class SongSQL implements SongDAO {
         }
     }
 
-    private void uploadCoverImage(File cover, int songID) throws DbxException, IOException {
+    private void uploadCoverImage(File cover, int songID) {
         try {
             InputStream in = new FileInputStream(cover);
             DbxClientV2 client = APIConfig.getInstance().getClient();
