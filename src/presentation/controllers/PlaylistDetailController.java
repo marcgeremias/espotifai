@@ -29,6 +29,9 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
     private ArrayList<Integer> songsOrder;
 
 
+    /**
+     * Constructor method to set up the PlaylistDetailController
+     */
     public PlaylistDetailController(PlayerViewListener listener, PlaylistDetailView playlistDetailView,
                                     UserManager userManager,SongManager songManager, PlaylistManager playlistManager) {
         this.listener = listener;
