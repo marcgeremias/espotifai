@@ -31,8 +31,8 @@ public class PlaylistManager {
         return allPlaylists == null ? new ArrayList<>() : allPlaylists;
     }
 
-    public boolean addSongToPlaylist(int playlistID, int songID) throws PlaylistDAOException{
-        return playlistDAO.addSongToPlaylist(playlistID, songID);
+    public boolean addSongToPlaylist(int playlistID, int songID, int order) throws PlaylistDAOException{
+        return playlistDAO.addSongToPlaylist(playlistID, songID, order);
     }
 
     public void deleteSongFromPlaylist(int playlistID, int songID) throws PlaylistDAOException {
@@ -51,8 +51,11 @@ public class PlaylistManager {
                 }
             }
         }
-        
+
         return false;
     }
 
+    public ArrayList<Integer> getPlaylistSongsOrder(int id) throws PlaylistDAOException {
+        return playlistDAO.getSongOrderByPlaylistId(id);
+    }
 }

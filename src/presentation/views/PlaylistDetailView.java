@@ -35,12 +35,17 @@ public class PlaylistDetailView extends JPanel {
     public static final String BTN_DELATE_SONG = "BTN DELETE SONG";
     public static final String JCOMBOX_SONG = "JCOMBOX_SONG";
 
-    private PlayerViewListener listener;
+    public static final String BTN_MOVE_UP = "BTN MOVE UP";
+    public static final String BTN_MOVE_DOWN = "BTN MOVE DOWN";
 
+    private PlayerViewListener listener;
 
     private JButton delateSong;
     private JComboBox<String> jSelectSong;
     private JButton addSong;
+
+    private JButton upButton;
+    private JButton downButton;
 
 
     /**
@@ -58,6 +63,15 @@ public class PlaylistDetailView extends JPanel {
         // Action listener for select songs
         jSelectSong.addActionListener(controller);
         jSelectSong.setActionCommand(JCOMBOX_SONG);
+
+
+        // Action listener for move down
+        downButton.addActionListener(controller);
+        downButton.setActionCommand(BTN_MOVE_DOWN);
+
+        // Action listener for move up
+        upButton.addActionListener(controller);
+        upButton.setActionCommand(BTN_MOVE_UP);
     }
 
 
@@ -105,10 +119,33 @@ public class PlaylistDetailView extends JPanel {
         addSong.setPreferredSize(new Dimension(100,25));
 
 
+        upButton = new HoverButton(Color.DARK_GRAY, Color.BLACK, "Move Up");
+        upButton.setBackground(Color.BLACK);
+        upButton.setForeground(Color.LIGHT_GRAY);
+        upButton.setFont(new Font("Apple Casual", Font.BOLD, 10));
+        //Border Settings
+        upButton.setBorderPainted(true);
+        upButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
+        upButton.setPreferredSize(new Dimension(100,25));
+
+        downButton = new HoverButton(Color.DARK_GRAY, Color.BLACK, "Move Down");
+        downButton.setBackground(Color.BLACK);
+        downButton.setForeground(Color.LIGHT_GRAY);
+        downButton.setFont(new Font("Apple Casual", Font.BOLD, 10));
+        //Border Settings
+        downButton.setBorderPainted(true);
+        downButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
+        downButton.setPreferredSize(new Dimension(100,25));
+
+
 
         panelPlaylistModify.add(delateSong);
         panelPlaylistModify.add(addSong);
         panelPlaylistModify.add(jSelectSong);
+
+        panelPlaylistModify.add(downButton);
+        panelPlaylistModify.add(upButton);
+
 
         return panelPlaylistModify;
     }
@@ -188,9 +225,6 @@ public class PlaylistDetailView extends JPanel {
                 data[i][3] = mySongs.get(i).getAuthor();
                 data[i][4] = mySongs.get(i).getUser();
             }
-
-
-
         }
 
         tableModel.setDataVector(data, columns);

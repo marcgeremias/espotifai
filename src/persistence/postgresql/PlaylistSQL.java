@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static persistence.config.DBConstants.PLAYLIST_COL_ORDER;
+
 /**
  * Public class that implements {@link PlaylistDAO} with SQL persistence in the database configured on start-up.
  * @see Playlist
@@ -158,14 +160,15 @@ public class PlaylistSQL implements PlaylistDAO {
      * @throws PlaylistDAOException if the query fails to execute or the database connection can't be opened.
      */
     @Override
-    public boolean addSongToPlaylist(int playlistID, int songID) throws PlaylistDAOException {
+    public boolean addSongToPlaylist(int playlistID, int songID, int order) throws PlaylistDAOException {
         try {
             Connection c = DBConfig.getInstance().openConnection();
 
-            String addSongSQL = "INSERT INTO " + DBConstants.TABLE_SONG_PLAYLIST + " VALUES (?, ?)";
+            String addSongSQL = "INSERT INTO " + DBConstants.TABLE_SONG_PLAYLIST + " VALUES (?, ?, ?)";
             PreparedStatement addSongSTMT = c.prepareStatement(addSongSQL);
             addSongSTMT.setInt(1, playlistID);
             addSongSTMT.setInt(2, songID);
+            addSongSTMT.setInt(3, order);
             int count = addSongSTMT.executeUpdate();
 
             c.close();
@@ -295,6 +298,36 @@ public class PlaylistSQL implements PlaylistDAO {
             throw new PlaylistDAOException(e.getMessage());
         }
     }
+
+
+    public ArrayList<Integer> getSongOrderByPlaylistId(int playlistId) throws PlaylistDAOException{
+        try {
+            ArrayList<Integer> arrayListOrder = new ArrayList<>();
+
+            Connection c = DBConfig.getInstance().openConnection();
+
+            String selectPlaylistSQL = "SELECT ps." + DBConstants.PLAYLIST_COL_ORDER + "  FROM "
+                    + DBConstants.TABLE_SONG_PLAYLIST + " AS ps WHERE ps." + DBConstants.COL_ID_PLAYLIST + " = ?";
+            PreparedStatement selectPlaylistSTMT = c.prepareStatement(selectPlaylistSQL);
+            selectPlaylistSTMT.setInt(1, playlistId);
+            ResultSet rs1 = selectPlaylistSTMT.executeQuery();
+
+            while (rs1.next()) {
+                arrayListOrder.add(rs1.getInt(1));
+            }
+
+            c.close();
+            return arrayListOrder;
+
+        } catch (SQLException e) {
+            throw new PlaylistDAOException(e.getMessage());
+        }
+    }
+
+
+
+
+
 
     /*
     Private method to get playlist object data from result set

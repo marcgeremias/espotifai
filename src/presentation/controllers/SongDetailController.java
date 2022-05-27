@@ -70,7 +70,13 @@ public class SongDetailController implements ActionListener, LyricsListener {
                     Playlist playlist = allPlaylists.get(playlistIndex);
 
                     try {
-                        if (playlistManager.addSongToPlaylist(playlist.getId(), currentSong.getId())) {
+                        ArrayList<Integer> arrayListOrder = playlistManager.getPlaylistSongsOrder(playlist.getId());
+                        int maxOrder=0;
+                        if(arrayListOrder.size() > 0){
+                            maxOrder = arrayListOrder.get(arrayListOrder.size()-1);
+                        }
+
+                        if (playlistManager.addSongToPlaylist(playlist.getId(), currentSong.getId(), maxOrder+1)) {
                             System.out.println("THE SONG HAS CORRECTLY ADDED");
                         }
 

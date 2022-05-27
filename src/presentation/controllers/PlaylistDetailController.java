@@ -24,6 +24,7 @@ public class PlaylistDetailController implements ActionListener {
     private ArrayList<Song> mySongs;
     private ArrayList<Song> allSongs;
     private Playlist actualPlaylist;
+    private ArrayList<Integer> songsOrder;
 
 
     public PlaylistDetailController(PlayerViewListener listener, PlaylistDetailView playlistDetailView,
@@ -43,7 +44,12 @@ public class PlaylistDetailController implements ActionListener {
     public void initView(Playlist actualPlaylist) {
         this.actualPlaylist = actualPlaylist;
 
-        updateActualPlaylist();
+        try {
+            updateActualPlaylist();
+        } catch (PlaylistDAOException e) {
+            e.printStackTrace();
+        }
+
 
         // Check if the users have permissions
         playlistDetailView.setModify(userManager.getCurrentUser().equals(actualPlaylist.getOwner()));
@@ -56,8 +62,9 @@ public class PlaylistDetailController implements ActionListener {
     /**
      * Method that updates the songs from the actual playlist
      */
-    private void updateActualPlaylist(){
+    private void updateActualPlaylist() throws PlaylistDAOException {
         mySongs = songManager.getAllPlaylistSongs(actualPlaylist.getId());
+        songsOrder = playlistManager.getPlaylistSongsOrder(actualPlaylist.getId());
         playlistDetailView.fillTable(mySongs, actualPlaylist);
     }
 
@@ -74,8 +81,13 @@ public class PlaylistDetailController implements ActionListener {
                 try {
                     if(!playlistManager.isSongInsidePlaylist(allSongs.get(playlistDetailView.getjSelectSong()).getId()
                     ,songManager.getAllPlaylistSongs(actualPlaylist.getId()))) {
+                        int maxOrder=0;
+                        if(songsOrder.size() > 0){
+                            maxOrder = songsOrder.get(songsOrder.size()-1);
+                        }
+
                         playlistManager.addSongToPlaylist(actualPlaylist.getId(),
-                        allSongs.get(playlistDetailView.getjSelectSong()).getId());
+                        allSongs.get(playlistDetailView.getjSelectSong()).getId(), maxOrder+1);
                         updateActualPlaylist();
                     }else{
                         playlistDetailView.notifyError("Song already added!");
@@ -99,6 +111,12 @@ public class PlaylistDetailController implements ActionListener {
                 } catch (PlaylistDAOException ex) {
                     ex.printStackTrace();
                 }
+                break;
+
+            case PlaylistDetailView.BTN_MOVE_UP:
+                break;
+
+            case PlaylistDetailView.BTN_MOVE_DOWN:
                 break;
         }
     }
