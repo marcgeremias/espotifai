@@ -176,8 +176,8 @@ public class UserManager {
     }
 
     /**
-     * Getter of currentUser
-     * @return the current user
+     * Gets the username of the currently logged-in user
+     * @return a String containing the current user's username
      */
     public String getCurrentUser() {
         return currentUser;
@@ -196,5 +196,4 @@ public class UserManager {
     public void deleteUser() throws UserDAOException{
         userDAO.deleteUser(currentUser);
     }
-
 }

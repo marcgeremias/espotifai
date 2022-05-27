@@ -4,12 +4,9 @@ import business.entities.*;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import persistence.SongDAO;
 import persistence.SongDAOException;
-import persistence.UserDAO;
-import persistence.config.APILyrics;
 import presentation.controllers.LyricsListener;
 
 import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -21,11 +18,13 @@ public class SongManager {
     private static int NUMBER_OF_GENRES = 16;
 
     private SongDAO songDAO;
-    private UserDAO userDAO;
+    private PlaylistManager playlistManager;
+    private PlayerManager playerManager;
 
-    public SongManager(SongDAO songDAO, UserDAO userDAO) {
+    public SongManager(SongDAO songDAO, PlaylistManager playlistManager, PlayerManager playerManager) {
         this.songDAO = songDAO;
-        this.userDAO = userDAO;
+        this.playlistManager = playlistManager;
+        this.playerManager = playerManager;
     }
 
     /**
@@ -98,7 +97,7 @@ public class SongManager {
             }
 
             return true;
-        } catch (Exception e) {
+        } catch (SongDAOException e) {
             // either no songs or album not defined in database
             return true;
         }
@@ -149,10 +148,6 @@ public class SongManager {
         Song song = new Song(title, album, genre, author, path, duration, user);
 
         songDAO.createSong(song, file, image);
-    }
-
-    public AudioInputStream getSongStream(Song song) throws SongDAOException{
-        return songDAO.downloadSong(song.getId());
     }
 
     public BufferedImage getCoverImage(int songID) throws SongDAOException {
@@ -234,5 +229,30 @@ public class SongManager {
 
         return data;
     }
-    
+
+    /**
+     * Checks whether the song to delete is currently playing and whether it belongs
+     * to the currently logged-in user
+     * @param songID an integer representing the ID of the song to delete
+     * @return a boolean indicating whether the song can be deleted
+     */
+    public boolean songCanBeDeleted(int songID) {
+        // check song not playing (user already checked)
+        return playerManager.getCurrentSong() != songID;
+    }
+
+    /**
+     * Permanently deletes a song from the system
+     * @param song an integer representing the ID of the song to delete
+     * @return a boolean indicating whether the song could be deleted
+     */
+    public boolean deleteSong(int song) {
+        try {
+            songDAO.deleteSong(song);
+            playlistManager.removeSongFromPlaylists(song);
+            return true;
+        } catch (SongDAOException e) {
+            return false;
+        }
+    }
 }

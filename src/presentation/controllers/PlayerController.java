@@ -181,9 +181,12 @@ public class PlayerController implements PlayerViewListener {
             listener.changeView(MainView.CARD_LOG_IN);
             playerView.changeView(PlayerView.DEFAULT_VIEW);
         } catch (UserDAOException e) {
-            e.printStackTrace();
         }
     }
 
-
+    @Override
+    public void songWasDeleted() {
+        playerManager.clearData();
+        musicPlaybackController.clearData();
+    }
 }

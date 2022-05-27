@@ -305,6 +305,8 @@ public class MusicPlaybackView extends JPanel {
         } else {
             songTitle.setText("Song Title Here");
             authorName.setText("Author Name Here");
+            currentTime.setText("0:00");
+            totalTime.setText("0:00");
             songCoverImage.attachImage(null);
         }
     }

@@ -90,6 +90,7 @@ public class PlaylistManager {
                 }
             }
         }
+
         return false;
     }
 
@@ -120,8 +121,25 @@ public class PlaylistManager {
         return -1;
     }
 
+    /**
+     * Deletes the song from all the playlists which contain it
+     * @param song an integer representing the song to delete
+     */
+    public void removeSongFromPlaylists(int song) {
+        try {
+            ArrayList<Playlist> playlists = playlistDAO.getAllPlaylists();
+            for (Playlist p : playlists) {
+                if (p.containsSong(song)) {
+                    p.removeSong(song);
+                    playlistDAO.updatePlaylist(p);
+                }
+            }
+        } catch (PlaylistDAOException e) {
+            //
+        }
+    }
+
     public void swapSongsOrder(int idPlaylist, int idSong1, int idSong2) throws PlaylistDAOException {
         playlistDAO.swapSongsOrder(idPlaylist,idSong1,idSong2);
     }
-
 }

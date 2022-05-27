@@ -29,6 +29,7 @@ public class SongDetailView extends JPanel {
     public static final String BTN_PLAY_IMAGE = "BTN PLAY IMAGE";
     public static final String BTN_ADD_PLAYLIST = "BTN ADD PLAYLIST";
     public static final String LOGO_PLAY_PATH = "res/icons/play-button.png";
+    public static final String BTN_DELETE_SONG = "BTN DELETE SONG";
 
     private static final String FETCHING_LYRICS_PLACEHOLDER = "Fetching the lyrics... This might take a while!";
 
@@ -40,6 +41,7 @@ public class SongDetailView extends JPanel {
     private JScrollPane lyricsScrollPane;
     private DefaultTableModel tableModel;
     private JTextArea textArea;
+    private HoverButton deleteSongButton;
 
     /**
      * Constructor method to set up the view
@@ -62,6 +64,9 @@ public class SongDetailView extends JPanel {
 
         addPlaylistButton.setActionCommand(BTN_ADD_PLAYLIST);
         addPlaylistButton.addActionListener(controller);
+
+        deleteSongButton.setActionCommand(BTN_DELETE_SONG);
+        deleteSongButton.addActionListener(controller);
     }
 
     /*
@@ -140,8 +145,8 @@ public class SongDetailView extends JPanel {
      * @return the JPanel with all the center of the SongtDetail view
      */
     private Component center() {
-
         lyricsScrollPane = new JScrollPane();
+        deleteSongButton = new HoverButton(Color.DARK_GRAY, Color.BLACK, "DELETE");
 
         //JPanel center config
         JPanel center = new JPanel();
@@ -173,7 +178,7 @@ public class SongDetailView extends JPanel {
         panelSearch.add(searchSong);
 
         center.add(lyricsScrollPane);
-
+        center.add(deleteSongButton());
 
         return center;
     }
@@ -197,6 +202,26 @@ public class SongDetailView extends JPanel {
 
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         buttonPanel.add(addPlaylistButton);
+
+        return buttonPanel;
+    }
+
+    private Component deleteSongButton() {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false);
+
+        deleteSongButton.setBackground(Color.BLACK);
+        deleteSongButton.setForeground(Color.LIGHT_GRAY);
+        deleteSongButton.setFont(new Font("Apple Casual", Font.BOLD, 10));
+        //Border Settings
+        deleteSongButton.setBorderPainted(true);
+        deleteSongButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
+        deleteSongButton.setPreferredSize(new Dimension(100,25));
+
+        deleteSongButton.setVisible(false);
+
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        buttonPanel.add(deleteSongButton);
 
         return buttonPanel;
     }
@@ -263,9 +288,7 @@ public class SongDetailView extends JPanel {
 
         data[0][5] = String.format("%02d:%02d", minutes, seconds);;
 
-
         tableModel.setDataVector(data, column);
-
         tableModel.fireTableDataChanged();
 
         // Update the text inside the lyrics textarea
@@ -273,7 +296,6 @@ public class SongDetailView extends JPanel {
 
         revalidate();
         repaint();
-
     }
 
     /*
@@ -319,6 +341,7 @@ public class SongDetailView extends JPanel {
      */
     private void resizeColumnWidth(JTable table) {
         TableColumnModel columnModel = table.getColumnModel();
+
         for (int column = 0; column < table.getColumnCount(); column++) {
             int width = 150;
             for (int row = 0; row < table.getRowCount(); row++) {
@@ -387,5 +410,38 @@ public class SongDetailView extends JPanel {
     public void lyricsError(String message) {
         textArea.setText("Error loading lyrics");
         JOptionPane.showMessageDialog(this,message);
+    }
+
+    /**
+     * Activates the button to delete a song
+     */
+    public void enableDeleteSongButton() {
+        deleteSongButton.setVisible(true);
+    }
+
+    /**
+     * Deactivates the button to delete a song
+     */
+    public void disableDeleteSongButton() {
+        deleteSongButton.setVisible(false);
+    }
+
+    private final String DELETE_SONG_DIALOG_TITLE = "Delete song";
+
+    /**
+     * Opens a dialog to confirm song deletion
+     * @param message a String containing the message of the dialog
+     * @return an int representing the selected option
+     */
+    public int confirmSongDeletion(String message) {
+        return JOptionPane.showConfirmDialog(null, message, DELETE_SONG_DIALOG_TITLE, JOptionPane.YES_NO_OPTION);
+    }
+
+    /**
+     * Opens an error dialog
+     * @param message a String containing the error message
+     */
+    public void showErrorDialog(String message) {
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }

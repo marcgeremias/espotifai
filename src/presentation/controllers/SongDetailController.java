@@ -6,8 +6,10 @@ import business.UserManager;
 import business.entities.Playlist;
 import business.entities.Song;
 import persistence.PlaylistDAOException;
+import presentation.views.PlayerView;
 import presentation.views.SongDetailView;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -15,18 +17,18 @@ import java.util.ArrayList;
 public class SongDetailController implements ActionListener, LyricsListener {
     private PlayerViewListener listener;
     private SongDetailView songDetailView;
-    private UserManager userManager;
     private SongManager songManager;
+    private UserManager userManager;
     private PlaylistManager playlistManager;
     private Song currentSong;
-    ArrayList<Playlist> allPlaylists;
+    private ArrayList<Playlist> allPlaylists;
 
     public SongDetailController(PlayerViewListener listener, SongDetailView songDetailView, UserManager userManager,
                              SongManager songManager, PlaylistManager playlistManager) {
         this.listener = listener;
         this.songDetailView = songDetailView;
-        this.userManager = userManager;
         this.songManager = songManager;
+        this.userManager = userManager;
         this.playlistManager = playlistManager;
     }
 
@@ -39,6 +41,12 @@ public class SongDetailController implements ActionListener, LyricsListener {
         currentSong = song;
         songDetailView.fillTable(currentSong);
 
+        if (currentSong.getUser().equals(userManager.getCurrentUser())) {
+            songDetailView.enableDeleteSongButton();
+        } else {
+            songDetailView.disableDeleteSongButton();
+        }
+
         // Get all playlists
         try {
             allPlaylists = playlistManager.getCurrentUserPlaylists(userManager.getCurrentUser());
@@ -50,6 +58,8 @@ public class SongDetailController implements ActionListener, LyricsListener {
         songManager.getLyrics(this, currentSong.getTitle(), currentSong.getAuthor());
     }
 
+    private final String DELETE_SONG_CONFIRMATION_MSG = "Are you sure you want to permanently delete the song?";
+    private final String ERROR_DELETE_SONG_MSG = "Cannot delete this song!";
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
@@ -82,6 +92,20 @@ public class SongDetailController implements ActionListener, LyricsListener {
                 ArrayList<Song> listSong = new ArrayList<>();
                 listSong.add(currentSong);
                 listener.playSong(listSong, 0);
+                break;
+            case SongDetailView.BTN_DELETE_SONG:
+                if (songDetailView.confirmSongDeletion(DELETE_SONG_CONFIRMATION_MSG) == JOptionPane.YES_OPTION) {
+                    if (songManager.songCanBeDeleted(currentSong.getId())) {
+                        if (songManager.deleteSong(currentSong.getId())) {
+                            listener.songWasDeleted();
+                            listener.changeView(PlayerView.SONG_LIST_VIEW);
+                        } else {
+                            songDetailView.showErrorDialog("Unexpected error");
+                        }
+                    } else {
+                        songDetailView.showErrorDialog(ERROR_DELETE_SONG_MSG);
+                    }
+                }
                 break;
         }
     }

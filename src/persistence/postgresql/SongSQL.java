@@ -373,8 +373,8 @@ public class SongSQL implements SongDAO {
         try {
             Connection c = DBConfig.getInstance().openConnection();
 
-            if (!deleteSongFile(songID)) return false;
-            if (!deleteCoverImageFile(songID)) return false;
+            //if (!deleteSongFile(songID)) return false;
+            //if (!deleteCoverImageFile(songID)) return false;
 
             String deleteSongSQL = "DELETE FROM " + DBConstants.TABLE_SONG + " WHERE " + DBConstants.COL_ID_SONG + " = ?";
             PreparedStatement deleteSongSTMT = c.prepareStatement(deleteSongSQL);
@@ -383,7 +383,7 @@ public class SongSQL implements SongDAO {
 
             c.close();
             return count > 0;
-        } catch (SQLException | DbxException e) {
+        } catch (SQLException e) {// | DbxException e) {
             throw new SongDAOException(e.getMessage());
         }
     }

@@ -1,10 +1,12 @@
 package presentation.views;
 
 import business.entities.Genre;
+import presentation.views.components.HoverButton;
 import presentation.views.components.PlaceholderTextField;
 import presentation.views.components.TextField;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -14,15 +16,14 @@ import java.util.ArrayList;
 public class AddSongView extends JPanel {
     private PlaceholderTextField titleField;
     private PlaceholderTextField albumField;
-    private PlaceholderTextField albumCover;
     private JComboBox<Genre> genreSelector;
     private JPanel authorPane;
     private JComboBox<String> authorSelector;
     private PlaceholderTextField authorField;
-    private JButton addSongButton;
+    private HoverButton addSongButton;
     private JLabel incorrectFieldLabel;
-    private JButton addFileButton;
-    private JButton addImageButton;
+    private HoverButton addFileButton;
+    private HoverButton addImageButton;
 
     public static final String COMBOBOX_AUTHOR = "COMBOBOX_AUTHOR";
     public static final String BTN_ADD_SONG = "BTN_ADD_SONG";
@@ -51,15 +52,14 @@ public class AddSongView extends JPanel {
 
         titleField = new PlaceholderTextField();
         albumField = new PlaceholderTextField();
-        //albumCover = new PlaceholderTextField();
         genreSelector = new JComboBox<Genre>();
         authorPane = new JPanel();
         authorSelector = new JComboBox<String>();
         authorField = new PlaceholderTextField();
-        addSongButton = new JButton(BUTTON_ADD_MSG);
+        addSongButton = new HoverButton(new Color(131, 29, 233), Color.BLACK, BUTTON_ADD_MSG);
         incorrectFieldLabel = new JLabel();
-        addFileButton = new JButton(BUTTON_SELECT_FILE);
-        addImageButton = new JButton(BUTTON_ADD_IMAGE);
+        addFileButton = new HoverButton(Color.DARK_GRAY, Color.BLACK, BUTTON_SELECT_FILE);
+        addImageButton = new HoverButton(Color.DARK_GRAY, Color.BLACK, BUTTON_ADD_IMAGE);
 
         east.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         east.setPreferredSize(new Dimension(
@@ -124,10 +124,9 @@ public class AddSongView extends JPanel {
         center.add(new TextField(ALBUM_FIELD_PH, albumField));
         center.add(genreSelector);
         center.add(authorPane);
-        center.add(addFileButton);
-        center.add(addImageButton);
-        //center.add(new TextField(ALBUM_COVER_PH, albumCover));
-        center.add(addSongButton);
+        center.add(addFileButton());
+        center.add(addImageButton());
+        center.add(addSongButton());
 
         panel.add(north, BorderLayout.NORTH);
         panel.add(south, BorderLayout.SOUTH);
@@ -174,6 +173,60 @@ public class AddSongView extends JPanel {
         authorPane.add(authorSelector);
         authorField.setVisible(false);
         authorPane.add(new TextField("Author", authorField));
+    }
+
+    private Component addFileButton() {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false);
+
+        addFileButton.setBackground(Color.BLACK);
+        addFileButton.setForeground(Color.LIGHT_GRAY);
+        addFileButton.setFont(new Font("Apple Casual", Font.BOLD, 10));
+        //Border Settings
+        addFileButton.setBorderPainted(true);
+        addFileButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
+        addFileButton.setPreferredSize(new Dimension(100,25));
+
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
+        buttonPanel.add(addFileButton);
+
+        return buttonPanel;
+    }
+
+    private Component addImageButton() {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false);
+
+        addImageButton.setBackground(Color.BLACK);
+        addImageButton.setForeground(Color.LIGHT_GRAY);
+        addImageButton.setFont(new Font("Apple Casual", Font.BOLD, 10));
+        //Border Settings
+        addImageButton.setBorderPainted(true);
+        addImageButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
+        addImageButton.setPreferredSize(new Dimension(100,25));
+
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(1, 0, 6, 0));
+        buttonPanel.add(addImageButton);
+
+        return buttonPanel;
+    }
+
+    private Component addSongButton() {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false);
+
+        addSongButton.setBackground(Color.BLACK);
+        addSongButton.setForeground(Color.LIGHT_GRAY);
+        addSongButton.setFont(new Font("Apple Casual", Font.BOLD, 10));
+        //Border Settings
+        addSongButton.setBorderPainted(true);
+        addSongButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
+        addSongButton.setPreferredSize(new Dimension(100,25));
+
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(6, 0, 2, 0));
+        buttonPanel.add(addSongButton);
+
+        return buttonPanel;
     }
 
     /**
@@ -283,13 +336,11 @@ public class AddSongView extends JPanel {
         titleField.setText(null);
         albumField.setText(null);
         authorField.setText(null);
-        //albumCover.setText(null);
 
         titleField.setBackground(new Color(76, 76, 76));
         albumField.setBackground(new Color(76, 76, 76));
         authorField.setBackground(new Color(76, 76, 76));
-        //albumCover.setBackground(new Color(76, 76, 76));
-        addFileButton.setForeground(Color.BLACK);
+        addFileButton.setForeground(Color.LIGHT_GRAY);
 
         this.revalidate();
     }
@@ -370,7 +421,7 @@ public class AddSongView extends JPanel {
      * Restores the appearance of the file selector button
      */
     public void restoreFileButton() {
-        addFileButton.setForeground(Color.BLACK);
+        addFileButton.setForeground(Color.LIGHT_GRAY);
     }
 
     /**
@@ -418,14 +469,6 @@ public class AddSongView extends JPanel {
      */
     public String getAuthorField() {
         return authorField.getText();
-    }
-
-    /**
-     * Path field text getter
-     * @return a String containing the path of the song
-     */
-    public String getAlbumCover() {
-        return albumCover.getText();
     }
 
     private final String ERROR_DIALOG_TITLE = "Error";

@@ -4,8 +4,7 @@ import persistence.config.APILyrics;
 import presentation.controllers.LyricsListener;
 
 
-public class LyricsLoader extends Thread{
-
+public class LyricsLoader extends Thread {
     private LyricsListener lyricsListener;
     private String author;
     private String songName;
@@ -26,10 +25,6 @@ public class LyricsLoader extends Thread{
 
         } catch (Exception e) {
             lyricsListener.notifyError(e.getMessage());
-
-            e.printStackTrace();
         }
-
-
     }
 }
