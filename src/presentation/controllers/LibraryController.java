@@ -47,7 +47,7 @@ public class LibraryController implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         // The user clicked more than once
-        if (e.getClickCount() >= 1) {
+        if (e.getClickCount() >= 1 && libraryView.getSelectedRow() != -1) {
             listener.showPlaylistDetails(myPlaylists.get(libraryView.getSelectedRow()));
         }
     }

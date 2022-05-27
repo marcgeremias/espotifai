@@ -61,7 +61,7 @@ public class SongListController implements KeyListener, MouseListener {
             listener.playSong(currentSongs, songIndex);
             //reproduce song
         } else if (tableCol > 0){
-            listener.showSongDetails(currentSongs.get(songListView.getTableRow()));
+            listener.showSongDetails(currentSongs.get(songIndex));
         }
     }
 

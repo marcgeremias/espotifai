@@ -362,6 +362,7 @@ public class SongDetailView extends JPanel {
      */
     public void showPlaylists(ArrayList<Playlist> allPlaylists) {
         // Authors JComboBox initialisation
+        playlistSelector.removeAllItems();
         playlistSelector.setBackground(new Color(76, 76, 76));
         playlistSelector.setForeground(Color.GRAY);
         playlistSelector.addItem("Select Playlist");

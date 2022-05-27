@@ -46,7 +46,7 @@ public class HomeController implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         // More than one click
-        if (e.getClickCount() >= 1) {
+        if (e.getClickCount() >= 1 && homeView.getSelectedRow() != -1) {
             listener.showPlaylistDetails(otherPlaylists.get(homeView.getSelectedRow()));
         }
     }

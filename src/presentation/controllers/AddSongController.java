@@ -4,6 +4,7 @@ import business.SongManager;
 import business.UserManager;
 import persistence.SongDAOException;
 import presentation.views.AddSongView;
+import presentation.views.PlayerView;
 
 import javax.sound.sampled.*;
 import java.awt.event.ActionEvent;
@@ -98,6 +99,7 @@ public class AddSongController implements ActionListener {
                     author,
                     path,
                     userManager.getCurrentUser());
+                listener.changeView(PlayerView.SONG_LIST_VIEW);
         } catch (SongDAOException ex) {
             addSongView.showErrorDialog(CREATE_SONG_ERROR);
         } catch (UnsupportedAudioFileException ex) {

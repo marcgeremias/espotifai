@@ -255,6 +255,12 @@ public class PlaylistSQL implements PlaylistDAO {
         }
     }
 
+    /**
+     * Method that gets all the playlists from the current user
+     * @param userId the current user on the database
+     * @return a playlist arraylist with all the playlists from the current user
+     * @throws PlaylistDAOException
+     */
     @Override
     public ArrayList<Playlist> getPlaylistByUserID(String userId) throws PlaylistDAOException {
         try {
@@ -277,6 +283,13 @@ public class PlaylistSQL implements PlaylistDAO {
         }
     }
 
+    /**
+     * This method will return the other playlists that are not from a user.
+     *
+     * @param userId unique identifier of user.
+     * @return (1) List of {@link Playlist} or <b>null</b>
+     * @throws PlaylistDAOException if there is an error storing the data.
+     */
     @Override
     public ArrayList<Playlist> getDifferentPlaylistByUserID(String userId) throws PlaylistDAOException{
         try {
@@ -299,7 +312,14 @@ public class PlaylistSQL implements PlaylistDAO {
         }
     }
 
-
+    /**
+     * This method will return the song index order from a playlist.
+     *
+     * @param playlistId unique identifier of playlist.
+     * @return (1) List of song order or <b>null</b>
+     * @throws PlaylistDAOException if there is an error storing the data.
+     */
+    @Override
     public ArrayList<Integer> getSongOrderByPlaylistId(int playlistId) throws PlaylistDAOException{
         try {
             ArrayList<Integer> arrayListOrder = new ArrayList<>();
@@ -325,10 +345,6 @@ public class PlaylistSQL implements PlaylistDAO {
     }
 
 
-
-
-
-
     /*
     Private method to get playlist object data from result set
      */
@@ -345,14 +361,71 @@ public class PlaylistSQL implements PlaylistDAO {
                 playlists.add(playlist);
             }
         } catch (SQLException e){
-            /*
-                Because DAO is generic and throws a generic Exception we need to make sure that if Exception is
-                thrown that we transform it to a SQLException
-             */
+
             throw new SQLException(e.getMessage());
         }
 
         c.close();
         return playlists.size() > 0 ? playlists : null;
     }
+
+    /**
+     * This method swaps the idSong1 order with the idSong2 inside the playlist selected.
+     *
+     * @param idPlaylist unique identifier of playlist.
+     * @param idSong1 song1 id to swap
+     * @param idSong2 song2 id to swap
+     * @throws PlaylistDAOException if there is an error storing the data.
+     */
+    @Override
+    public void swapSongsOrder(int idPlaylist, int idSong1, int idSong2) throws PlaylistDAOException{
+        try {
+            Connection c = DBConfig.getInstance().openConnection();
+            int prevOrder1 = 0;
+            int prevOrder2 = 0;
+
+            String select1 = "SELECT \"" + PLAYLIST_COL_ORDER + "\" FROM " + DBConstants.TABLE_SONG_PLAYLIST + " WHERE " +
+                    DBConstants.COL_ID_SONG + " = ? AND " + DBConstants.COL_ID_PLAYLIST + " = ?";
+            PreparedStatement select1STMT = c.prepareStatement(select1);
+            select1STMT.setInt(1, idSong1);
+            select1STMT.setInt(2, idPlaylist);
+            ResultSet rs1 = select1STMT.executeQuery();
+            if (rs1.next()) {
+                prevOrder1 = rs1.getInt(1);
+            }
+
+            String select2 = "SELECT \"" + PLAYLIST_COL_ORDER + "\" FROM " + DBConstants.TABLE_SONG_PLAYLIST + " WHERE " +
+                    DBConstants.COL_ID_SONG + " = ? AND " + DBConstants.COL_ID_PLAYLIST + " = ?";
+            PreparedStatement select2STMT = c.prepareStatement(select2);
+            select2STMT.setInt(1, idSong2);
+            select2STMT.setInt(2, idPlaylist);
+            ResultSet rs2 = select2STMT.executeQuery();
+            if (rs2.next()) {
+                prevOrder2 = rs2.getInt(1);
+            }
+
+            String update1 = "UPDATE "+ DBConstants.TABLE_SONG_PLAYLIST + " SET \"" + PLAYLIST_COL_ORDER + "\" = ? " +
+                    "WHERE " + DBConstants.COL_ID_SONG + " = ? AND "+ DBConstants.COL_ID_PLAYLIST + " = ?";
+            PreparedStatement update1STMT = c.prepareStatement(update1);
+            update1STMT.setInt(1, prevOrder2);
+            update1STMT.setInt(2, idSong1);
+            update1STMT.setInt(3, idPlaylist);
+            update1STMT.execute();
+
+            String update2 = "UPDATE "+ DBConstants.TABLE_SONG_PLAYLIST + " SET \"" + PLAYLIST_COL_ORDER + "\" = ? " +
+                    "WHERE " + DBConstants.COL_ID_SONG + " = ? AND "+ DBConstants.COL_ID_PLAYLIST + " = ?";
+            PreparedStatement update2STMT = c.prepareStatement(update2);
+            update2STMT.setInt(1, prevOrder1);
+            update2STMT.setInt(2, idSong2);
+            update2STMT.setInt(3, idPlaylist);
+            update2STMT.execute();
+
+            c.close();
+        } catch (SQLException e) {
+            throw new PlaylistDAOException(e.getMessage());
+
+        }
+    }
+
+
 }

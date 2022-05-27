@@ -49,7 +49,7 @@ public class SongDetailController implements ActionListener, LyricsListener {
 
         // Get all playlists
         try {
-            allPlaylists = playlistManager.getAllPlaylists();
+            allPlaylists = playlistManager.getCurrentUserPlaylists(userManager.getCurrentUser());
         } catch (PlaylistDAOException e) {
         }
         songDetailView.showPlaylists(allPlaylists);

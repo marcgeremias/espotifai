@@ -47,7 +47,7 @@ public class MainController implements MainViewListener {
         // Defining login view and controller
         LoginView loginView = new LoginView();
         loginController = new LoginController(this, loginView, userManager);
-        loginView.registerController(loginController);
+        loginView.registerController(loginController, loginController);
 
         // Defining signup view and controller
         SignUpView signUpView = new SignUpView();

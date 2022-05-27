@@ -108,7 +108,7 @@ public class SongListView extends JPanel {
      * Method that filters a song with a sorter in the search text field
      */
     public void filter() {
-        sorter.setRowFilter(RowFilter.regexFilter(searchField.getText()));
+        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchField.getText()));
     }
 
     /**

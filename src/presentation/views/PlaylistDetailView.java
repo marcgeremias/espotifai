@@ -76,7 +76,9 @@ public class PlaylistDetailView extends JPanel {
     }
 
 
-
+    /**
+     * Constructor method to set up the view
+     */
     public PlaylistDetailView(PlayerViewListener listener) {
         this.listener = listener;
         this.setLayout(new BorderLayout());
@@ -88,6 +90,10 @@ public class PlaylistDetailView extends JPanel {
         this.setOpaque(true);
     }
 
+
+    /*
+     * Method that configures all the south side of the view
+     */
     private Container down() {
         panelPlaylistModify = new JPanel();
 
@@ -152,6 +158,9 @@ public class PlaylistDetailView extends JPanel {
     }
 
 
+    /*
+     * Method that configures all the center side of the view
+     */
     private Component center() {
         tableSongs = new JPanel(new GridLayout());
 
@@ -202,6 +211,15 @@ public class PlaylistDetailView extends JPanel {
         center.setOpaque(false);
         return center;
     }
+
+
+    /**
+     * Method to adds the listener to the song list view JTable columns to acceding or reproducing songs
+     */
+    public void registerMouseController(MouseListener mouseListener) {
+        table.addMouseListener(mouseListener);
+    }
+
 
     /**
      * Method used to fill the jTable playlist songs
@@ -282,6 +300,7 @@ public class PlaylistDetailView extends JPanel {
      * @param notMySongs ArrayList with all songs from the system
      */
     public void fillSongsToAdd(ArrayList<Song> notMySongs) {
+        jSelectSong.removeAllItems();
         for (Song notMySong : notMySongs) {
             jSelectSong.addItem(notMySong.getTitle());
         }
@@ -290,7 +309,7 @@ public class PlaylistDetailView extends JPanel {
      * Getter used to get the actual selected JComboBox
      * @return The song index
      */
-    public int getjSelectSong() {
+    public int getSelectSong() {
         return jSelectSong.getSelectedIndex();
     }
 
@@ -302,12 +321,23 @@ public class PlaylistDetailView extends JPanel {
         panelPlaylistModify.setVisible(enable);
     }
 
+    /**
+     * Method used to notify an error to the user
+     * @param message Message to notify
+     */
     public void notifyError(String message){
         JOptionPane.showMessageDialog(this, message);
     }
 
+    /**
+     * Getter used to know the selected row
+     * @return Returns the selected row
+     */
     public int getSelectedRow(){
         return table.getSelectedRow();
     }
 
+    public int getSelectedCol() {
+        return table.getSelectedColumn();
+    }
 }
