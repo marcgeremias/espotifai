@@ -291,6 +291,7 @@ public class PlaylistDetailView extends JPanel {
      * @param notMySongs ArrayList with all songs from the system
      */
     public void fillSongsToAdd(ArrayList<Song> notMySongs) {
+        jSelectSong.removeAllItems();
         for (Song notMySong : notMySongs) {
             jSelectSong.addItem(notMySong.getTitle());
         }
@@ -299,7 +300,7 @@ public class PlaylistDetailView extends JPanel {
      * Getter used to get the actual selected JComboBox
      * @return The song index
      */
-    public int getjSelectSong() {
+    public int getSelectSong() {
         return jSelectSong.getSelectedIndex();
     }
 
@@ -319,4 +320,7 @@ public class PlaylistDetailView extends JPanel {
         return table.getSelectedRow();
     }
 
+    public int getSelectedCol() {
+        return table.getSelectedColumn();
+    }
 }

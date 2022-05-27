@@ -81,7 +81,7 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
         switch (e.getActionCommand()) {
             case PlaylistDetailView.BTN_ADD_SONG:
                 try {
-                    if(!playlistManager.isSongInsidePlaylist(allSongs.get(playlistDetailView.getjSelectSong()).getId()
+                    if(!playlistManager.isSongInsidePlaylist(allSongs.get(playlistDetailView.getSelectSong()).getId()
                     ,songManager.getAllPlaylistSongs(actualPlaylist.getId()))) {
                         int maxOrder=0;
                         if(songsOrder.size() > 0){
@@ -89,7 +89,7 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
                         }
 
                         playlistManager.addSongToPlaylist(actualPlaylist.getId(),
-                        allSongs.get(playlistDetailView.getjSelectSong()).getId(), maxOrder+1);
+                        allSongs.get(playlistDetailView.getSelectSong()).getId(), maxOrder+1);
                         updateActualPlaylist();
                     }else{
                         playlistDetailView.notifyError("Song already added!");
@@ -147,7 +147,12 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // TODO Play songs
+        int tableCol = playlistDetailView.getSelectedCol();
+        if (tableCol == 0){
+            listener.playSong(mySongs, playlistDetailView.getSelectedRow());
+        } else if (tableCol == 1){
+            listener.showSongDetails(mySongs.get(playlistDetailView.getSelectedRow()));
+        }
     }
 
     @Override

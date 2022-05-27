@@ -122,7 +122,7 @@ public class LoginView extends JPanel {
     /**
      * Method to add the listener to the Login view buttons
      */
-    public void registerController(ActionListener controller) {
+    public void registerController(ActionListener controller, KeyEventDispatcher listener) {
         // Action listener for Create Account button
         createAccountButton.addActionListener(controller);
         createAccountButton.setActionCommand(BTN_CREATE_ACCOUNT);
@@ -130,6 +130,8 @@ public class LoginView extends JPanel {
         // Action listener for Log In button
         loginButton.addActionListener(controller);
         loginButton.setActionCommand(BTN_LOG_IN);
+
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(listener);
     }
 
     /*

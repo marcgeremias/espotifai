@@ -4,10 +4,12 @@ import business.UserManager;
 import presentation.views.LoginView;
 import presentation.views.MainView;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
-public class LoginController implements ActionListener {
+public class LoginController implements ActionListener, KeyEventDispatcher {
 
     private LoginView loginView;
     private MainViewListener listener;
@@ -68,5 +70,13 @@ public class LoginController implements ActionListener {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent e) {
+        if (e.getKeyChar() == '\n'){
+            onLoginClick();
+        }
+        return false;
     }
 }

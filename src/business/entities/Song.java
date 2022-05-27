@@ -11,7 +11,6 @@ public class Song {
     private int duration;
     private String user;
 
-    // TODO: change user to string
     public Song(int id, String title, String album, Genre genre, String author, String imagePath, int duration, String user) {
         this.id = id;
         this.title = title;
