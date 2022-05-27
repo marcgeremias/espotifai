@@ -203,6 +203,15 @@ public class PlaylistDetailView extends JPanel {
         return center;
     }
 
+
+    /**
+     * Method to adds the listener to the song list view JTable columns to acceding or reproducing songs
+     */
+    public void registerMouseController(MouseListener mouseListener) {
+        table.addMouseListener(mouseListener);
+    }
+
+
     /**
      * Method used to fill the jTable playlist songs
      * @param mySongs Songs from the actual playlist

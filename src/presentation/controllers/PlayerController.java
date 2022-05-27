@@ -80,6 +80,7 @@ public class PlayerController implements PlayerViewListener {
         PlaylistDetailView playlistDetailView = new PlaylistDetailView(this);
         playlistDetailController = new PlaylistDetailController(this, playlistDetailView, userManager, songManager, playlistManager);
         playlistDetailView.registerController(playlistDetailController);
+        playlistDetailView.registerMouseController(playlistDetailController);
 
         UserProfileView userProfileView = new UserProfileView();
         userProfileController = new UserProfileController(this, userProfileView, userManager, songManager, playlistManager);
