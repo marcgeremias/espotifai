@@ -72,10 +72,13 @@ public class MainController implements MainViewListener {
         mainView.changeView(card);
     }
 
+    /**
+     * Method that inits all the views needed of the program
+     * @param card the identifier of a view inside a cardLayout
+     */
     public void initViews(String card) {
         if (CARD_PLAYER.equals(card)) {
             playerController.initHomeView();
         }
     }
-
 }

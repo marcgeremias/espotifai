@@ -292,7 +292,15 @@ public class UserProfileView extends JPanel {
     /**
      * Method that creates a confirmation panel when the user clicks the Delete button
      */
-    public void showConfirmationPanel() {
-        JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the account? ");
+    public int showConfirmationPanel() {
+        Object[] options = {"Yes, please", "No, thanks"};
+        return JOptionPane.showOptionDialog(null,
+                "Are you sure you want to delete the account",
+                "Delete",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
     }
 }

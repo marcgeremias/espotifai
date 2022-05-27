@@ -102,7 +102,8 @@ public class PlayerManager {
         // Value is in microseconds and it needs conversion to seconds
         currentSongLength = (int) (player.getMicrosecondLength() / 1000000);
         // delay is represented in ms so 1000 is 1 second
-        songTimer = new Timer(1000, listener);
+        if (songTimer == null) songTimer = new Timer(1000, listener);
+        else songTimer.restart();
         songTimer.setActionCommand(TMR_INTERRUPT);
         // Set audio control for player
         audioControl = (FloatControl) player.getControl(FloatControl.Type.MASTER_GAIN);

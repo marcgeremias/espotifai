@@ -21,7 +21,7 @@ public class MainView extends JFrame {
         configureWindow();
     }
 
-    /**
+    /*
      * Method to configure the window panel of the view
      */
     private void configureWindow() {

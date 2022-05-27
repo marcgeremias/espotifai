@@ -19,7 +19,6 @@ public class LibraryView extends JPanel {
 
     // Boolean indicating if it's the first time acceding to the view
     private boolean notFirstTime;
-    private int selectedRow;
 
     private static final String[] columns = {"Name"};
 
@@ -33,8 +32,8 @@ public class LibraryView extends JPanel {
     }
 
     /*
-     * Method to configure all the center components and containers of the SongList view
-     * @return the JPanel with all the center of the Login view
+     * Method to configure all the center components and containers of the Library view
+     * @return the JPanel with all the center of the Library view
      */
     private Component center() {
         tableSongs = new JPanel(new GridLayout());
@@ -114,35 +113,11 @@ public class LibraryView extends JPanel {
         for (int i = 0; i < myPlaylists.size(); i++) {
             data[i][0] = myPlaylists.get(i).getName();
             data[i][1] = String.valueOf(myPlaylists.get(i).getOwner());
-            //tableModel.insertRow(i, new Object[] {data[i][0]});
-            //System.out.println(myPlaylists.get(i).getName());
-            //System.out.println(myPlaylists.get(i).getOwner());
         }
         tableModel.setDataVector(data, columns);
 
         revalidate();
         repaint();
-
-        // Saving the selected Row to know what song is
-        /*table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-            public void valueChanged(ListSelectionEvent event) {
-                if (event.getValueIsAdjusting()) {
-                    // If it's the first time, the table says the selected row
-                    if (!notFirstTime) {
-                        selectedRow = table.getSelectedRow();
-                    } else {
-                        // If it's not the first time, if the first index has not changed, the new selected row
-                        // it's the last index and the same for last index.
-                        if (selectedRow == event.getFirstIndex()) {
-                            selectedRow = event.getLastIndex();
-                        } else {
-                            selectedRow = event.getFirstIndex();
-                        }
-                    }
-                }
-                System.out.println("EVENT: " + selectedRow);
-            }
-        });*/
     }
 
     /*
@@ -151,35 +126,25 @@ public class LibraryView extends JPanel {
      * @param table the JTable we are resizing
      */
     private void resizeColumnWidth(JTable table) {
-        //Se obtiene el modelo de la columna
         TableColumnModel columnModel = table.getColumnModel();
-        //Se obtiene el total de las columnas
         for (int column = 0; column < table.getColumnCount(); column++) {
-            //Establecemos un valor minimo para el ancho de la columna
-            int width = 150; //Min Width
-            //Obtenemos el numero de filas de la tabla
+            int width = 150;
             for (int row = 0; row < table.getRowCount(); row++) {
-                //Obtenemos el renderizador de la tabla
                 TableCellRenderer renderer = table.getCellRenderer(row, column);
-                //Creamos un objeto para preparar el renderer
                 Component comp = table.prepareRenderer(renderer, row, column);
-                //Establecemos el width segun el valor maximo del ancho de la columna
                 width = Math.max(comp.getPreferredSize().width + 1, width);
-
             }
-            //Se establece una condicion para no sobrepasar el valor de 300
-            //Esto es Opcional
+
             if (width > 300) {
                 width = 300;
             }
-            //Se establece el ancho de la columna
             columnModel.getColumn(column).setPreferredWidth(width);
         }
     }
 
     /*
-     * Method that returns the JTable with the search song label
-     * @return the JTable with the search song label
+     * Method that returns the JTable with the title label
+     * @return the JTable with the title label
      */
     private Component titleLabel(){
         JLabel searchSong = new JLabel("MY PLAYLISTS");
@@ -194,7 +159,19 @@ public class LibraryView extends JPanel {
         return panelSearch;
     }
 
+    /**
+     * Method that gets the selected row of the table
+     * @return the selected row of the table
+     */
     public int getSelectedRow() {
         return table.getSelectedRow();
+    }
+
+    /**
+     * Method that shows an error message if we could not get the user playlists
+     * @param message the message of the error we want to display
+     */
+    public void getPlaylistError(String message) {
+        JOptionPane.showMessageDialog(this,message);
     }
 }
