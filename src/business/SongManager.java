@@ -21,15 +21,13 @@ public class SongManager {
     private static int NUMBER_OF_GENRES = 16;
 
     private SongDAO songDAO;
-    //private UserDAO userDAO;
-    //private PlaybackManager playbackManager;
     private PlaylistManager playlistManager;
+    private PlayerManager playerManager;
 
-    //public SongManager(SongDAO songDAO, UserDAO userDAO) {
-    public SongManager(SongDAO songDAO, PlaylistManager playlistManager) {
+    public SongManager(SongDAO songDAO, PlaylistManager playlistManager, PlayerManager playerManager) {
         this.songDAO = songDAO;
         this.playlistManager = playlistManager;
-        //this.userDAO = userDAO;
+        this.playerManager = playerManager;
     }
 
     /**
@@ -155,10 +153,6 @@ public class SongManager {
         songDAO.createSong(song, file, image);
     }
 
-    public AudioInputStream getSongStream(Song song) throws SongDAOException{
-        return songDAO.downloadSong(song.getId());
-    }
-
     public BufferedImage getCoverImage(int songID) throws SongDAOException {
         return songDAO.downloadCoverImage(songID);
     }
@@ -177,11 +171,6 @@ public class SongManager {
         return data;
     }
 
-    // TODO: Remove method, now for testing purposes
-    private boolean isPlaying() {
-        return true;
-    }
-
     /**
      * Checks whether the song to delete is currently playing and whether it belongs
      * to the currently logged-in user
@@ -190,13 +179,13 @@ public class SongManager {
      * @return a boolean indicating whether the song can be deleted
      */
     public boolean songCanBeDeleted(int songID, String currentUser) {
-        Song song = null;
         try {
-            song = songDAO.getSongByID(songID);
+            Song song = songDAO.getSongByID(songID);
             // check song not playing
+            if (playerManager.getCurrentSong() == songID) System.out.println("Song is playing");
             // check song user is current user
-            return song.getUser().equals(currentUser) && !isPlaying();
-            //return playerManager.currentSongPlaying() != song && song.getUser().equals(currentUser);
+            //return song.getUser().equals(currentUser) && !isPlaying();
+            return playerManager.getCurrentSong() != songID && song.getUser().equals(currentUser);
         } catch (SongDAOException e) {
             return false;
         }

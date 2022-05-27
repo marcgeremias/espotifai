@@ -6,8 +6,10 @@ import business.UserManager;
 import business.entities.Playlist;
 import business.entities.Song;
 import persistence.PlaylistDAOException;
+import presentation.views.PlayerView;
 import presentation.views.SongDetailView;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -15,8 +17,8 @@ import java.util.ArrayList;
 public class SongDetailController implements ActionListener, LyricsListener {
     private PlayerViewListener listener;
     private SongDetailView songDetailView;
-    private UserManager userManager;
     private SongManager songManager;
+    private UserManager userManager;
     private PlaylistManager playlistManager;
     private Song currentSong;
     ArrayList<Playlist> allPlaylists;
@@ -25,8 +27,8 @@ public class SongDetailController implements ActionListener, LyricsListener {
                              SongManager songManager, PlaylistManager playlistManager) {
         this.listener = listener;
         this.songDetailView = songDetailView;
-        this.userManager = userManager;
         this.songManager = songManager;
+        this.userManager = userManager;
         this.playlistManager = playlistManager;
     }
 
@@ -84,6 +86,18 @@ public class SongDetailController implements ActionListener, LyricsListener {
                 ArrayList<Song> listSong = new ArrayList<>();
                 listSong.add(currentSong);
                 listener.playSong(listSong, 0);
+                break;
+            case SongDetailView.BTN_DELETE_SONG:
+                if (songDetailView.confirmSongDeletion("Are you sure you want to permanently delete the song?") == JOptionPane.YES_OPTION) {
+                    if (songManager.songCanBeDeleted(currentSong.getId(), userManager.getCurrentUser())) {
+                        if (songManager.deleteSong(currentSong.getId())) {
+                            playlistManager.removeSongFromPlaylists(currentSong.getId());
+                            listener.changeView(PlayerView.SONG_LIST_VIEW);
+                        }
+                    } else {
+                        songDetailView.showErrorDialog("Cannot delete this song!");
+                    }
+                }
                 break;
         }
     }

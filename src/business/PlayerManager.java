@@ -1,6 +1,7 @@
 package business;
 
 import business.entities.Song;
+import persistence.SongDAO;
 import persistence.SongDAOException;
 import presentation.controllers.MusicPlaybackController;
 
@@ -23,7 +24,7 @@ public class PlayerManager {
     public static final int MIN_VOL = -30;
     public static final int MAX_VOL = 6;
 
-    private SongManager songManager;
+    private SongDAO songDAO;
 
     private ArrayList<Song> songs;
     private int currentSongIndex;
@@ -40,10 +41,10 @@ public class PlayerManager {
 
     /**
      * Public constructor for the PlayerManager class
-     * @param songManager instance of {@link SongManager}
+     * @param songDAO instance of {@link SongDAO}
      */
-    public PlayerManager(SongManager songManager) {
-        this.songManager = songManager;
+    public PlayerManager(SongDAO songDAO) {
+        this.songDAO = songDAO;
         this.songs = new ArrayList<>();
         this.currentSongIndex = 0;
         this.repeatPlaylist = false;
@@ -73,7 +74,7 @@ public class PlayerManager {
         this.songs = songs;
         this.currentSongIndex = index;
         // This method needs to be called everytime because a new thread needs to be initiated
-        songLoader = new SongLoader(songManager);
+        songLoader = new SongLoader(songDAO);
         songLoader.load(songs);
         songLoader.start();
     }
@@ -95,7 +96,7 @@ public class PlayerManager {
             int indexWhere = tmp.indexOf(songs.get(currentSongIndex).getId());
             ais = AudioSystem.getAudioInputStream(new File("./res/songs/" + tmp.get(indexWhere) + ".wav"));
         } else {
-            ais = songManager.getSongStream(songs.get(currentSongIndex));
+            ais = songDAO.downloadSong(songs.get(currentSongIndex).getId());
         }
         player = AudioSystem.getClip();
         player.open(ais);
@@ -284,5 +285,13 @@ public class PlayerManager {
         this.randomSong = false;
         this.currentSongLength = 0;
         trail = null;
+    }
+
+    /**
+     * Gets the ID of the song that's currently playing
+     * @return an integer representing the song
+     */
+    public int getCurrentSong() {
+        return songs.get(currentSongIndex).getId();
     }
 }

@@ -1,6 +1,7 @@
 package business;
 
 import business.entities.Song;
+import persistence.SongDAO;
 import persistence.SongDAOException;
 
 import javax.sound.sampled.AudioFileFormat;
@@ -19,17 +20,17 @@ public class SongLoader extends Thread{
 
     private static final String SONGS_DIRECTORY = "./res/songs";
 
-    private SongManager songManager;
+    private SongDAO songDAO;
 
     private ArrayList<Song> songs;
     private ArrayList<Integer> songsSavedIndex;
 
     /**
      * Constructor for the SongLoader class. This constructor will load all the existing songs in the array
-     * @param songManager instance of {@link SongManager} to download the songs
+     * @param songDAO instance of {@link SongDAO} to download the songs
      */
-    public SongLoader(SongManager songManager){
-        this.songManager = songManager;
+    public SongLoader(SongDAO songDAO){
+        this.songDAO = songDAO;
         songsSavedIndex = new ArrayList<>();
         File directory = new File(SONGS_DIRECTORY);
         if (!directory.exists()){
@@ -55,13 +56,12 @@ public class SongLoader extends Thread{
             for (Song song : songs) {
                 //If song is already downloaded we don't want to download it again
                 if (!songsSavedIndex.contains(song.getId())) {
-                    AudioInputStream ais = songManager.getSongStream(song);
+                    AudioInputStream ais = songDAO.downloadSong(song.getId());
                     AudioSystem.write(ais, AudioFileFormat.Type.WAVE, new File(SONGS_DIRECTORY + "/" + song.getId() + ".wav"));
                     songsSavedIndex.add(song.getId());
                 }
             }
         } catch (SongDAOException | IOException e) {
-            e.printStackTrace();
         }
     }
 
