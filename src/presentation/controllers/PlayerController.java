@@ -29,6 +29,8 @@ public class PlayerController implements PlayerViewListener {
     private final UserProfileController userProfileController;
     private final MusicPlaybackController musicPlaybackController;
     private final SideMenuController sideMenuController;
+    private final CreatePlaylistController createPlaylistController;
+
     private UserManager userManager;
     private PlayerManager playerManager;
     // We need to make the view an attribute due to a dynamic JTable
@@ -75,7 +77,7 @@ public class PlayerController implements PlayerViewListener {
         songDetailController = new SongDetailController(this, songDetailView, userManager, songManager, playlistManager);
         songDetailView.registerController(songDetailController);
 
-        PlaylistDetailView playlistDetailView = new PlaylistDetailView(this);
+        PlaylistDetailView playlistDetailView = new PlaylistDetailView();
         playlistDetailController = new PlaylistDetailController(this, playlistDetailView, userManager, songManager, playlistManager);
         playlistDetailView.registerController(playlistDetailController);
 
@@ -87,9 +89,13 @@ public class PlayerController implements PlayerViewListener {
         musicPlaybackController = new MusicPlaybackController(musicPlaybackView, songManager, playerManager);
         musicPlaybackView.registerController(musicPlaybackController);
 
+        CreatePlaylistView createPlaylistView = new CreatePlaylistView();
+        createPlaylistController = new CreatePlaylistController(this, createPlaylistView, userManager, songManager, playlistManager);
+        createPlaylistView.registerController(createPlaylistController);
+
         this.playerView.setContents(musicPlaybackView, sideMenuView);
         this.playerView.initCardLayout(defaultView, songListView, libraryView, addSongView,
-                                        songDetailView, playlistDetailView, userProfileView);
+                                        songDetailView, playlistDetailView, userProfileView, createPlaylistView);
         this.playerView.changeView(PlayerView.DEFAULT_VIEW);
     }
 
@@ -134,6 +140,9 @@ public class PlayerController implements PlayerViewListener {
             case PlayerView.USER_PROFILE_VIEW:
                 userProfileController.setNickname(userManager.getCurrentUser());
                 break;
+
+            case PlayerView.CREATE_PLAYLIST:
+                break;
         }
     }
 
@@ -141,6 +150,7 @@ public class PlayerController implements PlayerViewListener {
     public void logout() {
         userManager.logOutUser();
         playerManager.clearData();
+        musicPlaybackController.clearData();
         listener.changeView(MainView.CARD_LOG_IN);
         playerView.changeView(DefaultView.HOME_VIEW);
     }

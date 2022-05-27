@@ -167,16 +167,24 @@ public class UserManager {
         return isDigit && isUpperCase && isLowerCase;
     }
 
+    /**
+     * Setter of currentUser
+     * @param user the actual user
+     */
     public void setCurrentUser(String user) {
         currentUser = user;
     }
 
+    /**
+     * Getter of currentUser
+     * @return the current user
+     */
     public String getCurrentUser() {
         return currentUser;
     }
 
     /**
-     * Method that deletes the current user from RAM
+     * Method that deletes the current user from RAM (logs out)
      */
     public void logOutUser(){
         this.currentUser = null;

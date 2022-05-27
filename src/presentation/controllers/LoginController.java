@@ -27,6 +27,7 @@ public class LoginController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case LoginView.BTN_CREATE_ACCOUNT:
+                // We change to the create account view and clear the login info
                 listener.changeView(MainView.CARD_SIGN_UP);
                 loginView.clearAllInfo();
                 break;
@@ -38,11 +39,13 @@ public class LoginController implements ActionListener {
         }
     }
 
-    /**
+    /*
      * Method that performs the actions when the user clicks the login button
      */
     private void onLoginClick() {
+        // We check the user and password of the text fields and get a result
         int validationResult = userManager.checkUserAndPassword(loginView.getUserField(), loginView.getPasswordField());
+
         if (validationResult == UserManager.USER_CORRECTLY_ADDED) {
             // Correct credentials
             userManager.setCurrentUser(loginView.getUserField());

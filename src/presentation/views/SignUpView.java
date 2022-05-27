@@ -1,11 +1,9 @@
 package presentation.views;
 
-import presentation.controllers.MainViewListener;
 import presentation.views.components.*;
 import presentation.views.components.TextField;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
@@ -48,7 +46,7 @@ public class SignUpView extends JPanel {
     }
 
     /**
-     * Method to add the listener to the Login view buttons
+     * Method to add the listener to the sign up view buttons
      */
     public void registerController(ActionListener controller) {
         // Action listener for Join button
@@ -60,7 +58,7 @@ public class SignUpView extends JPanel {
         goBackButton.setActionCommand(BTN_GO_BACK);
     }
 
-    /**
+    /*
      * Method that configures the left side of the view
      * @return a panel with all the components of the left side of the view
      */
@@ -72,7 +70,7 @@ public class SignUpView extends JPanel {
     }
 
     /*
-     * Method that shows a button to indicate if the user wants to go back to the login view
+     * Method that shows a button to indicate if the user wants to go back to the sign up view
      * @return the panel with the button of going back inside
      */
     private Component goBackButton() {
@@ -91,7 +89,7 @@ public class SignUpView extends JPanel {
         return panelAuxGoBack;
     }
 
-    /**
+    /*
      * Method to configure all the center components and containers of the SignUp view
      * @return the JPanel with all the center of the SignUp view
      */
@@ -110,7 +108,7 @@ public class SignUpView extends JPanel {
         return center;
     }
 
-    /**
+    /*
      * Method that shows a button to join the platform and finish registering
      * @return the panel with the button of joining the program inside
      */
@@ -131,7 +129,7 @@ public class SignUpView extends JPanel {
         return panelAuxJoin;
     }
 
-    /**
+    /*
      * Method that shows a label representing a borderline after the logo
      * @return the panel with the borderline inside
      */
@@ -149,8 +147,8 @@ public class SignUpView extends JPanel {
         return panelAux;
     }
 
-    /**
-     * Method to configure the image of the logo inside the center of the Login view
+    /*
+     * Method to configure the image of the logo inside the center of the sign up view
      * @return a JPanel with the logo image well configured
      */
     private Component logoImage() {
@@ -165,7 +163,7 @@ public class SignUpView extends JPanel {
         return logoImagePanel;
     }
 
-    /**
+    /*
      * Method that is in charge of the right margins of the window.
      * @return the container with the panel margin (without opacity)
      */
@@ -177,11 +175,11 @@ public class SignUpView extends JPanel {
         return downMargin;
     }
 
-    /**
+    /*
      * Method that is in charge of the top margins of the window.
      * @return the container with the panel margin (without opacity)
      */
-    public Container upMargin() {
+    private Container upMargin() {
         JPanel upMargin = new JPanel();
         upMargin.setOpaque(false);
         upMargin.setBorder(BorderFactory.createEmptyBorder(150, 0, 0, 0));
@@ -189,11 +187,11 @@ public class SignUpView extends JPanel {
         return upMargin;
     }
 
-    /**
+    /*
      * Method that is in charge of the bottom of the window.
      * @return the container with the panel (without opacity) and the incorrect input label
      */
-    public Container down() {
+    private Container down() {
         JPanel downMargin = new JPanel();
         downMargin.setOpaque(false);
         downMargin.setBorder(BorderFactory.createEmptyBorder(0, 0, 120, 0));
@@ -281,6 +279,9 @@ public class SignUpView extends JPanel {
         incorrectInput.setVisible(false);
     }
 
+    /**
+     * Method that clears all the fields of the text fields
+     */
     public void clearFields() {
         usernameField.setText("");
         emailField.setText("");
@@ -290,6 +291,9 @@ public class SignUpView extends JPanel {
         incorrectInput.setVisible(false);
     }
 
+    /**
+     * Method that clears all the information in the view (fields + reset errors)
+     */
     public void clearAllInfo(){
         clearFields();
         resetIncorrectInputs();

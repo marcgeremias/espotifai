@@ -1,6 +1,5 @@
 package presentation.views;
 
-import presentation.controllers.MainViewListener;
 import presentation.views.components.*;
 import presentation.views.components.TextField;
 
@@ -44,7 +43,7 @@ public class LoginView extends JPanel {
 
     }
 
-    /**
+    /*
      * Method to configure all the center components and containers of the Login view
      * @return the JPanel with all the center of the Login view
      */
@@ -61,7 +60,7 @@ public class LoginView extends JPanel {
         return center;
     }
 
-    /**
+    /*
      * Method to configure the image of the logo inside the center of the Login view
      * @return a JPanel with the logo image well configured
      */
@@ -78,11 +77,11 @@ public class LoginView extends JPanel {
         return logoImagePanel;
     }
 
-    /**
+    /*
      * Method to configure the Create Account button inside the center of the Login view
      * @return a JPanel with the Create Account button well configured
      */
-    public Container createAccountButton() {
+    private Container createAccountButton() {
         createAccountButton = new JButton();
         createAccountButton.setText("Create an account ");
         createAccountButton.setBorder(BorderFactory.createEmptyBorder(4, 90, 4, 90));
@@ -99,11 +98,11 @@ public class LoginView extends JPanel {
         return panelAuxStart;
     }
 
-    /**
+    /*
      * Method to configure the Login button inside the center of the Login view
      * @return a JPanel with the Login button well configured
      */
-    public Container loginButton() {
+    private Container loginButton() {
         loginButton = new JButton();
         loginButton.setText("Log In ");
         loginButton.setBorder(BorderFactory.createEmptyBorder(4, 10, 4, 10));
@@ -133,11 +132,11 @@ public class LoginView extends JPanel {
         loginButton.setActionCommand(BTN_LOG_IN);
     }
 
-    /**
+    /*
      * Method that is in charge of the top margins of the window.
      * @return the container with the panel margin (without opacity)
      */
-    public Container upMargin() {
+    private Container upMargin() {
         JPanel upMargin = new JPanel();
         upMargin.setOpaque(false);
         upMargin.setBorder(BorderFactory.createEmptyBorder(150, 0, 0, 0));
@@ -145,11 +144,11 @@ public class LoginView extends JPanel {
         return upMargin;
     }
 
-    /**
+    /*
      * Method that is in charge of the bottom of the window.
      * @return the container with the panel (without opacity) and the incorrect input label
      */
-    public Container down() {
+    private Container down() {
         JPanel downMargin = new JPanel();
         downMargin.setOpaque(false);
         downMargin.setBorder(BorderFactory.createEmptyBorder(0, 0, 120, 0));
@@ -204,18 +203,24 @@ public class LoginView extends JPanel {
 
     /**
      * Method called when all credentials are correct
-     * but the User could not be saved correctly into the databate
+     * but the User could not be saved correctly into the database
      */
     public void errorAddingUser() {
         incorrectInput.setText("ERROR: The User could not be added to the database.");
         incorrectInput.setVisible(true);
     }
 
+    /**
+     * Method that clears the fields of the text fields
+     */
     public void clearFields() {
         userField.setText("");
         passwordField.setText("");
     }
 
+    /**
+     * Method that clears all the information in the view (fields + reset errors)
+     */
     public void clearAllInfo() {
         clearFields();
         userField.setBackground(new Color(76, 76, 76));
