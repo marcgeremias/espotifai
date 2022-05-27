@@ -13,9 +13,11 @@ import presentation.views.SongDetailView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class PlaylistDetailController implements ActionListener {
+public class PlaylistDetailController implements ActionListener, MouseListener {
     private PlayerViewListener listener;
     private PlaylistDetailView playlistDetailView;
     private UserManager userManager;
@@ -114,10 +116,57 @@ public class PlaylistDetailController implements ActionListener {
                 break;
 
             case PlaylistDetailView.BTN_MOVE_UP:
+                try {
+                    if(playlistDetailView.getSelectedRow() > 0){
+
+                        playlistManager.swapSongsOrder(actualPlaylist.getId(),
+                                mySongs.get(playlistDetailView.getSelectedRow()).getId(),
+                                mySongs.get(playlistDetailView.getSelectedRow()-1).getId());
+                    }
+                    updateActualPlaylist();
+                } catch (PlaylistDAOException ex) {
+                    ex.printStackTrace();
+                }
+
                 break;
 
             case PlaylistDetailView.BTN_MOVE_DOWN:
+                try {
+                    if(playlistDetailView.getSelectedRow() < mySongs.size()-1){
+                        playlistManager.swapSongsOrder(actualPlaylist.getId(),
+                                mySongs.get(playlistDetailView.getSelectedRow()).getId(),
+                                mySongs.get(playlistDetailView.getSelectedRow()+1).getId());
+                    }
+                    updateActualPlaylist();
+                } catch (PlaylistDAOException ex) {
+                    ex.printStackTrace();
+                }
                 break;
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // TODO Play songs
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }

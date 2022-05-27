@@ -17,7 +17,7 @@ public interface PlaylistDAO {
      *
      * @param playlist instance of {@link Playlist} with the values to persist.
      * @return (1) true if the playlist is created correctly or (2) false if it fails to persist.
-     * @throws Exception if there is an error storing the data.
+     * @throws PlaylistDAOException if there is an error storing the data.
      */
     boolean createPlaylist(Playlist playlist) throws PlaylistDAOException;
 
@@ -28,7 +28,7 @@ public interface PlaylistDAO {
      * @param userDAO    DataAccessObject of {@link business.entities.User} to reconstruct playlist object.
      * @param songDAO    DataAccessObject of {@link business.entities.Song} to reconstruct playlist object.
      * @return (1) instance of {@link Playlist} or (2) <b>null</b>.
-     * @throws Exception if there is an error storing the data.
+     * @throws PlaylistDAOException if there is an error storing the data.
      */
     Playlist getPlaylistByID(int playlistID, UserDAO userDAO, SongDAO songDAO) throws PlaylistDAOException;
 
@@ -36,7 +36,7 @@ public interface PlaylistDAO {
      * This method will return all playlists stored in the system.
      *
      * @return (1) List of {@link Playlist} or <b>null</b>
-     * @throws Exception if there is an error storing the data.
+     * @throws PlaylistDAOException if there is an error storing the data.
      */
     ArrayList<Playlist> getAllPlaylists() throws PlaylistDAOException;
 
@@ -53,7 +53,7 @@ public interface PlaylistDAO {
      * @param userDAO DataAccessObject of {@link business.entities.User} to reconstruct playlist object.
      * @param songDAO DataAccessObject of {@link business.entities.Song} to reconstruct playlist object.
      * @return (1) List of {@link Playlist} or <b>null</b>
-     * @throws Exception if there is an error storing the data.
+     * @throws PlaylistDAOException if there is an error storing the data.
      */
     ArrayList<Playlist> getPlaylistsByTitle(String title, UserDAO userDAO, SongDAO songDAO) throws PlaylistDAOException;
 
@@ -65,7 +65,7 @@ public interface PlaylistDAO {
      * @param playlistID unique identifier for the playlist
      * @param songID     unique identifier for the song
      * @return (1) true if the song is added correctly to the playlist, (2) false otherwise
-     * @throws Exception if there is an error storing the data.
+     * @throws PlaylistDAOException if there is an error storing the data.
      */
     boolean addSongToPlaylist(int playlistID, int songID, int order) throws PlaylistDAOException;
 
@@ -75,7 +75,7 @@ public interface PlaylistDAO {
      * @param playlistID unique identifier for the playlist
      * @param songID     unique identifier for the song
      * @return (1) true if the song is deleted correctly from the playlist, (2) false otherwise.
-     * @throws Exception if there is an error storing the data.
+     * @throws PlaylistDAOException if there is an error storing the data.
      */
     boolean deleteSongFromPlaylist(int playlistID, int songID) throws PlaylistDAOException;
 
@@ -85,7 +85,7 @@ public interface PlaylistDAO {
      *
      * @param playlist instance of {@link Playlist} containing the new values to persist
      * @return (1) true if the playlist is updated correctly, (2) false otherwise.
-     * @throws Exception if there is an error storing the data.
+     * @throws PlaylistDAOException if there is an error storing the data.
      */
     boolean updatePlaylist(Playlist playlist) throws PlaylistDAOException;
 
@@ -94,7 +94,7 @@ public interface PlaylistDAO {
      *
      * @param playlistID unique identifier of playlist.
      * @return (1) true if the playlist is deleted correctly, (2) false otherwise.
-     * @throws Exception if there is an error storing the data.
+     * @throws PlaylistDAOException if there is an error storing the data.
      */
     boolean deletePlaylist(int playlistID) throws PlaylistDAOException;
 
@@ -103,7 +103,7 @@ public interface PlaylistDAO {
      *
      * @param userId unique identifier of user.
      * @return (1) List of {@link Playlist} or <b>null</b>
-     * @throws Exception if there is an error storing the data.
+     * @throws PlaylistDAOException if there is an error storing the data.
      */
     ArrayList<Playlist> getPlaylistByUserID(String userId) throws PlaylistDAOException;
 
@@ -112,9 +112,26 @@ public interface PlaylistDAO {
      *
      * @param userId unique identifier of user.
      * @return (1) List of {@link Playlist} or <b>null</b>
-     * @throws Exception if there is an error storing the data.
+     * @throws PlaylistDAOException if there is an error storing the data.
      */
     ArrayList<Playlist> getDifferentPlaylistByUserID(String userId) throws PlaylistDAOException;
 
+    /**
+     * This method will return the song index order from a playlist.
+     *
+     * @param playlistId unique identifier of playlist.
+     * @return (1) List of song order or <b>null</b>
+     * @throws PlaylistDAOException if there is an error storing the data.
+     */
     ArrayList<Integer> getSongOrderByPlaylistId(int playlistId) throws PlaylistDAOException;
+
+    /**
+     * This method swaps the idSong1 order with the idSong2 inside the playlist selected.
+     *
+     * @param idPlaylist unique identifier of playlist.
+     * @param idSong1 song1 id to swap
+     * @param idSong2 song2 id to swap
+     * @throws PlaylistDAOException if there is an error storing the data.
+     */
+    void swapSongsOrder(int idPlaylist, int idSong1, int idSong2) throws PlaylistDAOException;
 }
