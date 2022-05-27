@@ -1,5 +1,6 @@
 package business;
 
+import business.entities.Genre;
 import business.entities.Song;
 import persistence.SongDAO;
 import persistence.SongDAOException;
@@ -53,10 +54,10 @@ public class PlayerManager {
 
     /**
      * This method will recieve a list of songs and an index and set the values accordingly
-     * @param songs list of songs that will be played in order
+     * @param songsStr list of songs that will be played in order
      * @param index index start of the song we want to reproduce first
      */
-    public void initSongPlaylist(ArrayList<Song> songs, int index) {
+    public void initSongPlaylist(ArrayList<ArrayList<String>> songsStr, int index) {
         if (player != null){
             if (player.isRunning()){
                 player.stop();
@@ -71,7 +72,20 @@ public class PlayerManager {
         for (int i = 0; i < index; i++) {
             trail.push(i);
         }
-        this.songs = songs;
+
+        for (ArrayList<String> strings : songsStr) {
+            this.songs.add(new Song(
+                    Integer.parseInt(strings.get(SongManager.SONG_ID_ATTRIBUTE_INDEX)),
+                    strings.get(SongManager.SONG_TITLE_ATTRIBUTE_INDEX),
+                    strings.get(SongManager.SONG_ALBUM_ATTRIBUTE_INDEX),
+                    Genre.valueOf(strings.get(SongManager.SONG_GENRE_ATTRIBUTE_INDEX)),
+                    strings.get(SongManager.SONG_AUTHOR_ATTRIBUTE_INDEX),
+                    strings.get(SongManager.SONG_IMAGE_ATTRIBUTE_INDEX),
+                    Integer.parseInt(strings.get(SongManager.SONG_DURATION_ATTRIBUTE_INDEX)),
+                    strings.get(SongManager.SONG_USER_ATTRIBUTE_INDEX)
+            ));
+        }
+        //this.songs = songs;
         this.currentSongIndex = index;
         // This method needs to be called everytime because a new thread needs to be initiated
         songLoader = new SongLoader(songDAO);
@@ -253,10 +267,10 @@ public class PlayerManager {
      * @param songs list of songs
      * @return true if the lists match, false otherwise
      */
-    public boolean isSamePlaylist(ArrayList<Song> songs) {
+    public boolean isSamePlaylist(ArrayList<ArrayList<String>> songs) {
         if (this.songs.size() > 0) {
             for (int i = 0; i < this.songs.size(); i++) {
-                if (this.songs.get(i) != songs.get(i)) {
+                if (this.songs.get(i).getId() != Integer.parseInt(songs.get(i).get(SongManager.SONG_ID_ATTRIBUTE_INDEX))) {
                     return false;
                 }
             }
@@ -294,7 +308,6 @@ public class PlayerManager {
      */
     public int getCurrentSong() {
         if (songs.isEmpty() || !player.isRunning()) {
-            //killSong();
             return -1;
         }
         return songs.get(currentSongIndex).getId();

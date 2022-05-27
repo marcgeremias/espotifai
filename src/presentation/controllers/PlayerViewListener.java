@@ -8,7 +8,7 @@ import business.entities.Playlist;
 
 public interface PlayerViewListener {
 
-    void showSongDetails(Song song);
+    void showSongDetails(ArrayList<String> song);
 
     /**
      * This method will pass a String containing a key identifier for a card in order to switch the card layout.
@@ -26,7 +26,7 @@ public interface PlayerViewListener {
      * @param songs list of {@link Song} with all the songs in the playlist
      * @param index index representing the position of the song to be played in the playback interface
      */
-    void playSong(ArrayList<Song> songs, int index);
+    void playSong(ArrayList<ArrayList<String>> songs, int index);
 
     void showPlaylistDetails(Playlist playlist);
 

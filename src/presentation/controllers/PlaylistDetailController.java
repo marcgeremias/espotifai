@@ -23,8 +23,8 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
     private UserManager userManager;
     private SongManager songManager;
     private PlaylistManager playlistManager;
-    private ArrayList<Song> mySongs;
-    private ArrayList<Song> allSongs;
+    private ArrayList<ArrayList<String>> mySongs;
+    private ArrayList<ArrayList<String>> allSongs;
     private Playlist actualPlaylist;
     private ArrayList<Integer> songsOrder;
 
@@ -52,9 +52,7 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
         try {
             updateActualPlaylist();
         } catch (PlaylistDAOException e) {
-            e.printStackTrace();
         }
-
 
         // Check if the users have permissions
         playlistDetailView.setModify(userManager.getCurrentUser().equals(actualPlaylist.getOwner()));
@@ -63,8 +61,7 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
         playlistDetailView.fillSongsToAdd(allSongs);
     }
 
-
-    /**
+    /*
      * Method that updates the songs from the actual playlist
      */
     private void updateActualPlaylist() throws PlaylistDAOException {
@@ -72,8 +69,6 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
         songsOrder = playlistManager.getPlaylistSongsOrder(actualPlaylist.getId());
         playlistDetailView.fillTable(mySongs, actualPlaylist);
     }
-
-
 
     /**
      * Method of the interface ActionListener that does all the appropriate actions when a button is pressed
@@ -84,15 +79,19 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
         switch (e.getActionCommand()) {
             case PlaylistDetailView.BTN_ADD_SONG:
                 try {
-                    if(!playlistManager.isSongInsidePlaylist(allSongs.get(playlistDetailView.getSelectSong()).getId()
-                    ,songManager.getAllPlaylistSongs(actualPlaylist.getId()))) {
+                    if(!playlistManager.isSongInsidePlaylist(
+                            Integer.parseInt(allSongs.get(playlistDetailView.getSelectSong()).get(SongManager.SONG_ID_ATTRIBUTE_INDEX)),
+                            songManager.getAllPlaylistSongs(actualPlaylist.getId()))) {
                         int maxOrder=0;
                         if(songsOrder.size() > 0){
                             maxOrder = songsOrder.get(songsOrder.size()-1);
                         }
 
-                        playlistManager.addSongToPlaylist(actualPlaylist.getId(),
-                        allSongs.get(playlistDetailView.getSelectSong()).getId(), maxOrder+1);
+                        playlistManager.addSongToPlaylist(
+                                actualPlaylist.getId(),
+                                Integer.parseInt(allSongs.get(playlistDetailView.getSelectSong()).get(SongManager.SONG_ID_ATTRIBUTE_INDEX)),
+                                maxOrder+1
+                        );
                         updateActualPlaylist();
                     }else{
                         playlistDetailView.notifyError("Song already added!");
@@ -105,11 +104,12 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
             case PlaylistDetailView.BTN_DELATE_SONG:
                 try {
                     if(playlistDetailView.getSelectedRow() >= 0){
-                        if(playlistManager.isSongInsidePlaylist(mySongs.get(playlistDetailView.getSelectedRow()).getId()
-                                ,songManager.getAllPlaylistSongs(actualPlaylist.getId()))){
+                        if(playlistManager.isSongInsidePlaylist(Integer.parseInt(
+                                mySongs.get(playlistDetailView.getSelectedRow()).get(SongManager.SONG_ID_ATTRIBUTE_INDEX))
+                                ,songManager.getAllPlaylistSongs(actualPlaylist.getId()))) {
 
                             playlistManager.deleteSongFromPlaylist(actualPlaylist.getId(),
-                                    mySongs.get(playlistDetailView.getSelectedRow()).getId());
+                                    Integer.parseInt(mySongs.get(playlistDetailView.getSelectedRow()).get(SongManager.SONG_ID_ATTRIBUTE_INDEX)));
                             updateActualPlaylist();
                         }
                     }
@@ -123,8 +123,9 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
                     if(playlistDetailView.getSelectedRow() > 0){
 
                         playlistManager.swapSongsOrder(actualPlaylist.getId(),
-                                mySongs.get(playlistDetailView.getSelectedRow()).getId(),
-                                mySongs.get(playlistDetailView.getSelectedRow()-1).getId());
+                                Integer.parseInt(mySongs.get(playlistDetailView.getSelectedRow()).get(SongManager.SONG_ID_ATTRIBUTE_INDEX)),
+                                Integer.parseInt(mySongs.get(playlistDetailView.getSelectedRow()-1).get(SongManager.SONG_ID_ATTRIBUTE_INDEX))
+                        );
                     }
                     updateActualPlaylist();
                 } catch (PlaylistDAOException ex) {
@@ -140,8 +141,9 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
                     if(playlistDetailView.getSelectedRow() < mySongs.size()-1
                             && playlistDetailView.getSelectedRow() >= 0){
                         playlistManager.swapSongsOrder(actualPlaylist.getId(),
-                                mySongs.get(playlistDetailView.getSelectedRow()).getId(),
-                                mySongs.get(playlistDetailView.getSelectedRow()+1).getId());
+                                Integer.parseInt(mySongs.get(playlistDetailView.getSelectedRow()).get(SongManager.SONG_ID_ATTRIBUTE_INDEX)),
+                                Integer.parseInt(mySongs.get(playlistDetailView.getSelectedRow()+1).get(SongManager.SONG_ID_ATTRIBUTE_INDEX))
+                        );
                     }
                     updateActualPlaylist();
                 } catch (PlaylistDAOException ex) {

@@ -1,7 +1,7 @@
 package presentation.views;
 
+import business.SongManager;
 import business.entities.Playlist;
-import business.entities.Song;
 import presentation.views.components.HoverButton;
 import presentation.views.components.JImagePanel;
 
@@ -273,16 +273,16 @@ public class SongDetailView extends JPanel {
      * Method that fills the JTable with the songs in the system and personalize the JTable
      * @param currentSong an arraylist of songs that are currently in the system
      */
-    public void fillTable(Song currentSong) {
+    public void fillTable(ArrayList<String> currentSong) {
         // Inserting the data to each column
         String[][] data = new String[1][6];
-        data[0][0] = currentSong.getTitle();
-        data[0][1] = String.valueOf(currentSong.getGenre());
-        data[0][2] = currentSong.getAlbum();
-        data[0][3] = currentSong.getAuthor();
-        data[0][4] = currentSong.getUser();
+        data[0][0] = currentSong.get(SongManager.SONG_TITLE_ATTRIBUTE_INDEX);
+        data[0][1] = String.valueOf(currentSong.get(SongManager.SONG_GENRE_ATTRIBUTE_INDEX));
+        data[0][2] = currentSong.get(SongManager.SONG_ALBUM_ATTRIBUTE_INDEX);
+        data[0][3] = currentSong.get(SongManager.SONG_AUTHOR_ATTRIBUTE_INDEX);
+        data[0][4] = currentSong.get(SongManager.SONG_USER_ATTRIBUTE_INDEX);
 
-        int totalSecs = currentSong.getDuration();
+        int totalSecs = Integer.parseInt(currentSong.get(SongManager.SONG_DURATION_ATTRIBUTE_INDEX));
         int minutes = (totalSecs % 3600) / 60;
         int seconds = totalSecs % 60;
 

@@ -37,7 +37,7 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
     private int songSecondPos;
 
     /**
-     * Public cunstructor for the music playback controller class
+     * Public constructor for the music playback controller class
      * @param musicPlaybackView instance of the View to manage
      * @param songManager instance of {@link SongManager} to be used by the controller
      * @param playerManager istance of {@link PlayerManager} to be used by the controller
@@ -165,7 +165,7 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
      * @param songs list of songs in the playlist to be loaded
      * @param index index corresponding with the desired starting song
      */
-    public void initSongPlaylist(ArrayList<Song> songs, int index) {
+    public void initSongPlaylist(ArrayList<ArrayList<String>> songs, int index) {
         try {
             // If it's not same playlist, load new playlist
             if (!playerManager.isSamePlaylist(songs)) {

@@ -1,5 +1,6 @@
 package presentation.views;
 
+import business.SongManager;
 import business.entities.Playlist;
 import business.entities.Song;
 import presentation.controllers.PlayerViewListener;
@@ -7,8 +8,6 @@ import presentation.views.components.HoverButton;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -40,22 +39,20 @@ public class PlaylistDetailView extends JPanel {
 
     private PlayerViewListener listener;
 
-
-    private JButton delateSong;
+    private JButton deleteSong;
     private JComboBox<String> jSelectSong;
     private JButton addSong;
 
     private JButton upButton;
     private JButton downButton;
 
-
     /**
      * Method to add the listener to the Login view buttons
      */
     public void registerController(ActionListener controller) {
         // Action listener for delate song
-        delateSong.addActionListener(controller);
-        delateSong.setActionCommand(BTN_DELATE_SONG);
+        deleteSong.addActionListener(controller);
+        deleteSong.setActionCommand(BTN_DELATE_SONG);
 
         // Action listener for add song
         addSong.addActionListener(controller);
@@ -65,7 +62,6 @@ public class PlaylistDetailView extends JPanel {
         jSelectSong.addActionListener(controller);
         jSelectSong.setActionCommand(JCOMBOX_SONG);
 
-
         // Action listener for move down
         downButton.addActionListener(controller);
         downButton.setActionCommand(BTN_MOVE_DOWN);
@@ -74,7 +70,6 @@ public class PlaylistDetailView extends JPanel {
         upButton.addActionListener(controller);
         upButton.setActionCommand(BTN_MOVE_UP);
     }
-
 
     /**
      * Constructor method to set up the view
@@ -90,7 +85,6 @@ public class PlaylistDetailView extends JPanel {
         this.setOpaque(true);
     }
 
-
     /*
      * Method that configures all the south side of the view
      */
@@ -105,16 +99,14 @@ public class PlaylistDetailView extends JPanel {
         jSelectSong.setBackground(new Color(76, 76, 76));
         jSelectSong.setForeground(Color.GRAY);
 
-
-        delateSong = new HoverButton(Color.DARK_GRAY, Color.BLACK, "Delete Song");
-        delateSong.setBackground(Color.BLACK);
-        delateSong.setForeground(Color.LIGHT_GRAY);
-        delateSong.setFont(new Font("Apple Casual", Font.BOLD, 10));
+        deleteSong = new HoverButton(Color.DARK_GRAY, Color.BLACK, "Delete Song");
+        deleteSong.setBackground(Color.BLACK);
+        deleteSong.setForeground(Color.LIGHT_GRAY);
+        deleteSong.setFont(new Font("Apple Casual", Font.BOLD, 10));
         //Border Settings
-        delateSong.setBorderPainted(true);
-        delateSong.setBorder(new LineBorder((Color.LIGHT_GRAY)));
-        delateSong.setPreferredSize(new Dimension(100,25));
-
+        deleteSong.setBorderPainted(true);
+        deleteSong.setBorder(new LineBorder((Color.LIGHT_GRAY)));
+        deleteSong.setPreferredSize(new Dimension(100,25));
 
         addSong = new HoverButton(Color.DARK_GRAY, Color.BLACK, "Add Song");
         addSong.setBackground(Color.BLACK);
@@ -124,7 +116,6 @@ public class PlaylistDetailView extends JPanel {
         addSong.setBorderPainted(true);
         addSong.setBorder(new LineBorder((Color.LIGHT_GRAY)));
         addSong.setPreferredSize(new Dimension(100,25));
-
 
         upButton = new HoverButton(Color.DARK_GRAY, Color.BLACK, "Move Up");
         upButton.setBackground(Color.BLACK);
@@ -144,15 +135,12 @@ public class PlaylistDetailView extends JPanel {
         downButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
         downButton.setPreferredSize(new Dimension(100,25));
 
-
-
-        panelPlaylistModify.add(delateSong);
+        panelPlaylistModify.add(deleteSong);
         panelPlaylistModify.add(addSong);
         panelPlaylistModify.add(jSelectSong);
 
         panelPlaylistModify.add(downButton);
         panelPlaylistModify.add(upButton);
-
 
         return panelPlaylistModify;
     }
@@ -226,7 +214,7 @@ public class PlaylistDetailView extends JPanel {
      * @param mySongs Songs from the actual playlist
      * @param playlistSelected Actual playlist selected
      */
-    public void fillTable(ArrayList<Song> mySongs, Playlist playlistSelected) {
+    public void fillTable(ArrayList<ArrayList<String>> mySongs, Playlist playlistSelected) {
         // Setting the playlist Title
         playlistTitle.setText(playlistSelected.getName());
         String[][] data = null;
@@ -238,11 +226,11 @@ public class PlaylistDetailView extends JPanel {
             // Inserting the data to each column
 
             for (int i = 0; i < mySongs.size(); i++) {
-                data[i][0] = mySongs.get(i).getTitle();
-                data[i][1] = String.valueOf(mySongs.get(i).getGenre());
-                data[i][2] = mySongs.get(i).getAlbum();
-                data[i][3] = mySongs.get(i).getAuthor();
-                data[i][4] = mySongs.get(i).getUser();
+                data[i][0] = mySongs.get(i).get(SongManager.SONG_TITLE_ATTRIBUTE_INDEX);
+                data[i][1] = String.valueOf(mySongs.get(i).get(SongManager.SONG_GENRE_ATTRIBUTE_INDEX));
+                data[i][2] = mySongs.get(i).get(SongManager.SONG_ALBUM_ATTRIBUTE_INDEX);
+                data[i][3] = mySongs.get(i).get(SongManager.SONG_AUTHOR_ATTRIBUTE_INDEX);
+                data[i][4] = mySongs.get(i).get(SongManager.SONG_USER_ATTRIBUTE_INDEX);
             }
         }
 
@@ -299,10 +287,11 @@ public class PlaylistDetailView extends JPanel {
      * Method used to fill the comboBox song options
      * @param notMySongs ArrayList with all songs from the system
      */
-    public void fillSongsToAdd(ArrayList<Song> notMySongs) {
+    public void fillSongsToAdd(ArrayList<ArrayList<String>> notMySongs) {
         jSelectSong.removeAllItems();
-        for (Song notMySong : notMySongs) {
-            jSelectSong.addItem(notMySong.getTitle());
+
+        for (ArrayList<String> notMySong : notMySongs) {
+            jSelectSong.addItem(notMySong.get(SongManager.SONG_TITLE_ATTRIBUTE_INDEX));
         }
     }
     /**

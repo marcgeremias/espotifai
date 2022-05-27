@@ -20,7 +20,7 @@ public class SongDetailController implements ActionListener, LyricsListener {
     private SongManager songManager;
     private UserManager userManager;
     private PlaylistManager playlistManager;
-    private Song currentSong;
+    private ArrayList<String> currentSong;
     private ArrayList<Playlist> allPlaylists;
 
     public SongDetailController(PlayerViewListener listener, SongDetailView songDetailView, UserManager userManager,
@@ -36,12 +36,12 @@ public class SongDetailController implements ActionListener, LyricsListener {
      * Method that initializes the songDetailView by getting all current songs of the system
      * and passing the selected one to the table
      */
-    public void initView(Song song) {
+    public void initView(ArrayList<String> song) {
         // Get song selected
         currentSong = song;
         songDetailView.fillTable(currentSong);
 
-        if (currentSong.getUser().equals(userManager.getCurrentUser())) {
+        if (currentSong.get(SongManager.SONG_USER_ATTRIBUTE_INDEX).equals(userManager.getCurrentUser())) {
             songDetailView.enableDeleteSongButton();
         } else {
             songDetailView.disableDeleteSongButton();
@@ -55,7 +55,11 @@ public class SongDetailController implements ActionListener, LyricsListener {
         songDetailView.showPlaylists(allPlaylists);
 
         // Get lyrics
-        songManager.getLyrics(this, currentSong.getTitle(), currentSong.getAuthor());
+        songManager.getLyrics(
+                this,
+                currentSong.get(SongManager.SONG_TITLE_ATTRIBUTE_INDEX),
+                currentSong.get(SongManager.SONG_AUTHOR_ATTRIBUTE_INDEX)
+        );
     }
 
     private final String DELETE_SONG_CONFIRMATION_MSG = "Are you sure you want to permanently delete the song?";
@@ -78,7 +82,9 @@ public class SongDetailController implements ActionListener, LyricsListener {
                             maxOrder = arrayListOrder.get(arrayListOrder.size()-1);
                         }
 
-                        if (playlistManager.addSongToPlaylist(playlist.getId(), currentSong.getId(), maxOrder+1)) {
+                        if (playlistManager.addSongToPlaylist(playlist.getId(),
+                                Integer.parseInt(currentSong.get(SongManager.SONG_ID_ATTRIBUTE_INDEX)),
+                                maxOrder+1)) {
                             System.out.println("THE SONG HAS CORRECTLY ADDED");
                         }
 
@@ -89,14 +95,14 @@ public class SongDetailController implements ActionListener, LyricsListener {
 
             case SongDetailView.BTN_PLAY_IMAGE:
                 // We reproduce the song pressed
-                ArrayList<Song> listSong = new ArrayList<>();
+                ArrayList<ArrayList<String>> listSong = new ArrayList<>();
                 listSong.add(currentSong);
                 listener.playSong(listSong, 0);
                 break;
             case SongDetailView.BTN_DELETE_SONG:
                 if (songDetailView.confirmSongDeletion(DELETE_SONG_CONFIRMATION_MSG) == JOptionPane.YES_OPTION) {
-                    if (songManager.songCanBeDeleted(currentSong.getId())) {
-                        if (songManager.deleteSong(currentSong.getId())) {
+                    if (songManager.songCanBeDeleted(Integer.parseInt(currentSong.get(SongManager.SONG_ID_ATTRIBUTE_INDEX)))) {
+                        if (songManager.deleteSong(Integer.parseInt(currentSong.get(SongManager.SONG_ID_ATTRIBUTE_INDEX)))) {
                             listener.songWasDeleted();
                             listener.changeView(PlayerView.SONG_LIST_VIEW);
                         } else {
