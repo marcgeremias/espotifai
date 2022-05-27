@@ -10,38 +10,15 @@ import java.awt.*;
  */
 public class PlaceholderPasswordField extends JPasswordField {
 
+    // The placeholder we are going to set
     private String placeholder;
 
     public PlaceholderPasswordField() {
-
-    }
-
-    public PlaceholderPasswordField(
-            final Document pDoc,
-            final String pText,
-            final int pColumns)
-    {
-        super(pDoc, pText, pColumns);
-    }
-
-    public PlaceholderPasswordField(final int pColumns) {
-        super(pColumns);
-    }
-
-    public PlaceholderPasswordField(final String pText) {
-        super(pText);
-    }
-
-    public PlaceholderPasswordField(final String pText, final int pColumns) {
-        super(pText, pColumns);
-    }
-
-    public String getPlaceholder() {
-        return placeholder;
     }
 
     @Override
     protected void paintComponent(final Graphics pG) {
+        // We override the paint component to se the placeholder inside
         super.paintComponent(pG);
 
         if (placeholder == null || placeholder.length() == 0 || getText().length() > 0) {
@@ -57,8 +34,11 @@ public class PlaceholderPasswordField extends JPasswordField {
                 .getMaxAscent() + getInsets().top);
     }
 
-    public void setPlaceholder(final String s) {
-        placeholder = s;
+    /**
+     * Setter of the placeholder
+     * @param placeholder the placeholder
+     */
+    public void setPlaceholder(final String placeholder) {
+        this.placeholder = placeholder;
     }
-
 }

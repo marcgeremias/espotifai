@@ -10,7 +10,11 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class CreatePlaylistView extends JPanel{
-    public static final String BTN_CREATE_PLAYLIST = "BTN_ADD_SONG";
+
+    // The button to create playlist
+    public static final String BTN_CREATE_PLAYLIST = "BTN_CREATE_PLAYLIST";
+
+    // Attributes
     private HoverButton createButton;
     private PlaceholderTextField nameField;
 
@@ -18,15 +22,17 @@ public class CreatePlaylistView extends JPanel{
     public CreatePlaylistView() {
         this.setLayout(new BorderLayout());
         this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
+
         this.add(labelsPane("CREATE PLAYLIST", 30), BorderLayout.NORTH);
         this.add(center(), BorderLayout.CENTER);
         this.add(southMargin(), BorderLayout.SOUTH);
+
         this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         this.setOpaque(true);
     }
 
     /**
-     * Method to add the listener to the playlist buttons
+     * Method to add the listener to the create playlist button
      */
     public void registerController(ActionListener controller) {
         createButton.setActionCommand(BTN_CREATE_PLAYLIST);
@@ -47,9 +53,13 @@ public class CreatePlaylistView extends JPanel{
         center.add(new TextField("Name", nameField));
         center.add(createButton());
         center.setOpaque(false);
+
         return center;
     }
 
+    /*
+     * Method that creates a JPanel with a button to create playlist inside
+     */
     private Component createButton() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
@@ -57,6 +67,7 @@ public class CreatePlaylistView extends JPanel{
         createButton.setBackground(Color.BLACK);
         createButton.setForeground(Color.LIGHT_GRAY);
         createButton.setFont(new Font("Apple Casual", Font.BOLD, 10));
+
         //Border Settings
         createButton.setBorderPainted(true);
         createButton.setBorder(new LineBorder((Color.LIGHT_GRAY)));
@@ -68,6 +79,9 @@ public class CreatePlaylistView extends JPanel{
         return buttonPanel;
     }
 
+    /*
+     * Method that creates a JPanel with a personalized message and Font size
+     */
     private Component labelsPane(String message, int size) {
         JLabel searchSong = new JLabel(message);
         searchSong.setForeground(Color.WHITE);
@@ -78,13 +92,21 @@ public class CreatePlaylistView extends JPanel{
         panelSearch.setBorder(BorderFactory.createEmptyBorder(40,15,0,15));
         panelSearch.setOpaque(false);
         panelSearch.add(searchSong);
+
         return panelSearch;
     }
 
+    /**
+     * Method that gets the text inside the text field
+     * @return the text inside the text field
+     */
     public String getNameField() {
         return nameField.getText();
     }
 
+    /*
+     * Method that makes the south margin to compact all the other components on south
+     */
     private Component southMargin() {
         JPanel southMargin = new JPanel();
         southMargin.setOpaque(false);
@@ -93,6 +115,10 @@ public class CreatePlaylistView extends JPanel{
         return southMargin;
     }
 
+    /**
+     * Method that shows an error when the created playlist could not correctly add
+     * @param message the message with the error to display
+     */
     public void createPlaylistError(String message) {
         JOptionPane.showMessageDialog(this,message);
     }

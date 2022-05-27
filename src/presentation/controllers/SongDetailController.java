@@ -31,8 +31,8 @@ public class SongDetailController implements ActionListener, LyricsListener {
     }
 
     /**
-     * Method that initializes the songListView by getting all current songs of the system
-     * and passing them to the JTable of all songs in the system
+     * Method that initializes the songDetailView by getting all current songs of the system
+     * and passing the selected one to the table
      */
     public void initView(Song song) {
         // Get song selected
@@ -47,25 +47,17 @@ public class SongDetailController implements ActionListener, LyricsListener {
         songDetailView.showPlaylists(allPlaylists);
 
         // Get lyrics
-        System.out.println(currentSong.getTitle());
-        System.out.println(currentSong.getAuthor());
-        //songManager.getLyrics(this, currentSong.getTitle(), currentSong.getAuthor());
         songManager.getLyrics(this, currentSong.getTitle(), currentSong.getAuthor());
-
-        //System.out.println(songLyrics);
-
-        //if (songLyrics != null) {
-        //}
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case SongDetailView.BTN_ADD_PLAYLIST:
-                System.out.println("ADD PLAYLIST CLICKED");
-
+                // We get the playlist selected and add that song to the playlist
                 int playlistIndex = songDetailView.getPlaylistIndexSelected();
 
+                // If index is - 1 there is no playlist selected
                 if (playlistIndex != -1) {
                     Playlist playlist = allPlaylists.get(playlistIndex);
 
@@ -80,7 +72,7 @@ public class SongDetailController implements ActionListener, LyricsListener {
                 break;
 
             case SongDetailView.BTN_PLAY_IMAGE:
-                System.out.println("REPRODUCE MUSICCC");
+                // We reproduce the song pressed
                 ArrayList<Song> listSong = new ArrayList<>();
                 listSong.add(currentSong);
                 listener.playSong(listSong, 0);

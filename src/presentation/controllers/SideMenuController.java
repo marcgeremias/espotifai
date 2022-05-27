@@ -30,6 +30,7 @@ public class SideMenuController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        // We change to the button clicked view
         switch (e.getActionCommand()) {
             case SideMenuView.HOME_BUTTON:
                 listener.changeView(PlayerView.DEFAULT_VIEW);
@@ -51,7 +52,6 @@ public class SideMenuController implements ActionListener {
                 break;
             case SideMenuView.LOGOUT:
                 listener.logout();
-
                 break;
             default:
                 break;
