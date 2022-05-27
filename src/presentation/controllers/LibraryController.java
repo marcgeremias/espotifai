@@ -5,9 +5,7 @@ import business.SongManager;
 import business.UserManager;
 import business.entities.Playlist;
 import persistence.PlaylistDAOException;
-import presentation.views.HomeView;
 import presentation.views.LibraryView;
-import presentation.views.PlayerView;
 
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -39,6 +37,8 @@ public class LibraryController implements MouseListener {
         try {
             myPlaylists = playlistManager.getCurrentUserPlaylists(currentUser);
         } catch (PlaylistDAOException e) {
+            // We display an error if we could not get the user playlists
+            libraryView.getPlaylistError("The Playlist could not be added");
         }
 
         libraryView.fillTable(myPlaylists);
@@ -46,7 +46,7 @@ public class LibraryController implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Single click
+        // The user clicked more than once
         if (e.getClickCount() >= 1) {
             listener.showPlaylistDetails(myPlaylists.get(libraryView.getSelectedRow()));
         }

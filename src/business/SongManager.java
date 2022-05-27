@@ -30,8 +30,8 @@ public class SongManager {
     }
 
     /**
-     * Inicializa the getLyrics thread.
-     * @param lyricsListener listner for grt lyrics.
+     * Initializes the getLyrics thread.
+     * @param lyricsListener listener for grt lyrics.
      * @param songTitle song title.
      * @param songAuthor song author.
      */
@@ -173,8 +173,4 @@ public class SongManager {
 
         return data;
     }
-
-
-
-
 }

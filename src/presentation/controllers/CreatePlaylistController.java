@@ -3,15 +3,12 @@ package presentation.controllers;
 import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
-import business.entities.Playlist;
 import persistence.PlaylistDAOException;
-import presentation.views.AddSongView;
 import presentation.views.CreatePlaylistView;
 import presentation.views.PlayerView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 public class CreatePlaylistController implements ActionListener {
 
@@ -36,9 +33,14 @@ public class CreatePlaylistController implements ActionListener {
         switch (e.getActionCommand()) {
             case CreatePlaylistView.BTN_CREATE_PLAYLIST:
                 try {
-                    playlistManager.deleteSongFromPlaylist(createPlaylistView.getNameField(), userManager.getCurrentUser());
+                    // We create the user's playlist
+                    playlistManager.createPlaylist(createPlaylistView.getNameField(), userManager.getCurrentUser());
+
+                    // We change the view to library view to show that the playlist has correctly added
                     listener.changeView(PlayerView.LIBRARY_VIEW);
+
                 } catch (PlaylistDAOException ex) {
+                    // We display an error if the playlist could not be created
                     createPlaylistView.createPlaylistError("The Playlist could not be added");
                 }
                 break;

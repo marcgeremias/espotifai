@@ -3,8 +3,6 @@ package presentation.views;
 import business.entities.Playlist;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.*;
 import java.awt.*;
@@ -163,6 +161,10 @@ public class HomeView extends JPanel {
         return panelSearch;
     }
 
+    /**
+     * We get the selected row of the table
+     * @return an int with the index of the selected row
+     */
     public int getSelectedRow() {
         return table.getSelectedRow();
     }

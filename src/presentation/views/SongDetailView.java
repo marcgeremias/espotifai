@@ -12,7 +12,6 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -139,7 +138,7 @@ public class SongDetailView extends JPanel {
         return north;
     }
 
-    /**
+    /*
      * Method to configure all the center components and containers of the PlaylistDetail view
      * @return the JPanel with all the center of the PlaylistDetail view
      */
@@ -222,7 +221,7 @@ public class SongDetailView extends JPanel {
         repaint();
     }
 
-    /**
+    /*
      * Method that sets the play image
      * @return JPanel with the button image
      */

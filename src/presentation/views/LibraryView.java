@@ -197,4 +197,8 @@ public class LibraryView extends JPanel {
     public int getSelectedRow() {
         return table.getSelectedRow();
     }
+
+    public void getPlaylistError(String message) {
+        JOptionPane.showMessageDialog(this,message);
+    }
 }

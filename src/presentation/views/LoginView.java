@@ -44,7 +44,7 @@ public class LoginView extends JPanel {
 
     }
 
-    /**
+    /*
      * Method to configure all the center components and containers of the Login view
      * @return the JPanel with all the center of the Login view
      */
@@ -61,7 +61,7 @@ public class LoginView extends JPanel {
         return center;
     }
 
-    /**
+    /*
      * Method to configure the image of the logo inside the center of the Login view
      * @return a JPanel with the logo image well configured
      */
@@ -211,11 +211,17 @@ public class LoginView extends JPanel {
         incorrectInput.setVisible(true);
     }
 
+    /**
+     * Method that clears the fields of the text fields
+     */
     public void clearFields() {
         userField.setText("");
         passwordField.setText("");
     }
 
+    /**
+     * Method that clears all the information in the view (fields + reset errors)
+     */
     public void clearAllInfo() {
         clearFields();
         userField.setBackground(new Color(76, 76, 76));

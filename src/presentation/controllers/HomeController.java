@@ -6,12 +6,7 @@ import business.UserManager;
 import business.entities.Playlist;
 import persistence.PlaylistDAOException;
 import presentation.views.HomeView;
-import presentation.views.LibraryView;
-import presentation.views.PlayerView;
-import presentation.views.StatsView;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -38,8 +33,10 @@ public class HomeController implements MouseListener {
      * and passing them to the JTable of all songs in the system
      */
     public void initView() {
+        // We get the current user
         String currentUser = userManager.getCurrentUser();
         try {
+            // We get the other playlist
             otherPlaylists = playlistManager.getOtherUserPlaylists(currentUser);
         } catch (PlaylistDAOException e) {
         }
@@ -49,7 +46,7 @@ public class HomeController implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Single click
+        // More than one click
         if (e.getClickCount() >= 1) {
             listener.showPlaylistDetails(otherPlaylists.get(homeView.getSelectedRow()));
         }
