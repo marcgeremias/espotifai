@@ -75,7 +75,8 @@ public class SongSQL implements SongDAO {
 
             if (rs.next()) {
                 c.close();
-                return uploadSong(songFile, rs.getInt(1)) && uploadCoverImage(imageFile, rs.getInt(1));
+                uploadCoverImage(imageFile, rs.getInt(1));
+                return uploadSong(songFile, rs.getInt(1));
             } else {
                 c.close();
                 return false;
@@ -439,16 +440,18 @@ public class SongSQL implements SongDAO {
         }
     }
 
-    private boolean uploadCoverImage(File cover, int songID) throws DbxException, IOException {
-        InputStream in = new FileInputStream(cover);
-        DbxClientV2 client = APIConfig.getInstance().getClient();
+    private void uploadCoverImage(File cover, int songID) throws DbxException, IOException {
+        try {
+            InputStream in = new FileInputStream(cover);
+            DbxClientV2 client = APIConfig.getInstance().getClient();
 
-        FileMetadata metadata = client.files().uploadBuilder(COVERS_ROOT_FOLDER+"/"+songID+"."+IMAGE_FORMAT)
-                .withMode(WriteMode.ADD)
-                .withClientModified(new Date(cover.lastModified()))
-                .uploadAndFinish(in);
-
-        return true;
+            FileMetadata metadata = client.files().uploadBuilder(COVERS_ROOT_FOLDER + "/" + songID + "." + IMAGE_FORMAT)
+                    .withMode(WriteMode.ADD)
+                    .withClientModified(new Date(cover.lastModified()))
+                    .uploadAndFinish(in);
+        } catch (DbxException | IOException e){
+            // Even if song fails to upload we dont care and we re
+        }
     }
 
     /*
