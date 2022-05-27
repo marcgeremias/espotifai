@@ -76,7 +76,9 @@ public class PlaylistDetailView extends JPanel {
     }
 
 
-
+    /**
+     * Constructor method to set up the view
+     */
     public PlaylistDetailView(PlayerViewListener listener) {
         this.listener = listener;
         this.setLayout(new BorderLayout());
@@ -88,6 +90,10 @@ public class PlaylistDetailView extends JPanel {
         this.setOpaque(true);
     }
 
+
+    /*
+     * Method that configures all the south side of the view
+     */
     private Container down() {
         panelPlaylistModify = new JPanel();
 
@@ -152,6 +158,9 @@ public class PlaylistDetailView extends JPanel {
     }
 
 
+    /*
+     * Method that configures all the center side of the view
+     */
     private Component center() {
         tableSongs = new JPanel(new GridLayout());
 
@@ -312,10 +321,18 @@ public class PlaylistDetailView extends JPanel {
         panelPlaylistModify.setVisible(enable);
     }
 
+    /**
+     * Method used to notify an error to the user
+     * @param message Message to notify
+     */
     public void notifyError(String message){
         JOptionPane.showMessageDialog(this, message);
     }
 
+    /**
+     * Getter used to know the selected row
+     * @return Returns the selected row
+     */
     public int getSelectedRow(){
         return table.getSelectedRow();
     }

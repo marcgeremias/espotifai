@@ -29,6 +29,9 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
     private ArrayList<Integer> songsOrder;
 
 
+    /**
+     * Constructor method to set up the PlaylistDetailController
+     */
     public PlaylistDetailController(PlayerViewListener listener, PlaylistDetailView playlistDetailView,
                                     UserManager userManager,SongManager songManager, PlaylistManager playlistManager) {
         this.listener = listener;
@@ -132,7 +135,10 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
 
             case PlaylistDetailView.BTN_MOVE_DOWN:
                 try {
-                    if(playlistDetailView.getSelectedRow() < mySongs.size()-1){
+                    if(mySongs == null)break;
+
+                    if(playlistDetailView.getSelectedRow() < mySongs.size()-1
+                            && playlistDetailView.getSelectedRow() >= 0){
                         playlistManager.swapSongsOrder(actualPlaylist.getId(),
                                 mySongs.get(playlistDetailView.getSelectedRow()).getId(),
                                 mySongs.get(playlistDetailView.getSelectedRow()+1).getId());
