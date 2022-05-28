@@ -1,5 +1,6 @@
 package presentation.views;
 
+import business.PlaylistManager;
 import business.SongManager;
 import business.entities.Playlist;
 import business.entities.Song;
@@ -214,9 +215,9 @@ public class PlaylistDetailView extends JPanel {
      * @param mySongs Songs from the actual playlist
      * @param playlistSelected Actual playlist selected
      */
-    public void fillTable(ArrayList<ArrayList<String>> mySongs, Playlist playlistSelected) {
+    public void fillTable(ArrayList<ArrayList<String>> mySongs, ArrayList<String> playlistSelected) {
         // Setting the playlist Title
-        playlistTitle.setText(playlistSelected.getName());
+        playlistTitle.setText(playlistSelected.get(PlaylistManager.PLAYLIST_NAME_ATTRIBUTE_INDEX));
         String[][] data = null;
 
         if(mySongs != null){

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+//TODO: add class comment
 public class SongManager {
     private static int NUMBER_OF_GENRES = 16;
 
@@ -21,6 +22,7 @@ public class SongManager {
     private PlaylistManager playlistManager;
     private PlayerManager playerManager;
 
+    //TODO: add comment
     public SongManager(SongDAO songDAO, PlaylistManager playlistManager, PlayerManager playerManager) {
         this.songDAO = songDAO;
         this.playlistManager = playlistManager;
@@ -197,10 +199,12 @@ public class SongManager {
         songDAO.createSong(song, file, image);
     }
 
+    //TODO: add comment
     public BufferedImage getCoverImage(int songID) {
         return songDAO.downloadCoverImage(songID);
     }
 
+    //TODO: remove method if unused
     public int[] getNumberOfSongsByGenre() throws SongDAOException{
         int i = 0;
         int[] data = new int[NUMBER_OF_GENRES];
@@ -214,6 +218,7 @@ public class SongManager {
         return data;
     }
 
+    //TODO: add comment
     public int[] getNumberOfSongs() throws SongDAOException{
         int[] data = new int[NUMBER_OF_GENRES];
         ArrayList<Song> songs = songDAO.getAllSongs();
@@ -278,8 +283,7 @@ public class SongManager {
     }
 
     /**
-     * Checks whether the song to delete is currently playing and whether it belongs
-     * to the currently logged-in user
+     * Checks whether the song to delete is currently playing
      * @param songID an integer representing the ID of the song to delete
      * @return a boolean indicating whether the song can be deleted
      */

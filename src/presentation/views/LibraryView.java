@@ -1,6 +1,6 @@
 package presentation.views;
 
-import business.entities.Playlist;
+import business.PlaylistManager;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -42,6 +42,7 @@ public class LibraryView extends JPanel {
         table.getTableHeader().setReorderingAllowed(false);
         table.setOpaque(false);
         tableModel.setDataVector(null, columns);
+
         // Creating and personalizing JTable
         if (notFirstTime) {
             tableSongs = new JPanel(new GridLayout());
@@ -65,7 +66,6 @@ public class LibraryView extends JPanel {
         resizeColumnWidth(table);
         table.getColumnModel().getColumn(0).setResizable(false);
 
-
         table.setShowGrid(false);
         table.setFillsViewportHeight(true);
 
@@ -84,9 +84,6 @@ public class LibraryView extends JPanel {
 
         tableSongs.add(pane);
         notFirstTime = true;
-
-
-
 
         JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
@@ -107,14 +104,15 @@ public class LibraryView extends JPanel {
      * @param myPlaylists an arraylist of songs that are currently in the system
      */
     //TODO: fix encapsulation
-    public void fillTable(ArrayList<Playlist> myPlaylists) {
+    public void fillTable(ArrayList<ArrayList<String>> myPlaylists) {
         // Inserting the data to each column
         String[][] data = new String[myPlaylists.size()][2];
 
         for (int i = 0; i < myPlaylists.size(); i++) {
-            data[i][0] = myPlaylists.get(i).getName();
-            data[i][1] = String.valueOf(myPlaylists.get(i).getOwner());
+            data[i][0] = myPlaylists.get(i).get(PlaylistManager.PLAYLIST_NAME_ATTRIBUTE_INDEX);
+            data[i][1] = myPlaylists.get(i).get(PlaylistManager.PLAYLIST_OWNER_ATTRIBUTE_INDEX);
         }
+
         tableModel.setDataVector(data, columns);
 
         revalidate();

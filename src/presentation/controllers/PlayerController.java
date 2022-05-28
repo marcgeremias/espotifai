@@ -169,7 +169,7 @@ public class PlayerController implements PlayerViewListener {
     }
 
     @Override
-    public void showPlaylistDetails(Playlist playlistId) {
+    public void showPlaylistDetails(ArrayList<String> playlistId) {
         playerView.changeView(PlayerView.PLAYLIST_DETAIL_VIEW);
         playlistDetailController.initView(playlistId);
     }

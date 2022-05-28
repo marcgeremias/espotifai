@@ -12,13 +12,12 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class HomeController implements MouseListener {
-
     private PlayerViewListener listener;
     private HomeView homeView;
     private UserManager userManager;
     private SongManager songManager;
     private PlaylistManager playlistManager;
-    private ArrayList<Playlist> otherPlaylists;
+    private ArrayList<ArrayList<String>> otherPlaylists;
 
     public HomeController(PlayerViewListener listener, HomeView homeView, UserManager userManager, SongManager songManager, PlaylistManager playlistManager) {
         this.listener = listener;

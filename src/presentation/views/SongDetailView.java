@@ -1,7 +1,7 @@
 package presentation.views;
 
+import business.PlaylistManager;
 import business.SongManager;
-import business.entities.Playlist;
 import presentation.views.components.HoverButton;
 import presentation.views.components.JImagePanel;
 
@@ -302,6 +302,7 @@ public class SongDetailView extends JPanel {
      * Method that is in charge of the top margins of the window.
      * @return the container with the panel margin (without opacity)
      */
+    //TODO: remove method?
     public Container northMargin() {
         JPanel northMargin = new JPanel();
         northMargin.setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));
@@ -360,14 +361,16 @@ public class SongDetailView extends JPanel {
     /**
      * Creates a JComboBox from which to pick a playlist to add in a song
      */
-    public void showPlaylists(ArrayList<Playlist> allPlaylists) {
+    //TODO: method could be private?
+    public void showPlaylists(ArrayList<ArrayList<String>> allPlaylists) {
         // Authors JComboBox initialisation
         playlistSelector.removeAllItems();
         playlistSelector.setBackground(new Color(76, 76, 76));
         playlistSelector.setForeground(Color.GRAY);
         playlistSelector.addItem("Select Playlist");
-        for (Playlist allPlaylist : allPlaylists) {
-            playlistSelector.addItem(allPlaylist.getName());
+
+        for (ArrayList<String> playlist : allPlaylists) {
+            playlistSelector.addItem(playlist.get(PlaylistManager.PLAYLIST_NAME_ATTRIBUTE_INDEX));
         }
 
         playlistSelector.setSelectedIndex(0);

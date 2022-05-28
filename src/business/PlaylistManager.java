@@ -10,19 +10,51 @@ import java.util.ArrayList;
 public class PlaylistManager {
     private PlaylistDAO playlistDAO;
 
+    //TODO: add comment
     public PlaylistManager(PlaylistDAO playlistDAO) {
         this.playlistDAO = playlistDAO;
     }
 
+    public static final int PLAYLIST_ID_ATTRIBUTE_INDEX = 0;
+    public static final int PLAYLIST_NAME_ATTRIBUTE_INDEX = 1;
+    public static final int PLAYLIST_OWNER_ATTRIBUTE_INDEX = 2;
+    public static final int PLAYLIST_SONGS_ATTRIBUTE_INDEX = 3;
+    public static final String PLAYLIST_SONGS_SEPARATOR = ";";
     /**
      * Method that gets all the playlists from the current user
      * @param currentUser the current user on the database
      * @return a playlist arraylist with all the playlists from the current user
      * @throws PlaylistDAOException if there is an error getting the data.
      */
-    public ArrayList<Playlist> getCurrentUserPlaylists(String currentUser) throws PlaylistDAOException{
-            ArrayList<Playlist> myPlaylists = playlistDAO.getPlaylistByUserID(currentUser);
-            return myPlaylists == null ? new ArrayList<>() : myPlaylists;
+    public ArrayList<ArrayList<String>> getCurrentUserPlaylists(String currentUser) throws PlaylistDAOException{
+        ArrayList<Playlist> myPlaylists = playlistDAO.getPlaylistByUserID(currentUser);
+
+        if (myPlaylists == null) {
+            return new ArrayList<>();
+        }
+
+        ArrayList<ArrayList<String>> myPlaylistsStr = new ArrayList<>();
+
+        for (Playlist myPlaylist : myPlaylists) {
+            ArrayList<String> attributes = new ArrayList<>();
+            attributes.add(PLAYLIST_ID_ATTRIBUTE_INDEX, Integer.toString(myPlaylist.getId()));
+            attributes.add(PLAYLIST_NAME_ATTRIBUTE_INDEX, myPlaylist.getName());
+            attributes.add(PLAYLIST_OWNER_ATTRIBUTE_INDEX, myPlaylist.getOwner());
+
+            if (myPlaylist.getSongs().size() > 0) {
+                StringBuilder songs = new StringBuilder(Integer.toString(myPlaylist.getSongs().get(0)));
+
+                for (int j = 1; j < myPlaylist.getSongs().size(); j++) {
+                    songs.append(PLAYLIST_SONGS_SEPARATOR).append(myPlaylist.getSongs().get(j));
+                }
+
+                attributes.add(PLAYLIST_SONGS_ATTRIBUTE_INDEX, songs.toString());
+            }
+
+            myPlaylistsStr.add(attributes);
+        }
+
+        return myPlaylistsStr;
     }
 
     /**
@@ -31,9 +63,35 @@ public class PlaylistManager {
      * @return a playlist arraylist with all the playlists that are NOT from the current user
      * @throws PlaylistDAOException if there is an error getting the data.
      */
-    public ArrayList<Playlist> getOtherUserPlaylists(String currentUser) throws PlaylistDAOException{
+    public ArrayList<ArrayList<String>> getOtherUserPlaylists(String currentUser) throws PlaylistDAOException{
         ArrayList<Playlist> otherPlaylists = playlistDAO.getDifferentPlaylistByUserID(currentUser);
-        return otherPlaylists == null ? new ArrayList<>() : otherPlaylists;
+
+        if (otherPlaylists == null) {
+            return new ArrayList<>();
+        }
+
+        ArrayList<ArrayList<String>> otherPlaylistsStr = new ArrayList<>();
+
+        for (Playlist otherPlaylist : otherPlaylists) {
+            ArrayList<String> attributes = new ArrayList<>();
+            attributes.add(PLAYLIST_ID_ATTRIBUTE_INDEX, Integer.toString(otherPlaylist.getId()));
+            attributes.add(PLAYLIST_NAME_ATTRIBUTE_INDEX, otherPlaylist.getName());
+            attributes.add(PLAYLIST_OWNER_ATTRIBUTE_INDEX, otherPlaylist.getOwner());
+
+            if (otherPlaylist.getSongs().size() > 0) {
+                StringBuilder songs = new StringBuilder(Integer.toString(otherPlaylist.getSongs().get(0)));
+
+                for (int j = 1; j < otherPlaylist.getSongs().size(); j++) {
+                    songs.append(PLAYLIST_SONGS_SEPARATOR).append(otherPlaylist.getSongs().get(j));
+                }
+
+                attributes.add(PLAYLIST_SONGS_ATTRIBUTE_INDEX, songs.toString());
+            }
+
+            otherPlaylistsStr.add(attributes);
+        }
+
+        return otherPlaylistsStr;
     }
 
     /**
@@ -84,8 +142,8 @@ public class PlaylistManager {
      */
     public boolean isSongInsidePlaylist(int songId, ArrayList<ArrayList<String>> songs){
         if(songs != null){
-            for (int i = 0; i < songs.size(); i++) {
-                if(songId == Integer.parseInt(songs.get(i).get(SongManager.SONG_ID_ATTRIBUTE_INDEX))){
+            for (ArrayList<String> song : songs) {
+                if (songId == Integer.parseInt(song.get(SongManager.SONG_ID_ATTRIBUTE_INDEX))) {
                     return true;
                 }
             }
@@ -96,7 +154,6 @@ public class PlaylistManager {
 
     /**
      * Method that gets the songs order from a playlist
-     *
      * @param id unique playlistId
      * @return Arraylist with the playlist order songs.
      * @throws PlaylistDAOException
@@ -140,6 +197,7 @@ public class PlaylistManager {
         }
     }
 
+    //TODO: add comment
     public void swapSongsOrder(int idPlaylist, int idSong1, int idSong2) throws PlaylistDAOException {
         playlistDAO.swapSongsOrder(idPlaylist,idSong1,idSong2);
     }

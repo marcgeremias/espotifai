@@ -33,10 +33,12 @@ public class SongUnloader extends Thread{
      */
     @Override
     public void run() {
-        for (Song song : songs){
-            songDAO.deleteFilesystem(song.getId());
-            File songWAV = new File(SONGS_PATH + song.getId() + LOCAL_SONGS_EXTENSION);
-            songWAV.delete();
+        if (songs != null) {
+            for (Song song : songs) {
+                songDAO.deleteFilesystem(song.getId());
+                File songWAV = new File(SONGS_PATH + song.getId() + LOCAL_SONGS_EXTENSION);
+                songWAV.delete();
+            }
         }
     }
 }

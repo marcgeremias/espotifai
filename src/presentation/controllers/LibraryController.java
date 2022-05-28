@@ -17,7 +17,7 @@ public class LibraryController implements MouseListener {
     private UserManager userManager;
     private SongManager songManager;
     private PlaylistManager playlistManager;
-    private ArrayList<Playlist> myPlaylists;
+    private ArrayList<ArrayList<String>> myPlaylists;
 
     public LibraryController(PlayerViewListener listener, LibraryView libraryView, UserManager userManager,
                              SongManager songManager, PlaylistManager playlistManager) {

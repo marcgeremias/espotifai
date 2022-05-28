@@ -1,5 +1,6 @@
 package presentation.views;
 
+import business.PlaylistManager;
 import business.entities.Playlist;
 
 import javax.swing.*;
@@ -92,12 +93,14 @@ public class HomeView extends JPanel {
      * @param othersPlaylists an arraylist of songs that are currently in the system
      */
     //TODO: fix encapsulation
-    public void fillTable(ArrayList<Playlist> othersPlaylists) {
+    public void fillTable(ArrayList<ArrayList<String>> othersPlaylists) {
         String[][] data = new String[othersPlaylists.size()][2];
 
         for (int i = 0; i < othersPlaylists.size(); i++) {
-            data[i][0] = othersPlaylists.get(i).getName();
-            data[i][1] = String.valueOf(othersPlaylists.get(i).getOwner());
+            //String[] songs = othersPlaylists.get(i).get(PlaylistManager.PLAYLIST_SONGS_ATTRIBUTE_INDEX).split(PlaylistManager.PLAYLIST_SONGS_SEPARATOR);
+
+            data[i][0] = othersPlaylists.get(i).get(PlaylistManager.PLAYLIST_NAME_ATTRIBUTE_INDEX);
+            data[i][1] = othersPlaylists.get(i).get(PlaylistManager.PLAYLIST_OWNER_ATTRIBUTE_INDEX);
         }
 
         tableModel.setDataVector(data, column);

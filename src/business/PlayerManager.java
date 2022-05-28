@@ -85,7 +85,7 @@ public class PlayerManager {
                     strings.get(SongManager.SONG_USER_ATTRIBUTE_INDEX)
             ));
         }
-        //this.songs = songs;
+        
         this.currentSongIndex = index;
         // This method needs to be called everytime because a new thread needs to be initiated
         songLoader = new SongLoader(songDAO);

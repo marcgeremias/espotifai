@@ -3,8 +3,6 @@ package presentation.controllers;
 import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
-import business.entities.Playlist;
-import business.entities.Song;
 import persistence.PlaylistDAOException;
 import presentation.views.PlayerView;
 import presentation.views.SongDetailView;
@@ -21,7 +19,7 @@ public class SongDetailController implements ActionListener, LyricsListener {
     private UserManager userManager;
     private PlaylistManager playlistManager;
     private ArrayList<String> currentSong;
-    private ArrayList<Playlist> allPlaylists;
+    private ArrayList<ArrayList<String>> allPlaylists;
 
     public SongDetailController(PlayerViewListener listener, SongDetailView songDetailView, UserManager userManager,
                              SongManager songManager, PlaylistManager playlistManager) {
@@ -73,16 +71,16 @@ public class SongDetailController implements ActionListener, LyricsListener {
 
                 // If index is - 1 there is no playlist selected
                 if (playlistIndex != -1) {
-                    Playlist playlist = allPlaylists.get(playlistIndex);
+                    int playlist = Integer.parseInt(allPlaylists.get(playlistIndex).get(PlaylistManager.PLAYLIST_ID_ATTRIBUTE_INDEX));
 
                     try {
-                        ArrayList<Integer> arrayListOrder = playlistManager.getPlaylistSongsOrder(playlist.getId());
+                        ArrayList<Integer> arrayListOrder = playlistManager.getPlaylistSongsOrder(playlist);
                         int maxOrder=0;
                         if(arrayListOrder.size() > 0){
                             maxOrder = arrayListOrder.get(arrayListOrder.size()-1);
                         }
 
-                        if (playlistManager.addSongToPlaylist(playlist.getId(),
+                        if (playlistManager.addSongToPlaylist(playlist,
                                 Integer.parseInt(currentSong.get(SongManager.SONG_ID_ATTRIBUTE_INDEX)),
                                 maxOrder+1)) {
                             System.out.println("THE SONG HAS CORRECTLY ADDED");

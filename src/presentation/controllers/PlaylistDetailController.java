@@ -17,6 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+//TODO: add class comment
 public class PlaylistDetailController implements ActionListener, MouseListener {
     private PlayerViewListener listener;
     private PlaylistDetailView playlistDetailView;
@@ -25,13 +26,14 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
     private PlaylistManager playlistManager;
     private ArrayList<ArrayList<String>> mySongs;
     private ArrayList<ArrayList<String>> allSongs;
-    private Playlist actualPlaylist;
+    private ArrayList<String> actualPlaylist;
+    private int actualPlaylistID;
     private ArrayList<Integer> songsOrder;
-
 
     /**
      * Constructor method to set up the PlaylistDetailController
      */
+    //TODO: update comment
     public PlaylistDetailController(PlayerViewListener listener, PlaylistDetailView playlistDetailView,
                                     UserManager userManager,SongManager songManager, PlaylistManager playlistManager) {
         this.listener = listener;
@@ -39,6 +41,7 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
         this.userManager = userManager;
         this.songManager = songManager;
         this.playlistManager = playlistManager;
+        this.actualPlaylistID = -1;
     }
 
     /**
@@ -46,8 +49,9 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
      * and passing them to the JTable of all songs in the system
      * @param actualPlaylist
      */
-    public void initView(Playlist actualPlaylist) {
+    public void initView(ArrayList<String> actualPlaylist) {
         this.actualPlaylist = actualPlaylist;
+        actualPlaylistID = Integer.parseInt(actualPlaylist.get(PlaylistManager.PLAYLIST_ID_ATTRIBUTE_INDEX));
 
         try {
             updateActualPlaylist();
@@ -55,7 +59,7 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
         }
 
         // Check if the users have permissions
-        playlistDetailView.setModify(userManager.getCurrentUser().equals(actualPlaylist.getOwner()));
+        playlistDetailView.setModify(userManager.getCurrentUser().equals(actualPlaylist.get(PlaylistManager.PLAYLIST_OWNER_ATTRIBUTE_INDEX)));
 
         allSongs = songManager.getAllSongs();
         playlistDetailView.fillSongsToAdd(allSongs);
@@ -65,8 +69,10 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
      * Method that updates the songs from the actual playlist
      */
     private void updateActualPlaylist() throws PlaylistDAOException {
-        mySongs = songManager.getAllPlaylistSongs(actualPlaylist.getId());
-        songsOrder = playlistManager.getPlaylistSongsOrder(actualPlaylist.getId());
+        //mySongs = songManager.getAllPlaylistSongs(Integer.parseInt(actualPlaylist.get(PlaylistManager.PLAYLIST_ID_ATTRIBUTE_INDEX)));
+        mySongs = songManager.getAllPlaylistSongs(actualPlaylistID);
+        //songsOrder = playlistManager.getPlaylistSongsOrder(Integer.parseInt(actualPlaylist.get(PlaylistManager.PLAYLIST_ID_ATTRIBUTE_INDEX)));
+        songsOrder = playlistManager.getPlaylistSongsOrder(actualPlaylistID);
         playlistDetailView.fillTable(mySongs, actualPlaylist);
     }
 
@@ -81,14 +87,14 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
                 try {
                     if(!playlistManager.isSongInsidePlaylist(
                             Integer.parseInt(allSongs.get(playlistDetailView.getSelectSong()).get(SongManager.SONG_ID_ATTRIBUTE_INDEX)),
-                            songManager.getAllPlaylistSongs(actualPlaylist.getId()))) {
+                            songManager.getAllPlaylistSongs(actualPlaylistID))) {
                         int maxOrder=0;
                         if(songsOrder.size() > 0){
                             maxOrder = songsOrder.get(songsOrder.size()-1);
                         }
 
                         playlistManager.addSongToPlaylist(
-                                actualPlaylist.getId(),
+                                actualPlaylistID,
                                 Integer.parseInt(allSongs.get(playlistDetailView.getSelectSong()).get(SongManager.SONG_ID_ATTRIBUTE_INDEX)),
                                 maxOrder+1
                         );
@@ -97,7 +103,6 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
                         playlistDetailView.notifyError("Song already added!");
                     }
                 } catch (PlaylistDAOException ex) {
-                    ex.printStackTrace();
                 }
                 break;
 
@@ -106,15 +111,14 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
                     if(playlistDetailView.getSelectedRow() >= 0){
                         if(playlistManager.isSongInsidePlaylist(Integer.parseInt(
                                 mySongs.get(playlistDetailView.getSelectedRow()).get(SongManager.SONG_ID_ATTRIBUTE_INDEX))
-                                ,songManager.getAllPlaylistSongs(actualPlaylist.getId()))) {
+                                ,songManager.getAllPlaylistSongs(actualPlaylistID))) {
 
-                            playlistManager.deleteSongFromPlaylist(actualPlaylist.getId(),
+                            playlistManager.deleteSongFromPlaylist(actualPlaylistID,
                                     Integer.parseInt(mySongs.get(playlistDetailView.getSelectedRow()).get(SongManager.SONG_ID_ATTRIBUTE_INDEX)));
                             updateActualPlaylist();
                         }
                     }
                 } catch (PlaylistDAOException ex) {
-                    ex.printStackTrace();
                 }
                 break;
 
@@ -122,14 +126,13 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
                 try {
                     if(playlistDetailView.getSelectedRow() > 0){
 
-                        playlistManager.swapSongsOrder(actualPlaylist.getId(),
+                        playlistManager.swapSongsOrder(actualPlaylistID,
                                 Integer.parseInt(mySongs.get(playlistDetailView.getSelectedRow()).get(SongManager.SONG_ID_ATTRIBUTE_INDEX)),
                                 Integer.parseInt(mySongs.get(playlistDetailView.getSelectedRow()-1).get(SongManager.SONG_ID_ATTRIBUTE_INDEX))
                         );
                     }
                     updateActualPlaylist();
                 } catch (PlaylistDAOException ex) {
-                    ex.printStackTrace();
                 }
 
                 break;
@@ -140,14 +143,13 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
 
                     if(playlistDetailView.getSelectedRow() < mySongs.size()-1
                             && playlistDetailView.getSelectedRow() >= 0){
-                        playlistManager.swapSongsOrder(actualPlaylist.getId(),
+                        playlistManager.swapSongsOrder(actualPlaylistID,
                                 Integer.parseInt(mySongs.get(playlistDetailView.getSelectedRow()).get(SongManager.SONG_ID_ATTRIBUTE_INDEX)),
                                 Integer.parseInt(mySongs.get(playlistDetailView.getSelectedRow()+1).get(SongManager.SONG_ID_ATTRIBUTE_INDEX))
                         );
                     }
                     updateActualPlaylist();
                 } catch (PlaylistDAOException ex) {
-                    ex.printStackTrace();
                 }
                 break;
         }

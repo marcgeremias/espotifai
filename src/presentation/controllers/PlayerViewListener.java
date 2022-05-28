@@ -28,7 +28,7 @@ public interface PlayerViewListener {
      */
     void playSong(ArrayList<ArrayList<String>> songs, int index);
 
-    void showPlaylistDetails(Playlist playlist);
+    void showPlaylistDetails(ArrayList<String> playlist);
 
     /**
      * This method is called when a user wants to delete its account

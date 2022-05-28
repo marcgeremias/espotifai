@@ -74,5 +74,4 @@ public class PlayerView extends JPanel {
     public void changeView(String card) {
         cardManager.show(centerPane, card);
     }
-
 }
