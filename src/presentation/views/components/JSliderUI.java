@@ -98,6 +98,10 @@ public class JSliderUI extends BasicSliderUI {
         slider.setValue(value);
     }
 
+    /**
+     * Sets the value of focus
+     * @param focused a boolean indicating whether it is the focused component
+     */
     public void setFocused(boolean focused) {
         this.focused = focused;
     }

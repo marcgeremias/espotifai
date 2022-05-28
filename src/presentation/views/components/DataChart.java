@@ -7,18 +7,18 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class DataChart extends JComponent {
-    public final static Integer DATA_X = 300;
-    public final static Integer TEXT_X = 200;
-    public final static Integer HEIGTH = 20;
-    public final static Integer DISTANCE = 26;
-    public final static Integer DATA_Y_DISTANCE = 50;
+    private final Integer DATA_X = 300;
+    private final Integer TEXT_X = 200;
+    private final Integer HEIGTH = 20;
+    private final Integer DISTANCE = 26;
+    private final Integer DATA_Y_DISTANCE = 50;
 
-    public final static Integer AXIS_WEIGHT = 600;
-    public final static Integer AXIS_HEIGHT = 1;
+    private final Integer AXIS_WEIGHT = 600;
+    private final Integer AXIS_HEIGHT = 1;
 
     private int[] data;
     private int y;
-    private int text_y;
+    private int textY;
 
     /**
      * Method that paints the component which we are creating for the graphic
@@ -33,7 +33,7 @@ public class DataChart extends JComponent {
 
         int i = 0;
         y = 10;
-        text_y = 30;
+        textY = 30;
         String[] array = new String[16];
         for (Genre genres : Genre.values()){
             array[i] = genres.toString();
@@ -49,8 +49,8 @@ public class DataChart extends JComponent {
         Shape shape = new Rectangle2D.Float(DATA_X,y, this.data[0] + (partition * this.data[0]), HEIGTH);
 
         graphBar.setColor(Color.LIGHT_GRAY);
-        graphBar.drawString(array[0], TEXT_X, text_y);
-        graphBar.drawString(Integer.toString(this.data[0]), DATA_X + this.data[0] + (partition * this.data[0]) + 10, text_y);
+        graphBar.drawString(array[0], TEXT_X, textY);
+        graphBar.drawString(Integer.toString(this.data[0]), DATA_X + this.data[0] + (partition * this.data[0]) + 10, textY);
         graphBar.fill(shape);
         graphBar.draw(shape);
 
@@ -59,18 +59,18 @@ public class DataChart extends JComponent {
             shape = new Rectangle2D.Float(DATA_X,y + DISTANCE, this.data[i] + (partition * this.data[i]) , HEIGTH);
 
             graphBar.setColor(Color.LIGHT_GRAY);
-            graphBar.drawString(array[i], TEXT_X, text_y + DISTANCE);
-            graphBar.drawString(Integer.toString(this.data[i]), DATA_X + this.data[i] + (partition * this.data[i]) + 10, text_y + DISTANCE);
+            graphBar.drawString(array[i], TEXT_X, textY + DISTANCE);
+            graphBar.drawString(Integer.toString(this.data[i]), DATA_X + this.data[i] + (partition * this.data[i]) + 10, textY + DISTANCE);
             graphBar.fill(shape);
             graphBar.draw(shape);
             y += DISTANCE;
-            text_y += DISTANCE;
+            textY += DISTANCE;
         }
 
-        Shape axis = new Rectangle2D.Float(DATA_X, text_y + DISTANCE, AXIS_WEIGHT, AXIS_HEIGHT);
+        Shape axis = new Rectangle2D.Float(DATA_X, textY + DISTANCE, AXIS_WEIGHT, AXIS_HEIGHT);
         graphBar.draw(axis);
 
-        int data_x = DATA_X, j = 0, data_y = text_y + DATA_Y_DISTANCE;
+        int data_x = DATA_X, j = 0, data_y = textY + DATA_Y_DISTANCE;
 
         graphBar.drawString(Integer.toString(0), data_x, data_y);
         graphBar.draw(axis);
@@ -90,7 +90,7 @@ public class DataChart extends JComponent {
         this.data = data;
     }
 
-    /**
+    /*
      * Method that returns the maximum number of songs between all genres in the database.
      * @return Integer with the representation of the maximum number.
      */

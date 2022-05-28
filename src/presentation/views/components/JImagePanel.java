@@ -45,8 +45,6 @@ public class JImagePanel extends JPanel implements MouseListener {
             showSecondary = false;
             addMouseListener(this);
         } catch (IOException e) {
-            // Not properly managed, sorry!
-            e.printStackTrace();
         }
     }
 
@@ -162,5 +160,3 @@ public class JImagePanel extends JPanel implements MouseListener {
         repaint();
     }
 }
-
-

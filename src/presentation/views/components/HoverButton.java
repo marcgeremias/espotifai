@@ -43,5 +43,4 @@ public class HoverButton extends JButton implements MouseListener{
     public void mouseExited(MouseEvent e) {
         this.setBackground(this.defaultColor);
     }
-
 }

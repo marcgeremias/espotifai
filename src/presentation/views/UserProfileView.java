@@ -26,13 +26,6 @@ public class UserProfileView extends JPanel {
      * Constructor method to set up the view
      */
     public UserProfileView() {
-        configureLogOut();
-    }
-
-    /**
-     * Function which organises all the settings of the User Profile View
-     */
-    private void configureLogOut(){
         this.setLayout(new BorderLayout()); // Setting of a Border Layout which structures the whole menu
         this.setBackground(Color.DARK_GRAY);
         this.add(upMargin(), BorderLayout.NORTH);
@@ -41,16 +34,20 @@ public class UserProfileView extends JPanel {
         this.add(center(), BorderLayout.CENTER);
     }
 
+    /**
+     * Updates the name of the user to display
+     * @param username a String containing the username
+     */
     public void setUsername(String username){
         this.username.setText(username);
         repaint();
     }
 
-    /**
+    /*
      * Method that creates a margin in the top of the window
      * @return A container with the panel of the top margin (without opacity)
      */
-    public static Container upMargin() {
+    private Container upMargin() {
         JPanel upMargin = new JPanel();
         upMargin.setOpaque(false);
         upMargin.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
@@ -58,11 +55,11 @@ public class UserProfileView extends JPanel {
         return upMargin;
     }
 
-    /**
+    /*
      * Method that creates a margin in the bottom of the window
      * @return A container with the panel of the bottom margin (without opacity)
      */
-    public static Container downMargin() {
+    private Container downMargin() {
         JPanel downMargin = new JPanel();
         downMargin.setOpaque(false);
         downMargin.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
@@ -70,7 +67,7 @@ public class UserProfileView extends JPanel {
         return downMargin;
     }
 
-    /**
+    /*
      * Method to configure all the center components and containers of the User Profile view
      * @return the JPanel with all the center of the User Profile view
      */
@@ -97,7 +94,7 @@ public class UserProfileView extends JPanel {
         return center;
     }
 
-    /**
+    /*
      * Method that sets the user's name in the User Profile View
      * @return A panel containing the user's name
      */
@@ -115,7 +112,7 @@ public class UserProfileView extends JPanel {
         return panelUsername;
     }
 
-    /**
+    /*
      * Method that sets the title of the menu inside the User Profile view
      * @return A panel containing the title of the section of the view
      */
@@ -133,7 +130,7 @@ public class UserProfileView extends JPanel {
         return panelTitleSettings;
     }
 
-    /**
+    /*
      * Method that displays the image of the user in the User Profile view
      * @return A panel containing the image specified
      */
@@ -152,7 +149,7 @@ public class UserProfileView extends JPanel {
         return userImagePanel;
     }
 
-    /**
+    /*
      * Method that sets the rollback button to skip the User Profile view
      * @return A panel containing the button to rollback
      */
@@ -176,7 +173,7 @@ public class UserProfileView extends JPanel {
         return panelBackButton;
     }
 
-    /**
+    /*
      * Method that displays a button to Delete the account of the user in the User Profile view
      * @return A panel with the current button specified
      */
@@ -201,7 +198,7 @@ public class UserProfileView extends JPanel {
         return panelDeleteAccount;
     }
 
-    /**
+    /*
      * Method that creates Account Settings option in the User Profile view
      * @return A panel with the option to manage the user's account settings
      */
@@ -226,7 +223,7 @@ public class UserProfileView extends JPanel {
         return panelEditSettings;
     }
 
-    /**
+    /*
      * Method that creates Paymeny Methods option in the User Profile view
      * @return A panel with the option to manage the user's payment methods
      */
@@ -250,7 +247,7 @@ public class UserProfileView extends JPanel {
         return panelPaymentMethods;
     }
 
-    /**
+    /*
      * Method that creates Manage Susbcriptions option in the User Profile view
      * @return A panel with the option to manage the user's subscriptions
      */
@@ -308,7 +305,7 @@ public class UserProfileView extends JPanel {
      * Opens an error dialog
      * @param message a String containing the error message
      */
-    public void showErrorDialog(String message){
+    public void showErrorDialog(String message) {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }

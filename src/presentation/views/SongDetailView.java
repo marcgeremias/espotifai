@@ -302,19 +302,6 @@ public class SongDetailView extends JPanel {
      * Method that is in charge of the top margins of the window.
      * @return the container with the panel margin (without opacity)
      */
-    //TODO: remove method?
-    public Container northMargin() {
-        JPanel northMargin = new JPanel();
-        northMargin.setBorder(BorderFactory.createEmptyBorder(50, 0, 0, 0));
-
-        northMargin.setOpaque(false);
-        return northMargin;
-    }
-
-    /*
-     * Method that is in charge of the top margins of the window.
-     * @return the container with the panel margin (without opacity)
-     */
     private Container westMargin() {
         JPanel westMargin = new JPanel();
         westMargin.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 50));
@@ -360,8 +347,8 @@ public class SongDetailView extends JPanel {
 
     /**
      * Creates a JComboBox from which to pick a playlist to add in a song
+     * @param allPlaylists an ArrayList of an ArrayList of String containing all the playlists
      */
-    //TODO: method could be private?
     public void showPlaylists(ArrayList<ArrayList<String>> allPlaylists) {
         // Authors JComboBox initialisation
         playlistSelector.removeAllItems();
@@ -412,7 +399,6 @@ public class SongDetailView extends JPanel {
      */
     public void lyricsError(String message) {
         textArea.setText("Error loading lyrics");
-        //JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     /**

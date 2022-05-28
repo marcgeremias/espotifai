@@ -38,7 +38,6 @@ public class AddSongView extends JPanel {
     private final String BUTTON_ADD_IMAGE = "Add image";
     private final String TITLE_FIELD_PH = "Title";
     private final String ALBUM_FIELD_PH = "Album";
-    private final String ALBUM_COVER_PH = "Cover path";
 
     /**
      * Creates a new instance of AddSongView given a list of authors
@@ -284,7 +283,7 @@ public class AddSongView extends JPanel {
      * Public method that updated the authors list in the combo box selector
      * @param authors list of authors as Strings
      */
-    public void setAuthors(ArrayList<String> authors){
+    public void setAuthors(ArrayList<String> authors) {
         authorSelector.removeAllItems();
         authorSelector.addItem(SELECT_AUTHOR_ITEM);
         authorSelector.addItem(OTHER_ITEM);
@@ -326,14 +325,6 @@ public class AddSongView extends JPanel {
     public void showAuthorField() {
         authorField.setVisible(true);
         this.revalidate();
-    }
-
-    /**
-     * Adds a new item in the author selector combobox
-     * @param author: a String containing the name of the new author
-     */
-    public void addAuthor(String author) {
-        authorSelector.addItem(author);
     }
 
     /**
