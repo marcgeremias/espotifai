@@ -17,7 +17,7 @@ public class HomeView extends JPanel {
 
     private JTable table;
     private JPanel tableSongs;
-    DefaultTableModel tableModel;
+    private DefaultTableModel tableModel;
 
     private static final String[] column = {"Name", "Owner"};
 

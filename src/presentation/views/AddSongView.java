@@ -13,6 +13,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * Public class for the Add song view graphical interface
+ */
 public class AddSongView extends JPanel {
     private PlaceholderTextField titleField;
     private PlaceholderTextField albumField;
@@ -25,13 +28,15 @@ public class AddSongView extends JPanel {
     private HoverButton addFileButton;
     private HoverButton addImageButton;
 
+
     public static final String COMBOBOX_AUTHOR = "COMBOBOX_AUTHOR";
     public static final String BTN_ADD_SONG = "BTN_ADD_SONG";
     public static final String BTN_SELECT_FILE = "SELECT FILE";
     public static final String BTN_SELECT_IMAGE = "SELECT IMAGE";
 
-    private final String ADD_SONG_TITLE = "Add Song";
-    private final String BUTTON_ADD_MSG = "Add";
+    private static final String ERROR_DIALOG_TITLE = "Error";
+    private static final String ADD_SONG_TITLE = "Add Song";
+    private static final String BUTTON_ADD_MSG = "Add";
     private final String SELECT_AUTHOR_ITEM = "Select author";
     private final String OTHER_ITEM = "Other";
     private final String BUTTON_SELECT_FILE = "Select file";
@@ -39,6 +44,9 @@ public class AddSongView extends JPanel {
     private final String TITLE_FIELD_PH = "Title";
     private final String ALBUM_FIELD_PH = "Album";
     private final String ALBUM_COVER_PH = "Cover path";
+
+    private static final Color DEFAULT_ERROR_LABEL_BG = new Color(220, 60, 25);
+    private static final Color DEFAULT_LABEL_BG = new Color(76, 76, 76);
 
     /**
      * Creates a new instance of AddSongView given a list of authors
@@ -96,7 +104,7 @@ public class AddSongView extends JPanel {
         south.setPreferredSize(new Dimension(
                 this.getWidth(), ((int) Toolkit.getDefaultToolkit().getScreenSize().getHeight()) / 12
         ));
-        incorrectFieldLabel.setForeground(new Color(220, 60, 25));
+        incorrectFieldLabel.setForeground(DEFAULT_ERROR_LABEL_BG);
         incorrectFieldLabel.setVisible(false);
         south.add(incorrectFieldLabel);
 
@@ -138,7 +146,7 @@ public class AddSongView extends JPanel {
     * Creates a JComboBox containing the genres in the system
     */
     private void configureGenres() {
-        genreSelector.setBackground(new Color(76, 76, 76));
+        genreSelector.setBackground(DEFAULT_LABEL_BG);
         genreSelector.setForeground(Color.GRAY);
         genreSelector.setBorder(BorderFactory.createEmptyBorder(0, 130, 0, 130));
 
@@ -154,7 +162,7 @@ public class AddSongView extends JPanel {
     */
     private void configureAuthors() {
         // Authors JComboBox initialisation
-        authorSelector.setBackground(new Color(76, 76, 76));
+        authorSelector.setBackground(DEFAULT_LABEL_BG);
         authorSelector.setForeground(Color.GRAY);
         authorSelector.setBorder(BorderFactory.createEmptyBorder(0, 130, 0, 130));
         authorSelector.addItem(SELECT_AUTHOR_ITEM);
@@ -328,13 +336,6 @@ public class AddSongView extends JPanel {
         this.revalidate();
     }
 
-    /**
-     * Adds a new item in the author selector combobox
-     * @param author: a String containing the name of the new author
-     */
-    public void addAuthor(String author) {
-        authorSelector.addItem(author);
-    }
 
     /**
      * Hides the author textField
@@ -356,9 +357,9 @@ public class AddSongView extends JPanel {
         albumField.setText(null);
         authorField.setText(null);
 
-        titleField.setBackground(new Color(76, 76, 76));
-        albumField.setBackground(new Color(76, 76, 76));
-        authorField.setBackground(new Color(76, 76, 76));
+        titleField.setBackground(DEFAULT_LABEL_BG);
+        albumField.setBackground(DEFAULT_LABEL_BG);
+        authorField.setBackground(DEFAULT_LABEL_BG);
         addFileButton.setForeground(Color.LIGHT_GRAY);
 
         this.revalidate();
@@ -371,7 +372,7 @@ public class AddSongView extends JPanel {
     public void incorrectTitleField(String message) {
         incorrectFieldLabel.setText(message);
         incorrectFieldLabel.setVisible(true);
-        titleField.setBackground(new Color(220, 60, 25));
+        titleField.setBackground(DEFAULT_ERROR_LABEL_BG);
     }
 
     /**
@@ -381,7 +382,7 @@ public class AddSongView extends JPanel {
     public void incorrectAlbumField(String message) {
         incorrectFieldLabel.setText(message);
         incorrectFieldLabel.setVisible(true);
-        albumField.setBackground(new Color(220, 60, 25));
+        albumField.setBackground(DEFAULT_ERROR_LABEL_BG);
     }
 
     private final String NO_AUTHOR_SELECTED = "Please select an author";
@@ -392,7 +393,7 @@ public class AddSongView extends JPanel {
     public void incorrectAuthorSelection() {
         incorrectFieldLabel.setText(NO_AUTHOR_SELECTED);
         incorrectFieldLabel.setVisible(true);
-        authorSelector.setForeground(new Color(220, 60, 25));
+        authorSelector.setForeground(DEFAULT_ERROR_LABEL_BG);
     }
 
     /**
@@ -402,7 +403,7 @@ public class AddSongView extends JPanel {
     public void incorrectAuthorField(String message) {
         incorrectFieldLabel.setText(message);
         incorrectFieldLabel.setVisible(true);
-        authorField.setBackground(new Color(220, 60, 25));
+        authorField.setBackground(DEFAULT_ERROR_LABEL_BG);
     }
 
     /**
@@ -412,21 +413,21 @@ public class AddSongView extends JPanel {
     public void incorrectFile(String message) {
         incorrectFieldLabel.setText(message);
         incorrectFieldLabel.setVisible(true);
-        addFileButton.setForeground(new Color(220, 60, 25));
+        addFileButton.setForeground(DEFAULT_ERROR_LABEL_BG);
     }
 
     /**
      * Restores the appearance of the title field
      */
     public void restoreTitleField() {
-        titleField.setBackground(new Color(76, 76, 76));
+        titleField.setBackground(DEFAULT_LABEL_BG);
     }
 
     /**
      * Restores the appearance of the album field
      */
     public void restoreAlbumField() {
-        albumField.setBackground(new Color(76, 76, 76));
+        albumField.setBackground(DEFAULT_LABEL_BG);
     }
 
     /**
@@ -447,7 +448,7 @@ public class AddSongView extends JPanel {
      * Restores the appearance of the author field
      */
     public void restoreAuthorField() {
-        authorField.setBackground(new Color(76, 76, 76));
+        authorField.setBackground(DEFAULT_LABEL_BG);
     }
 
     /**
@@ -490,7 +491,6 @@ public class AddSongView extends JPanel {
         return authorField.getText();
     }
 
-    private final String ERROR_DIALOG_TITLE = "Error";
     /**
      * Opens an error dialog
      * @param message: a String containing the message to display in the dialog

@@ -13,6 +13,9 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+/**
+ * Public class for the song list graphic interface
+ */
 public class SongListView extends JPanel {
 
     private static final String[] column = {"Title","Genre","Album","Author", "Uploaded By"};
@@ -23,9 +26,9 @@ public class SongListView extends JPanel {
     private JPanel tableSongs;
     private DefaultTableModel tableModel;
 
-    // Boolean indicating if it's the first time acceding to the view
-    private boolean notFirstTime;
-
+    /**
+     * Public constructor method that initializes all the components in the view
+     */
     public SongListView() {
         this.setLayout(new BorderLayout());
         this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
@@ -139,13 +142,10 @@ public class SongListView extends JPanel {
 
         // Creating the filter sorter
         table.setAutoCreateRowSorter(true);
-        if (!notFirstTime) {
-            sorter = new TableRowSorter<>(tableModel);
-        }
+        sorter = new TableRowSorter<>(tableModel);
         table.setRowSorter(sorter);
         filter();
 
-        notFirstTime = true;
 
         revalidate();
         repaint();

@@ -19,9 +19,9 @@ public class PlayerView extends JPanel {
 
     public static final Color CENTER_BACKGROUND_COLOR = new Color(35, 35, 35);
 
-    private CardLayout cardManager;
+    private final CardLayout cardManager;
 
-    private JPanel centerPane;
+    private final JPanel centerPane;
 
     /**
      * Public constructor that prepares the view
@@ -52,6 +52,8 @@ public class PlayerView extends JPanel {
      * @param addSongView
      * @param songDetailView
      * @param playlistDetailView
+     * @param userProfileView
+     * @param createPlaylistView
      */
     public void initCardLayout(DefaultView defaultView, SongListView songListView, LibraryView libraryView,
                                AddSongView addSongView, SongDetailView songDetailView,

@@ -9,6 +9,9 @@ import java.awt.event.ActionListener;
 
 import static presentation.views.MainView.LOGO_IMAGE_PATH;
 
+/**
+ * Public class for the sign-up view graphical interface
+ */
 public class SignUpView extends JPanel {
 
     private static final Color DEFAULT_LABEL_BG = new Color(76, 76, 76);

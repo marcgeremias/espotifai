@@ -7,6 +7,9 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Public class for the UserProfile View graphic interface
+ */
 public class UserProfileView extends JPanel {
     public static final String DELETE_ACCOUNT = "deleteButton";
     public static final String BACK_BUTTON = "backButton";

@@ -8,6 +8,9 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Public class for the side menu view panel implementation as part of the WEST layout for the player view
+ */
 public class SideMenuView extends JPanel {
 
     private String pathHomeNormal = "res/icons/home.png";

@@ -18,7 +18,7 @@ public class LibraryView extends JPanel {
 
     private JTable table;
     private JPanel tableSongs;
-    DefaultTableModel tableModel;
+    private DefaultTableModel tableModel;
 
     // Boolean indicating if it's the first time acceding to the view
     private boolean notFirstTime;

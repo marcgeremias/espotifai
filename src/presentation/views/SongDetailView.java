@@ -32,6 +32,7 @@ public class SongDetailView extends JPanel {
     public static final String BTN_DELETE_SONG = "BTN DELETE SONG";
 
     private static final String FETCHING_LYRICS_PLACEHOLDER = "Fetching the lyrics... This might take a while!";
+    private static final String DELETE_SONG_DIALOG_TITLE = "Delete song";
 
     private JTable table;
     private JPanel tableSong;
@@ -206,6 +207,9 @@ public class SongDetailView extends JPanel {
         return buttonPanel;
     }
 
+    /*
+    Method that adds the delete button component to the layout
+     */
     private Component deleteSongButton() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
@@ -397,7 +401,6 @@ public class SongDetailView extends JPanel {
      */
     public void lyricsError() {
         textArea.setText("Error loading lyrics");
-        //JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -413,8 +416,6 @@ public class SongDetailView extends JPanel {
     public void disableDeleteSongButton() {
         deleteSongButton.setVisible(false);
     }
-
-    private final String DELETE_SONG_DIALOG_TITLE = "Delete song";
 
     /**
      * Opens a dialog to confirm song deletion
