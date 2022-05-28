@@ -135,8 +135,8 @@ public class HomeView extends JPanel {
     }
 
     /*
-     * Method that returns the JTable with the title label
-     * @return the JTable with the title label
+     * Method that returns the JLabel with the title label
+     * @return the JLabel with the title label
      */
     private Component titleLabel(){
         JLabel searchSong = new JLabel("OTHER PLAYLISTS");
