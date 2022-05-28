@@ -32,19 +32,22 @@ public class CreatePlaylistController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case CreatePlaylistView.BTN_CREATE_PLAYLIST:
-                try {
-                    // We create the user's playlist
-                    playlistManager.createPlaylist(createPlaylistView.getNameField(), userManager.getCurrentUser());
 
-                    // We change the view to library view to show that the playlist has correctly added
-                    listener.changeView(PlayerView.LIBRARY_VIEW);
+                String textField = createPlaylistView.getNameField();
+                if (!textField.equals("")) {
+                    try {
+                        // We create the user's playlist
+                        playlistManager.createPlaylist(textField, userManager.getCurrentUser());
 
-                } catch (PlaylistDAOException ex) {
-                    // We display an error if the playlist could not be created
-                    createPlaylistView.createPlaylistError("The Playlist could not be added");
+                        // We change the view to library view to show that the playlist has correctly added
+                        listener.changeView(PlayerView.LIBRARY_VIEW);
+
+                    } catch (PlaylistDAOException ex) {
+                        // We display an error if the playlist could not be created
+                        createPlaylistView.createPlaylistError("The Playlist could not be added");
+                    }
                 }
                 break;
         }
-
     }
 }
