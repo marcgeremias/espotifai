@@ -165,6 +165,8 @@ public class SongManager {
         try {
             ArrayList<String> authors = songDAO.getAllAuthors();
 
+            if (authors == null) return true;
+
             for (String a : authors) {
                 if (a.equalsIgnoreCase(author)) return false;
             }

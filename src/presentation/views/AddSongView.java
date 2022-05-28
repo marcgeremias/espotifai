@@ -288,9 +288,13 @@ public class AddSongView extends JPanel {
         authorSelector.removeAllItems();
         authorSelector.addItem(SELECT_AUTHOR_ITEM);
         authorSelector.addItem(OTHER_ITEM);
-        for (String author : authors){
-            authorSelector.addItem(author);
+
+        if (authors != null) {
+            for (String author : authors) {
+                authorSelector.addItem(author);
+            }
         }
+
         authorSelector.setSelectedIndex(0);
         revalidate();
     }

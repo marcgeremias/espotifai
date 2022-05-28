@@ -164,7 +164,7 @@ public class MusicPlaybackView extends JPanel {
         JPanel rightSide = new JPanel();
         rightSide.setOpaque(false);
         rightSide.setLayout(new BoxLayout(rightSide, BoxLayout.Y_AXIS));
-        songTitle = new JTextArea(1, 15);
+        songTitle = new JTextArea(1, 13);
         songTitle.setText(SONG_NAME_PLACEHOLDER);
         songTitle.setWrapStyleWord(true);
         songTitle.setLineWrap(true);

@@ -71,19 +71,21 @@ public class SongDetailController implements ActionListener, LyricsListener {
 
                 // If index is - 1 there is no playlist selected
                 if (playlistIndex != -1) {
-                    int playlist = Integer.parseInt(allPlaylists.get(playlistIndex).get(PlaylistManager.PLAYLIST_ID_ATTRIBUTE_INDEX));
+                    ArrayList<String> playlist = allPlaylists.get(playlistIndex);
+                    int playlistID = Integer.parseInt(playlist.get(PlaylistManager.PLAYLIST_ID_ATTRIBUTE_INDEX));
 
                     try {
-                        ArrayList<Integer> arrayListOrder = playlistManager.getPlaylistSongsOrder(playlist);
-                        int maxOrder=0;
+                        ArrayList<Integer> arrayListOrder = playlistManager.getPlaylistSongsOrder(playlistID);
+                        int maxOrder = 0;
+
                         if(arrayListOrder.size() > 0){
                             maxOrder = arrayListOrder.get(arrayListOrder.size()-1);
                         }
 
-                        if (playlistManager.addSongToPlaylist(playlist,
+                        if (playlistManager.addSongToPlaylist(playlistID,
                                 Integer.parseInt(currentSong.get(SongManager.SONG_ID_ATTRIBUTE_INDEX)),
                                 maxOrder+1)) {
-                            songDetailView.showSuccessDialog("Song was added to the playlist: " + playlist.getName());
+                            songDetailView.showSuccessDialog("Song was added to the playlist: " + playlist.get(PlaylistManager.PLAYLIST_NAME_ATTRIBUTE_INDEX));
                         }
                     } catch (PlaylistDAOException ex) {
                         songDetailView.showErrorDialog("Song already in playlist!");
