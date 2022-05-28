@@ -171,6 +171,10 @@ public class SideMenuView extends JPanel {
         return additionPanel;
     }
 
+    /*
+     * Method that returns a panel containing the information of all the playlists available
+     * @return A panel containing the information of all the playlists available
+     */
     private Component playlistSection() {
         JPanel playlistJPanel = new JPanel();
         playlistJPanel.setLayout(new BoxLayout(playlistJPanel, BoxLayout.Y_AXIS));
@@ -178,7 +182,7 @@ public class SideMenuView extends JPanel {
         playlistJPanel.setOpaque(true);
 
         for (int i = 0; i < 12; i++) {
-            Label label = new Label("ULAAA");
+            Label label = new Label("");
             label.setForeground(Color.BLACK);
             playlistJPanel.add(label);
         }
