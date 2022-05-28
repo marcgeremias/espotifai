@@ -412,7 +412,7 @@ public class SongDetailView extends JPanel {
      */
     public void lyricsError(String message) {
         textArea.setText("Error loading lyrics");
-        JOptionPane.showMessageDialog(this,message);
+        //JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
@@ -446,5 +446,13 @@ public class SongDetailView extends JPanel {
      */
     public void showErrorDialog(String message) {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    /**
+     * Opens successful dialog
+     * @param s a String containing the success message
+     */
+    public void showSuccessDialog(String s) {
+        JOptionPane.showMessageDialog(null, s);
     }
 }

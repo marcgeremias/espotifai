@@ -42,9 +42,8 @@ public class AddSongView extends JPanel {
 
     /**
      * Creates a new instance of AddSongView given a list of authors
-     * @param authors: an ArrayList of String containing the authors
      */
-    public AddSongView(ArrayList<String> authors) {
+    public AddSongView() {
         this.setLayout(new BorderLayout());
         this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
 
@@ -67,13 +66,13 @@ public class AddSongView extends JPanel {
         ));
 
         this.add(east, BorderLayout.EAST);
-        this.add(center(authors), BorderLayout.CENTER);
+        this.add(center(), BorderLayout.CENTER);
     }
 
     /*
     * Configures the components in the center section of the view
     */
-    private Component center(ArrayList<String> authors) {
+    private Component center() {
         JPanel panel = new JPanel();
         JLabel viewTitle = new JLabel(ADD_SONG_TITLE);
         JPanel north = new JPanel();
@@ -117,7 +116,7 @@ public class AddSongView extends JPanel {
         configureGenres();
 
         // Authors JCombobox initialisation
-        configureAuthors(authors);
+        configureAuthors();
 
         // Add center components
         center.add(new TextField(TITLE_FIELD_PH, titleField));
@@ -153,17 +152,13 @@ public class AddSongView extends JPanel {
     /*
     * Creates a JComboBox from which to pick an author which adds a text field when option is "Other"
     */
-    private void configureAuthors(ArrayList<String> authors) {
+    private void configureAuthors() {
         // Authors JComboBox initialisation
         authorSelector.setBackground(new Color(76, 76, 76));
         authorSelector.setForeground(Color.GRAY);
         authorSelector.setBorder(BorderFactory.createEmptyBorder(0, 130, 0, 130));
         authorSelector.addItem(SELECT_AUTHOR_ITEM);
         authorSelector.addItem(OTHER_ITEM);
-
-        for (String author : authors) {
-            authorSelector.addItem(author);
-        }
 
         authorSelector.setSelectedIndex(0);
 
@@ -286,6 +281,21 @@ public class AddSongView extends JPanel {
     }
 
     /**
+     * Public method that updated the authors list in the combo box selector
+     * @param authors list of authors as Strings
+     */
+    public void setAuthors(ArrayList<String> authors){
+        authorSelector.removeAllItems();
+        authorSelector.addItem(SELECT_AUTHOR_ITEM);
+        authorSelector.addItem(OTHER_ITEM);
+        for (String author : authors){
+            authorSelector.addItem(author);
+        }
+        authorSelector.setSelectedIndex(0);
+        revalidate();
+    }
+
+    /**
      * Checks whether an author has been selected from available ones
      * @return a boolean indicating whether an author has been selected
      */
@@ -298,7 +308,12 @@ public class AddSongView extends JPanel {
      * @return a boolean indicating whether the user selected the option that creates a new author
      */
     public boolean newAuthorSelected() {
-        return authorSelector.getItemAt(authorSelector.getSelectedIndex()).equals(OTHER_ITEM);
+        String item = authorSelector.getItemAt(authorSelector.getSelectedIndex());
+        if (item != null) {
+            return item.equals(OTHER_ITEM);
+        } else {
+            return false;
+        }
     }
 
     /**

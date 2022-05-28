@@ -373,8 +373,8 @@ public class SongSQL implements SongDAO {
         try {
             Connection c = DBConfig.getInstance().openConnection();
 
-            if (!deleteSongFile(songID)) return false;
-            if (!deleteCoverImageFile(songID)) return false;
+            deleteSongFile(songID);
+            deleteCoverImageFile(songID);
 
             String deleteSongSQL = "DELETE FROM " + DBConstants.TABLE_SONG + " WHERE " + DBConstants.COL_ID_SONG + " = ?";
             PreparedStatement deleteSongSTMT = c.prepareStatement(deleteSongSQL);
@@ -383,7 +383,7 @@ public class SongSQL implements SongDAO {
 
             c.close();
             return count > 0;
-        } catch (SQLException | DbxException e) {// | DbxException e) {
+        } catch (SQLException  e) {
             throw new SongDAOException(e.getMessage());
         }
     }
@@ -452,17 +452,13 @@ public class SongSQL implements SongDAO {
      */
     @Override
     public void deleteFilesystem(int songID) {
-        try {
-            deleteSongFile(songID);
-        } catch (DbxException ignored) {
-        }
-        try {
-            deleteCoverImageFile(songID);
-        } catch (DbxException ignored) {
-
-        }
+        deleteSongFile(songID);
+        deleteCoverImageFile(songID);
     }
 
+    /*
+    This method uploads cover image to the dropbox api
+     */
     private void uploadCoverImage(File cover, int songID) {
         if (cover == null) return;
         try {
@@ -473,9 +469,8 @@ public class SongSQL implements SongDAO {
                     .withMode(WriteMode.ADD)
                     .withClientModified(new Date(cover.lastModified()))
                     .uploadAndFinish(in);
-        } catch (DbxException | IOException e){
+        } catch (DbxException | IOException ignored){
             // Even if song fails to upload we dont care and we re
-            System.out.println("Failed to save cover image");
         }
     }
 
@@ -497,18 +492,21 @@ public class SongSQL implements SongDAO {
     /*
     Private method to delete a song from the dropbox API
      */
-    private boolean deleteSongFile(int songID) throws DbxException {
-        DbxClientV2 client = APIConfig.getInstance().getClient();
-        DeleteResult metadata = client.files().deleteV2(SONGS_ROOT_FOLDER+"/"+songID+"."+SONG_FORMAT);
-        // Will only reach here if delete operation is successful
-        return true;
+    private void deleteSongFile(int songID) {
+        try {
+            DbxClientV2 client = APIConfig.getInstance().getClient();
+            DeleteResult metadata = client.files().deleteV2(SONGS_ROOT_FOLDER + "/" + songID + "." + SONG_FORMAT);
+        } catch (DbxException ignored){
+
+        }
     }
 
-    private boolean deleteCoverImageFile(int songID) throws DbxException {
-        DbxClientV2 client = APIConfig.getInstance().getClient();
-        DeleteResult metadata = client.files().deleteV2(COVERS_ROOT_FOLDER+"/"+songID+"."+IMAGE_FORMAT);
-        // Will only reach here if delete operation is successful
-        return true;
+    private void deleteCoverImageFile(int songID) {
+        try {
+            DbxClientV2 client = APIConfig.getInstance().getClient();
+            DeleteResult metadata = client.files().deleteV2(COVERS_ROOT_FOLDER+"/"+songID+"."+IMAGE_FORMAT);
+        } catch (DbxException ignored){
+        }
     }
 
     /*

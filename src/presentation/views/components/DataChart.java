@@ -41,7 +41,10 @@ public class DataChart extends JComponent {
         }
 
         int value = getHighestValue();
-        int partition = AXIS_WEIGHT/value;
+        int partition = 0;
+        if (value > 0) {
+            partition = AXIS_WEIGHT / value;
+        }
 
         Shape shape = new Rectangle2D.Float(DATA_X,y, this.data[0] + (partition * this.data[0]), HEIGTH);
 

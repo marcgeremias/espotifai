@@ -50,8 +50,8 @@ public class MusicPlaybackView extends JPanel {
     private static final Color SECONDARY_TEXT_COLOR = Color.WHITE;
     private static final Dimension SLDR_MUSIC_DIM = new Dimension(400, 15);
     private static final Dimension SONG_COVER_SIZE = new Dimension(60, 60);
-    private static final String SONG_NAME_PLACEHOLDER = "Song Title Here";
-    private static final String SONG_AUTHOR_PLACEHOLDER = "Author Name Here";
+    private static final String SONG_NAME_PLACEHOLDER = "-";
+    private static final String SONG_AUTHOR_PLACEHOLDER = "-";
 
     private JImagePanel btn_play;
     private JImagePanel btn_random;
@@ -66,7 +66,7 @@ public class MusicPlaybackView extends JPanel {
     private JLabel currentTime;
     private JLabel totalTime;
     private JImagePanel songCoverImage;
-    private JLabel songTitle;
+    private JTextArea songTitle;
     private JLabel authorName;
 
     /**
@@ -164,12 +164,23 @@ public class MusicPlaybackView extends JPanel {
         JPanel rightSide = new JPanel();
         rightSide.setOpaque(false);
         rightSide.setLayout(new BoxLayout(rightSide, BoxLayout.Y_AXIS));
-        songTitle = new JLabel(SONG_NAME_PLACEHOLDER);
+        songTitle = new JTextArea(1, 15);
+        songTitle.setText(SONG_NAME_PLACEHOLDER);
+        songTitle.setWrapStyleWord(true);
+        songTitle.setLineWrap(true);
+        songTitle.setOpaque(false);
+        songTitle.setEditable(false);
+        songTitle.setFocusable(false);
+        songTitle.setFont(UIManager.getFont("Label.font"));
+        songTitle.setBorder(UIManager.getBorder("Label.border"));
+        /*songTitle = new JLabel(SONG_NAME_PLACEHOLDER);*/
         songTitle.setFont(SONG_TITLE_STYLE);
         songTitle.setForeground(PRIMARY_TEXT_COLOR);
+        songTitle.setAlignmentX(LEFT_ALIGNMENT);
         authorName = new JLabel(SONG_AUTHOR_PLACEHOLDER);
         authorName.setFont(AUTHOR_NAME_STYLE);
         authorName.setForeground(SECONDARY_TEXT_COLOR);
+        authorName.setAlignmentX(LEFT_ALIGNMENT);
 
         rightSide.add(songTitle);
         rightSide.add(authorName);

@@ -83,7 +83,7 @@ public class AddSongController implements ActionListener {
         }
 
         if (addSongView.newAuthorSelected()) {
-            addSongView.addAuthor(addSongView.getAuthorField());
+            //addSongView.addAuthor(addSongView.getAuthorField());
             author = addSongView.getAuthorField();
         }
 
@@ -152,5 +152,9 @@ public class AddSongController implements ActionListener {
             addSongView.restoreAuthorField();
             addSongView.revalidate();
         }
+    }
+
+    public void initView(){
+        addSongView.setAuthors(songManager.getAuthors());
     }
 }

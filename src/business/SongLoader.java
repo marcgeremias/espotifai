@@ -22,8 +22,8 @@ public class SongLoader extends Thread{
 
     private SongDAO songDAO;
 
-    private ArrayList<Song> songs;
-    private ArrayList<Integer> songsSavedIndex;
+    private volatile ArrayList<Song> songs;
+    private volatile ArrayList<Integer> songsSavedIndex;
 
     /**
      * Constructor for the SongLoader class. This constructor will load all the existing songs in the array

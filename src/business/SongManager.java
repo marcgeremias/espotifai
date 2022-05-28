@@ -70,18 +70,20 @@ public class SongManager {
             ArrayList<Song> songs = songDAO.getAllSongs();
             ArrayList<ArrayList<String>> songsStr = new ArrayList<>();
 
-            for (Song s : songs) {
-                ArrayList<String> attributes = new ArrayList<>();
-                attributes.add(SONG_ID_ATTRIBUTE_INDEX, Integer.toString(s.getId()));
-                attributes.add(SONG_TITLE_ATTRIBUTE_INDEX, s.getTitle());
-                attributes.add(SONG_ALBUM_ATTRIBUTE_INDEX, s.getAlbum());
-                attributes.add(SONG_AUTHOR_ATTRIBUTE_INDEX, s.getAuthor());
-                attributes.add(SONG_DURATION_ATTRIBUTE_INDEX, Integer.toString(s.getDuration()));
-                attributes.add(SONG_USER_ATTRIBUTE_INDEX, s.getUser());
-                attributes.add(SONG_GENRE_ATTRIBUTE_INDEX, String.valueOf(s.getGenre()));
-                attributes.add(SONG_IMAGE_ATTRIBUTE_INDEX, s.getImagePath());
+            if (songs != null) {
+                for (Song s : songs) {
+                    ArrayList<String> attributes = new ArrayList<>();
+                    attributes.add(SONG_ID_ATTRIBUTE_INDEX, Integer.toString(s.getId()));
+                    attributes.add(SONG_TITLE_ATTRIBUTE_INDEX, s.getTitle());
+                    attributes.add(SONG_ALBUM_ATTRIBUTE_INDEX, s.getAlbum());
+                    attributes.add(SONG_AUTHOR_ATTRIBUTE_INDEX, s.getAuthor());
+                    attributes.add(SONG_DURATION_ATTRIBUTE_INDEX, Integer.toString(s.getDuration()));
+                    attributes.add(SONG_USER_ATTRIBUTE_INDEX, s.getUser());
+                    attributes.add(SONG_GENRE_ATTRIBUTE_INDEX, String.valueOf(s.getGenre()));
+                    attributes.add(SONG_IMAGE_ATTRIBUTE_INDEX, s.getImagePath());
 
-                songsStr.add(attributes);
+                    songsStr.add(attributes);
+                }
             }
 
             return songsStr;
@@ -222,60 +224,60 @@ public class SongManager {
     public int[] getNumberOfSongs() throws SongDAOException{
         int[] data = new int[NUMBER_OF_GENRES];
         ArrayList<Song> songs = songDAO.getAllSongs();
-        System.out.println(songs.size());
-
-        for (int i = 0; i < songs.size(); i++) {
-            switch (songs.get(i).getGenre()){
-                case ROCK:
-                    data[0]++;
-                    break;
-                case POP:
-                    data[1]++;
-                    break;
-                case RAP:
-                    data[2]++;
-                    break;
-                case TRAP:
-                    data[3]++;
-                    break;
-                case DEMBOW:
-                    data[4]++;
-                    break;
-                case DISCO:
-                    data[5]++;
-                    break;
-                case RB:
-                    data[6]++;
-                    break;
-                case SOUL:
-                    data[7]++;
-                    break;
-                case COUNTRY:
-                    data[8]++;
-                    break;
-                case REGGAE:
-                    data[9]++;
-                    break;
-                case TECHNO:
-                    data[10]++;
-                    break;
-                case BLUES:
-                    data[11]++;
-                    break;
-                case JAZZ:
-                    data[12]++;
-                    break;
-                case METAL:
-                    data[13]++;
-                    break;
-                case PUNK:
-                    data[14]++;
-                    break;
-                case SWING:
-                    data[15]++;
-                    break;
-                default:
-                    break;
+        if (songs != null) {
+            for (int i = 0; i < songs.size(); i++) {
+                switch (songs.get(i).getGenre()) {
+                    case ROCK:
+                        data[0]++;
+                        break;
+                    case POP:
+                        data[1]++;
+                        break;
+                    case RAP:
+                        data[2]++;
+                        break;
+                    case TRAP:
+                        data[3]++;
+                        break;
+                    case DEMBOW:
+                        data[4]++;
+                        break;
+                    case DISCO:
+                        data[5]++;
+                        break;
+                    case RB:
+                        data[6]++;
+                        break;
+                    case SOUL:
+                        data[7]++;
+                        break;
+                    case COUNTRY:
+                        data[8]++;
+                        break;
+                    case REGGAE:
+                        data[9]++;
+                        break;
+                    case TECHNO:
+                        data[10]++;
+                        break;
+                    case BLUES:
+                        data[11]++;
+                        break;
+                    case JAZZ:
+                        data[12]++;
+                        break;
+                    case METAL:
+                        data[13]++;
+                        break;
+                    case PUNK:
+                        data[14]++;
+                        break;
+                    case SWING:
+                        data[15]++;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -300,7 +302,7 @@ public class SongManager {
     public boolean deleteSong(int song) {
         try {
             songDAO.deleteSong(song);
-            playlistManager.removeSongFromPlaylists(song);
+            //playlistManager.removeSongFromPlaylists(song);
             return true;
         } catch (SongDAOException e) {
             return false;

@@ -83,10 +83,10 @@ public class SongDetailController implements ActionListener, LyricsListener {
                         if (playlistManager.addSongToPlaylist(playlist,
                                 Integer.parseInt(currentSong.get(SongManager.SONG_ID_ATTRIBUTE_INDEX)),
                                 maxOrder+1)) {
-                            System.out.println("THE SONG HAS CORRECTLY ADDED");
+                            songDetailView.showSuccessDialog("Song was added to the playlist: " + playlist.getName());
                         }
-
                     } catch (PlaylistDAOException ex) {
+                        songDetailView.showErrorDialog("Song already in playlist!");
                     }
                 }
                 break;

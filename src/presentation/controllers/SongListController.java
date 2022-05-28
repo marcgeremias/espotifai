@@ -53,7 +53,7 @@ public class SongListController implements KeyListener, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         // Single click
-
+        if (songListView.getTableRow() == -1) return;
         int tableCol = songListView.getTableCol();
         int songIndex = findSongIndexBySongAttribute(songListView.getTableRow());
         if (tableCol == 0) {
