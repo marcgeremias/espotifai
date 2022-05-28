@@ -258,7 +258,6 @@ public class PlayerManager {
         if (trail == null) return false;
         try {
             if (trail.size() >= 1) {
-                //trail.pop();
                 currentSongIndex = trail.pop();
                 return true;
             } else {
@@ -319,5 +318,16 @@ public class PlayerManager {
             return -1;
         }
         return songs.get(currentSongIndex).getId();
+    }
+
+    /**
+     * This method return the current song location in seconds
+     * @return integer
+     */
+    public int getCurrentSongSecond() {
+        if (player != null){
+            return (int)(player.getMicrosecondPosition()/1000000L);
+        }
+        return 0;
     }
 }

@@ -14,18 +14,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-//TODO: add class comment
+/**
+ * Public class that implements and manages all logic related to songs
+ */
 public class SongManager {
-    private static int NUMBER_OF_GENRES = 16;
+    private static final int NUMBER_OF_GENRES = 16;
 
-    private SongDAO songDAO;
-    private PlaylistManager playlistManager;
-    private PlayerManager playerManager;
+    private final SongDAO songDAO;
+    private final PlayerManager playerManager;
 
-    //TODO: add comment
-    public SongManager(SongDAO songDAO, PlaylistManager playlistManager, PlayerManager playerManager) {
+    /**
+     * Constructor for the songManager instance
+     * @param songDAO data access object for the song business entity
+     * @param playerManager player manager
+     */
+    public SongManager(SongDAO songDAO, PlayerManager playerManager) {
         this.songDAO = songDAO;
-        this.playlistManager = playlistManager;
         this.playerManager = playerManager;
     }
 
@@ -222,63 +226,30 @@ public class SongManager {
         return data;
     }
 
-    //TODO: add comment
     public int[] getNumberOfSongs() throws SongDAOException{
         int[] data = new int[NUMBER_OF_GENRES];
         ArrayList<Song> songs = songDAO.getAllSongs();
         if (songs != null) {
-            for (int i = 0; i < songs.size(); i++) {
-                switch (songs.get(i).getGenre()) {
-                    case ROCK:
-                        data[0]++;
-                        break;
-                    case POP:
-                        data[1]++;
-                        break;
-                    case RAP:
-                        data[2]++;
-                        break;
-                    case TRAP:
-                        data[3]++;
-                        break;
-                    case DEMBOW:
-                        data[4]++;
-                        break;
-                    case DISCO:
-                        data[5]++;
-                        break;
-                    case RB:
-                        data[6]++;
-                        break;
-                    case SOUL:
-                        data[7]++;
-                        break;
-                    case COUNTRY:
-                        data[8]++;
-                        break;
-                    case REGGAE:
-                        data[9]++;
-                        break;
-                    case TECHNO:
-                        data[10]++;
-                        break;
-                    case BLUES:
-                        data[11]++;
-                        break;
-                    case JAZZ:
-                        data[12]++;
-                        break;
-                    case METAL:
-                        data[13]++;
-                        break;
-                    case PUNK:
-                        data[14]++;
-                        break;
-                    case SWING:
-                        data[15]++;
-                        break;
-                    default:
-                        break;
+            for (Song song : songs) {
+                switch (song.getGenre()) {
+                    case ROCK -> data[0]++;
+                    case POP -> data[1]++;
+                    case RAP -> data[2]++;
+                    case TRAP -> data[3]++;
+                    case DEMBOW -> data[4]++;
+                    case DISCO -> data[5]++;
+                    case RB -> data[6]++;
+                    case SOUL -> data[7]++;
+                    case COUNTRY -> data[8]++;
+                    case REGGAE -> data[9]++;
+                    case TECHNO -> data[10]++;
+                    case BLUES -> data[11]++;
+                    case JAZZ -> data[12]++;
+                    case METAL -> data[13]++;
+                    case PUNK -> data[14]++;
+                    case SWING -> data[15]++;
+                    default -> {
+                    }
                 }
             }
         }

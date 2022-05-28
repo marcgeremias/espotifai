@@ -34,8 +34,6 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
     private final SongManager songManager;
     private final PlayerManager playerManager;
 
-    private int songSecondPos;
-
     /**
      * Public constructor for the music playback controller class
      * @param musicPlaybackView instance of the View to manage
@@ -73,10 +71,9 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
                 // Play song from beginning or previous song depending on current execution second
                 try {
                     // Minimum seconds that need to pass to go back to previous song, else it will restart the song
-                    if (songSecondPos > 3) {
+                    if (playerManager.getCurrentSongSecond() > 3) {
                         musicPlaybackView.setSliderPos(0);
                         playerManager.setPlaybackFrame(0);
-                        songSecondPos = 0;
                     } else {
                         if (playerManager.setPreviousSongIndex()) {
                             playerManager.killSong();
@@ -110,9 +107,8 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
                 }
             }
             case TMR_INTERRUPT -> {
-                songSecondPos++;
                 if (!playerManager.songEnded()) {
-                    musicPlaybackView.setSliderPos(songSecondPos);
+                    musicPlaybackView.setSliderPos(playerManager.getCurrentSongSecond());
                 } else {
                     if (musicPlaybackView.isBtnSongLoop()){
                         playerManager.killSong();
@@ -146,7 +142,6 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
             case SLDR_SONG -> {
                 // Update song position with sliderPos
                 playerManager.setPlaybackFrame(sliderPos);
-                songSecondPos = sliderPos;
             }
             case SLDR_SOUND -> {
                 playerManager.setAudioControlLevel(sliderPos == -30 ? -80 : (float) sliderPos);
@@ -186,7 +181,6 @@ public class MusicPlaybackController implements ActionListener, SliderListener {
         musicPlaybackView.setSliderValues(0, playerManager.getCurrentSongLength());
         Song currentSong = playerManager.getCurrentSongAttributes();
         musicPlaybackView.setSongDetails(currentSong.getTitle(), currentSong.getAuthor(), songManager.getCoverImage(currentSong.getId()));
-        songSecondPos = 0;
     }
 
     /**

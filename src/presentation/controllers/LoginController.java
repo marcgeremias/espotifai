@@ -9,12 +9,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+/**
+ * Public class for the log in controller
+ */
 public class LoginController implements ActionListener, KeyEventDispatcher {
 
     private LoginView loginView;
     private MainViewListener listener;
     private UserManager userManager;
 
+    private long enterKeyTimeElapsed;
+
+    /**
+     * Public constructor for LoginController instance
+     * @param listener main listener to report change view commands
+     * @param loginView managed view
+     * @param userManager manager instance to perform logic
+     */
     public LoginController(MainViewListener listener, LoginView loginView, UserManager userManager) {
         this.listener = listener;
         this.loginView = loginView;
@@ -72,10 +83,18 @@ public class LoginController implements ActionListener, KeyEventDispatcher {
         }
     }
 
+    /**
+     * Method that manages key press to log in with enter key
+     * @param e event
+     * @return false
+     */
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
-        if (e.getKeyChar() == '\n'){
+        if (e.getKeyChar() == KeyEvent.VK_ENTER && enterKeyTimeElapsed == 0){
             onLoginClick();
+            enterKeyTimeElapsed = System.currentTimeMillis();
+        } else if (System.currentTimeMillis() - enterKeyTimeElapsed >= 1000){
+            enterKeyTimeElapsed = 0;
         }
         return false;
     }

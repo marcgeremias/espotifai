@@ -21,10 +21,17 @@ public class JSliderUI extends BasicSliderUI {
 
     private final RoundRectangle2D.Float trackShape = new RoundRectangle2D.Float();
 
+    /**
+     * Basic constructor for the Slider UI
+     * @param slider
+     */
     public JSliderUI(JSlider slider){
         super(slider);
     }
 
+    /**
+     * This method calculates the track height and sets its shape
+     */
     @Override
     protected void calculateTrackRect() {
         super.calculateTrackRect();
@@ -33,17 +40,28 @@ public class JSliderUI extends BasicSliderUI {
         trackShape.setRoundRect(trackRect.x, trackRect.y, trackRect.width, trackRect.height, 1, 5);
     }
 
+    /**
+     * This method calculates the current thumb location
+     */
     @Override
     protected void calculateThumbLocation() {
         super.calculateThumbLocation();
         thumbRect.y = trackRect.y + (trackRect.height - thumbRect.height) / 2;
     }
 
+    /**
+     * Method that sets the size for the thumb
+     * @return dimension of the thumb
+     */
     @Override
     protected Dimension getThumbSize() {
         return new Dimension(14, 14);
     }
 
+    /**
+     * This method paints the thumb with the desired graphics and colors
+     * @param g
+     */
     @Override
     public void paintThumb(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;

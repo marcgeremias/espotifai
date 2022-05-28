@@ -20,7 +20,7 @@ public class Main {
             UserManager userManager = new UserManager(userSQL);
             PlaylistManager playlistManager = new PlaylistManager(new PlaylistSQL());
             PlayerManager playerManager = new PlayerManager(songDAO);
-            SongManager songManager = new SongManager(songDAO, playlistManager, playerManager);
+            SongManager songManager = new SongManager(songDAO, playerManager);
             MainView mainView = new MainView();
             MainController mainController = new MainController(mainView, userManager, songManager, playlistManager, playerManager);
 
