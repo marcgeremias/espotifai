@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Public class that manages all the logic for the User instance
+ */
 public class UserManager {
     private UserDAO userDAO;
     private String currentUser;
@@ -22,6 +25,10 @@ public class UserManager {
     public static final int WRONG_CONFIRM_PASSWORD = 4;
     public static final int ERROR_CREATING_USER = 5;
 
+    /**
+     * Default constructor for the class
+     * @param userDAO data access object for the User instance
+     */
     public UserManager(UserDAO userDAO) {
         this.userDAO = userDAO;
         this.currentUser = null;
