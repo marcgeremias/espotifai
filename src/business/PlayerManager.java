@@ -153,7 +153,7 @@ public class PlayerManager {
             ArrayList<String> attributes = new ArrayList<>();
             Song s = songs.get(currentSongIndex);
 
-            attributes.add(Integer.toString(SongManager.SONG_ID_ATTRIBUTE_INDEX, s.getId()));
+            attributes.add(SongManager.SONG_ID_ATTRIBUTE_INDEX, Integer.toString(s.getId()));
             attributes.add(SongManager.SONG_TITLE_ATTRIBUTE_INDEX, s.getTitle());
             attributes.add(SongManager.SONG_ALBUM_ATTRIBUTE_INDEX, s.getAlbum());
             attributes.add(SongManager.SONG_AUTHOR_ATTRIBUTE_INDEX, s.getAuthor());
