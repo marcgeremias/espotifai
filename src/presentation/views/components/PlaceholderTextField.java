@@ -13,9 +13,16 @@ public class PlaceholderTextField extends JTextField {
     // The placeholder we are going to set
     private String placeholder;
 
+    /**
+     * Public constructor that omits default JTextField constructor
+     */
     public PlaceholderTextField() {
     }
 
+    /**
+     * Override method to paint custom graphics
+     * @param pG
+     */
     @Override
     protected void paintComponent(final Graphics pG) {
         // We override the paint component to se the placeholder inside

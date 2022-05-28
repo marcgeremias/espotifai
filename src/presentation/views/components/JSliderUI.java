@@ -70,6 +70,11 @@ public class JSliderUI extends BasicSliderUI {
         if (focused) g2.fillOval(thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height);
     }
 
+    /**
+     * Override method to paint custom graphics
+     * @param g
+     * @param c
+     */
     @Override
     public void paint(Graphics g, JComponent c) {
         Graphics2D g2 = (Graphics2D) g;
@@ -77,6 +82,10 @@ public class JSliderUI extends BasicSliderUI {
         super.paint(g2, c);
     }
 
+    /**
+     * Override method to paint custom track graphics
+     * @param g
+     */
     @Override
     public void paintTrack(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
@@ -101,21 +110,37 @@ public class JSliderUI extends BasicSliderUI {
 
     }
 
+    /**
+     * This method is overridden to do nothing so that focus action doesn't change the aspect of the component
+     * @param g
+     */
     @Override
     public void paintFocus(Graphics g) {
     }
 
+    /**
+     * This function determines whether a slider is being dragged or not
+     * @return true if slider is being dragged, false otherwise
+     */
     @Override
     protected boolean isDragging() {
         return super.isDragging();
     }
 
+    /**
+     * This method is to change the thumb position if the slider is clicked in a certain location
+     * @param dir
+     */
     @Override
     protected void scrollDueToClickInTrack(int dir) {
         int value = this.valueForXPosition(slider.getMousePosition().x);
         slider.setValue(value);
     }
 
+    /**
+     * This method is used to tell the slider if it is being focused by the cursor or not
+     * @param focused boolean true or false
+     */
     public void setFocused(boolean focused) {
         this.focused = focused;
     }

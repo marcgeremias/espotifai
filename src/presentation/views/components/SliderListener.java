@@ -1,5 +1,8 @@
 package presentation.views.components;
 
+/**
+ * Public interface that notifies when a slider position has changed
+ */
 public interface SliderListener {
 
     /**

@@ -9,9 +9,6 @@ import java.awt.event.MouseListener;
  */
 public class JSliderCustom extends JSlider implements MouseListener {
 
-    private static final int SLIDER_WIDTH = 400;
-    private static final int SLIDER_HEIGHT = 15;
-
     private JSliderUI sliderUI;
     private SliderListener sliderListener;
     private String source;
@@ -34,32 +31,48 @@ public class JSliderCustom extends JSlider implements MouseListener {
         setUI(sliderUI);
     }
 
+    /**
+     * This method attaches an action listener to the slider
+     * @param sliderListener instance of the listener
+     */
     public void addSliderListener(SliderListener sliderListener){
         this.sliderListener = sliderListener;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        //Do nothing here
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        //Do nothing here
     }
 
+    /**
+     * Override method that is called when the mouse click was released
+     * @param e
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
         sliderListener.sliderPositionChanged(this.getValue(), source);
         repaint();
     }
 
+    /**
+     * Override method that is called everytime the mouse enters the slider component
+     * @param e
+     */
     @Override
     public void mouseEntered(MouseEvent e) {
         sliderUI.setFocused(true);
         repaint();
     }
 
+    /**
+     * Override method that is called when the mouse exits the slider component
+     * @param e
+     */
     @Override
     public void mouseExited(MouseEvent e) {
         if (!sliderUI.isDragging()) {

@@ -3,7 +3,15 @@ package presentation.views.components;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This class creates a custom component for a TextField like implementation with palceholder
+ */
 public class TextField extends JPanel {
+    /**
+     * Public constructor for the custom TextField panel class
+     * @param placeHolder
+     * @param textField
+     */
     public TextField(String placeHolder, PlaceholderTextField textField) {
         //Using own textField classes
         textField.setBorder(BorderFactory.createCompoundBorder(
