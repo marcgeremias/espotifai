@@ -92,9 +92,6 @@ public class APIConfig {
                 .build();
         HttpResponse<String> response = null;
         try {
-            //TODO: change sync request to async request for thread safe purposes.
-            // Here we send the request and wait for the response, this method is currently blocking all the threads
-            // and there is a better alternative with an async function, for now this works
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
             JSONObject object = new JSONObject(response.body());
             ACCESS_TOKEN = object.getString("access_token");

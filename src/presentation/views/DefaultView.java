@@ -7,10 +7,12 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Public class default view that is part of a card layout switching views inside the home view
+ */
 public class DefaultView extends JPanel {
     public static final String MAIN_SECTION = "main_button_pressed";
     public static final String STATISTICS = "statistics_button_pressed";
-    public static final String SETTINGS = "settings_button_pressed";
 
     public static final String HOME_VIEW = "home_view";
     public static final String STATS_VIEW = "stats_view";
@@ -21,6 +23,9 @@ public class DefaultView extends JPanel {
     private CardLayout cardManager;
     private JPanel centerPane;
 
+    /**
+     * Public constructor for the DefaultView of the HomeView
+     */
     public DefaultView() {
         cardManager = new CardLayout();
         centerPane = new JPanel(cardManager);
@@ -33,10 +38,16 @@ public class DefaultView extends JPanel {
         configureView();
     }
 
+    /*
+    This method is called to configure the view
+     */
     private void configureView() {
         this.add(center(), BorderLayout.NORTH);
     }
 
+    /*
+    Method that configures all the components in the center of the view
+     */
     private Component center() {
         JPanel center = new JPanel();
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
@@ -46,6 +57,9 @@ public class DefaultView extends JPanel {
         return center;
     }
 
+    /*
+    Method that initializes the components for the optionBar
+     */
     private Component optionBar() {
         JPanel container = new JPanel();
         Border emptyBorder = BorderFactory.createEmptyBorder();
@@ -76,6 +90,10 @@ public class DefaultView extends JPanel {
         return container;
     }
 
+    /**
+     * Public method to register controller for the view action buttons
+     * @param controller instance
+     */
     public void registerController(ActionListener controller) {
         mainButton.setActionCommand(MAIN_SECTION);
         mainButton.addActionListener(controller);
@@ -84,15 +102,20 @@ public class DefaultView extends JPanel {
         statisticsButton.addActionListener(controller);
     }
 
+    /**
+     * This method is called to initialize the card layout
+     * @param homeView
+     * @param statsView
+     */
     public void initCardLayout (HomeView homeView, StatsView statsView){
         centerPane.add(homeView, HOME_VIEW);
         centerPane.add(statsView, STATS_VIEW);
-
-        //cardManager.addLayoutComponent(homeView, HOME_VIEW);
-        //cardManager.addLayoutComponent(statsView, STATS_VIEW);
-        //cardManager.first(centerPane);
     }
 
+    /**
+     * Public method to change the displayed view
+     * @param card string containing the target view
+     */
     public void changeView(String card) {
         CardLayout cl = (CardLayout) centerPane.getLayout();
         cl.show(centerPane ,card);

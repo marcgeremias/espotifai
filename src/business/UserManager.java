@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Public class that manages all the logic for the User instance
+ */
 public class UserManager {
     private UserDAO userDAO;
     private String currentUser;
@@ -22,6 +25,10 @@ public class UserManager {
     public static final int WRONG_CONFIRM_PASSWORD = 4;
     public static final int ERROR_CREATING_USER = 5;
 
+    /**
+     * Default constructor for the class
+     * @param userDAO data access object for the User instance
+     */
     public UserManager(UserDAO userDAO) {
         this.userDAO = userDAO;
         this.currentUser = null;
@@ -32,7 +39,7 @@ public class UserManager {
      * of the Strings introduced in the textFields in the Login View
      * @param userField the username or email to check
      * @param passwordField the password to check
-     * @return
+     * @return an integer indicating whether the credentials are correct
      */
     public int checkUserAndPassword(String userField, String passwordField) {
         User user = null;

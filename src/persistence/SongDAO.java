@@ -1,6 +1,5 @@
 package persistence;
 
-import business.entities.Genre;
 import business.entities.Song;
 
 import javax.sound.sampled.AudioInputStream;
@@ -34,15 +33,6 @@ public interface SongDAO {
     ArrayList<String> getAllAuthors() throws SongDAOException;
 
     /**
-     * This method searched the storage system and returns a instance of {@link Song} if the values match.
-     * @param songID unique identifier of the {@link Song} instance
-     * @return (1) Instance of {@link Song} if the identifier matches with stored values in the system or
-     * (2) null otherwise
-     * @throws SongDAOException if there is an error accessing the database.
-     */
-    Song getSongByID(int songID) throws SongDAOException;
-
-    /**
      * This method will return all the songs that are part of a playlist given the playlist ID.
      * @param playlistID {@link business.entities.Playlist} unique identifier
      * @return (1) List of {@link Song} if the values matches any song in the system, (2) null otherwise.
@@ -59,28 +49,11 @@ public interface SongDAO {
     ArrayList<Song> getSongsByUserID(String userID) throws SongDAOException;
 
     /**
-     * This method will return all the songs that belong to an author given its name.
-     * @param authorName String containing the name of the author to filter the songs.
-     * @return (1) List of {@link Song} if the values matches any song in the system, (2) null otherwise.
-     * @throws SongDAOException if there is an error accessing the database.
-     */
-    ArrayList<Song> getSongsByAuthorName(String authorName) throws SongDAOException;
-
-    /**
      * This method will return all the songs in the database.
      * @return (1) List of {@link Song} if the values matches any song in the system, (2) null otherwise.
      * @throws SongDAOException if there is an error accessing the database.
      */
     ArrayList<Song> getAllSongs() throws SongDAOException;
-
-    /**
-     * This method will return all the songs that have the same title. <b>Note</b> that songs can have the same
-     * name and be different.
-     * @param title String containing the title of the song.
-     * @return (1) List of {@link Song} if the values matches any song in the system, (2) null otherwise.
-     * @throws SongDAOException if there is an error accessing the database.
-     */
-    ArrayList<Song> getSongsByTitle(String title) throws SongDAOException;
 
     /**
      * This method will return all the songs listed under the same album name.
@@ -89,33 +62,6 @@ public interface SongDAO {
      * @throws SongDAOException if there is an error accessing the database.
      */
     ArrayList<Song> getSongsByAlbum(String album) throws SongDAOException;
-
-    /**
-     * This method will return all the songs listed under the same genre.
-     * @param genre instance of {@link Genre} to filter the songs.
-     * @return (1) List of {@link Song} if the values matches any song in the system, (2) null otherwise.
-     * @throws SongDAOException if there is an error accessing the database.
-     */
-    ArrayList<Song> getSongsByGenre(Genre genre) throws SongDAOException;
-
-    /**
-     * This method will search in the storage system any song that matches with the song title, album, author
-     * or genre given the <b>key</b> parameter.
-     * @param key String containing a value used to filter the search.
-     * @return (1) List of {@link Song} if the values matches any song in the system, (2) null otherwise.
-     * @throws SongDAOException if there is an error accessing the database.
-     */
-    ArrayList<Song> getSongsByKeyword(String key) throws SongDAOException;
-
-    /**
-     * This method will update the values of a song given its unique identifier. <b>Note</b> that ALL values will
-     * be replaced from the desired song, so it's important to make sure that other values of the song that we do not
-     * wish to update remain the same. All information stored in the system regarding this song will be overwritten.
-     * @param song instance of {@link Song} containing the new values to persist in the system.
-     * @return (1) true if the song has been updated successfully or (2) false if the identifier doesn't match any song.
-     * @throws SongDAOException if there is an error accessing the database.
-     */
-    boolean updateSong(Song song) throws SongDAOException;
 
     /**
      * This method will delete a song from the system provided its unique identifier.

@@ -13,9 +13,16 @@ public class PlaceholderPasswordField extends JPasswordField {
     // The placeholder we are going to set
     private String placeholder;
 
+    /**
+     * Public constructor that omits JPasswordField default initializer
+     */
     public PlaceholderPasswordField() {
     }
 
+    /**
+     * Override method to paint custom graphics
+     * @param pG
+     */
     @Override
     protected void paintComponent(final Graphics pG) {
         // We override the paint component to se the placeholder inside

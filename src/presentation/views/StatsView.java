@@ -5,6 +5,9 @@ import presentation.views.components.DataChart;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Public class for the StatsView graphic interface implementation
+ */
 public class StatsView extends PlayerView {
     private DataChart dataChart;
 

@@ -1,17 +1,14 @@
 package presentation.controllers;
 
 import business.PlayerManager;
-import business.PlaylistManager;
 import business.SongManager;
-import business.UserManager;
 
-import business.entities.Song;
-import presentation.views.MainView;
 import presentation.views.PlayerView;
 import presentation.views.UserProfileView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class UserProfileController implements ActionListener {
 
@@ -41,9 +38,9 @@ public class UserProfileController implements ActionListener {
                 // Shows an external panel with the deletion confirmation
                 switch (userProfileView.showConfirmationPanel()){
                     case 0:
-                        Song currentSong = playerManager.getCurrentSongAttributes();
+                        ArrayList<String> currentSong = playerManager.getCurrentSongAttributes();
                         if (currentSong != null) {
-                            if (songManager.songCanBeDeleted(currentSong.getId())) {
+                            if (songManager.songCanBeDeleted(Integer.parseInt(currentSong.get(SongManager.SONG_ID_ATTRIBUTE_INDEX)))) {
                                 listener.delete();
                             } else {
                                 userProfileView.showErrorDialog(ERROR_DELETE_SONG_MSG);

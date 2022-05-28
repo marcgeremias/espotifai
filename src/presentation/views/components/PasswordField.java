@@ -3,7 +3,15 @@ package presentation.views.components;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Public class that extends JPanel to create custom Password field component
+ */
 public class PasswordField extends JPanel {
+    /**
+     * Public constructor for the class that sets all the custom attributes by default
+     * @param placeHolder
+     * @param passField
+     */
     public PasswordField(String placeHolder, PlaceholderPasswordField passField) {
         //Using own Field classes
         passField.setBorder(BorderFactory.createCompoundBorder(

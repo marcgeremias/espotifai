@@ -21,10 +21,17 @@ public class JSliderUI extends BasicSliderUI {
 
     private final RoundRectangle2D.Float trackShape = new RoundRectangle2D.Float();
 
+    /**
+     * Basic constructor for the Slider UI
+     * @param slider
+     */
     public JSliderUI(JSlider slider){
         super(slider);
     }
 
+    /**
+     * This method calculates the track height and sets its shape
+     */
     @Override
     protected void calculateTrackRect() {
         super.calculateTrackRect();
@@ -33,17 +40,28 @@ public class JSliderUI extends BasicSliderUI {
         trackShape.setRoundRect(trackRect.x, trackRect.y, trackRect.width, trackRect.height, 1, 5);
     }
 
+    /**
+     * This method calculates the current thumb location
+     */
     @Override
     protected void calculateThumbLocation() {
         super.calculateThumbLocation();
         thumbRect.y = trackRect.y + (trackRect.height - thumbRect.height) / 2;
     }
 
+    /**
+     * Method that sets the size for the thumb
+     * @return dimension of the thumb
+     */
     @Override
     protected Dimension getThumbSize() {
         return new Dimension(14, 14);
     }
 
+    /**
+     * This method paints the thumb with the desired graphics and colors
+     * @param g
+     */
     @Override
     public void paintThumb(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
@@ -52,6 +70,11 @@ public class JSliderUI extends BasicSliderUI {
         if (focused) g2.fillOval(thumbRect.x, thumbRect.y, thumbRect.width, thumbRect.height);
     }
 
+    /**
+     * Override method to paint custom graphics
+     * @param g
+     * @param c
+     */
     @Override
     public void paint(Graphics g, JComponent c) {
         Graphics2D g2 = (Graphics2D) g;
@@ -59,6 +82,10 @@ public class JSliderUI extends BasicSliderUI {
         super.paint(g2, c);
     }
 
+    /**
+     * Override method to paint custom track graphics
+     * @param g
+     */
     @Override
     public void paintTrack(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
@@ -83,15 +110,27 @@ public class JSliderUI extends BasicSliderUI {
 
     }
 
+    /**
+     * This method is overridden to do nothing so that focus action doesn't change the aspect of the component
+     * @param g
+     */
     @Override
     public void paintFocus(Graphics g) {
     }
 
+    /**
+     * This function determines whether a slider is being dragged or not
+     * @return true if slider is being dragged, false otherwise
+     */
     @Override
     protected boolean isDragging() {
         return super.isDragging();
     }
 
+    /**
+     * This method is to change the thumb position if the slider is clicked in a certain location
+     * @param dir
+     */
     @Override
     protected void scrollDueToClickInTrack(int dir) {
         int value = this.valueForXPosition(slider.getMousePosition().x);
@@ -99,11 +138,10 @@ public class JSliderUI extends BasicSliderUI {
     }
 
     /**
-     * Sets the value of focus
-     * @param focused a boolean indicating whether it is the focused component
+     * This method is used to tell the slider if it is being focused by the cursor or not
+     * @param focused a boolean indicating whether there is focus
      */
     public void setFocused(boolean focused) {
         this.focused = focused;
     }
 }
-

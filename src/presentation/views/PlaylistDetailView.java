@@ -327,6 +327,10 @@ public class PlaylistDetailView extends JPanel {
         return table.getSelectedRow();
     }
 
+    /**
+     * Public method that gets the currently selected row
+     * @return integer containing the row count
+     */
     public int getSelectedCol() {
         return table.getSelectedColumn();
     }

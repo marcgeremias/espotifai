@@ -11,17 +11,23 @@ import java.awt.*;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+/**
+ * Public class that implements the graphic interface for the library view
+ */
 public class LibraryView extends JPanel {
 
     private JTable table;
     private JPanel tableSongs;
-    DefaultTableModel tableModel;
+    private DefaultTableModel tableModel;
 
     // Boolean indicating if it's the first time acceding to the view
     private boolean notFirstTime;
 
     private static final String[] columns = {"Name"};
 
+    /**
+     * Public constructor for the library view
+     */
     public LibraryView() {
         this.setLayout(new BorderLayout());
         this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
@@ -103,7 +109,6 @@ public class LibraryView extends JPanel {
      * Method that fills the JTable with the playlist of the current user in the JTable
      * @param myPlaylists an arraylist of songs that are currently in the system
      */
-    //TODO: fix encapsulation
     public void fillTable(ArrayList<ArrayList<String>> myPlaylists) {
         // Inserting the data to each column
         String[][] data = new String[myPlaylists.size()][2];

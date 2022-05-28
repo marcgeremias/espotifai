@@ -7,10 +7,16 @@ import persistence.PlaylistDAOException;
 
 import java.util.ArrayList;
 
+/**
+ * Public class that manages all the logic and management of the playlist instance
+ */
 public class PlaylistManager {
-    private PlaylistDAO playlistDAO;
+    private final PlaylistDAO playlistDAO;
 
-    //TODO: add comment
+    /**
+     * Public constructor for the playlist manager
+     * @param playlistDAO data access object for the playlist instance
+     */
     public PlaylistManager(PlaylistDAO playlistDAO) {
         this.playlistDAO = playlistDAO;
     }
@@ -23,10 +29,10 @@ public class PlaylistManager {
     /**
      * Method that gets all the playlists from the current user
      * @param currentUser the current user on the database
-     * @return a playlist arraylist with all the playlists from the current user
+     * @return an Arraylist of an ArrayList of String with all the playlists from the current user
      * @throws PlaylistDAOException if there is an error getting the data.
      */
-    public ArrayList<ArrayList<String>> getCurrentUserPlaylists(String currentUser) throws PlaylistDAOException{
+    public ArrayList<ArrayList<String>> getCurrentUserPlaylists(String currentUser) throws PlaylistDAOException {
         ArrayList<Playlist> myPlaylists = playlistDAO.getPlaylistByUserID(currentUser);
 
         if (myPlaylists == null) {
@@ -60,10 +66,10 @@ public class PlaylistManager {
     /**
      * Method that gets all the playlists that are NOT from the current user
      * @param currentUser the current user on the database
-     * @return a playlist arraylist with all the playlists that are NOT from the current user
+     * @return an Arraylist of an ArrayList of String with all the playlists that are NOT from the current user
      * @throws PlaylistDAOException if there is an error getting the data.
      */
-    public ArrayList<ArrayList<String>> getOtherUserPlaylists(String currentUser) throws PlaylistDAOException{
+    public ArrayList<ArrayList<String>> getOtherUserPlaylists(String currentUser) throws PlaylistDAOException {
         ArrayList<Playlist> otherPlaylists = playlistDAO.getDifferentPlaylistByUserID(currentUser);
 
         if (otherPlaylists == null) {
@@ -95,30 +101,19 @@ public class PlaylistManager {
     }
 
     /**
-     * Method that gets all the playlists of the database
-     * @return a playlist arraylist with all the playlists of the database
-     * @throws PlaylistDAOException if there is an error getting the data.
-     */
-    public ArrayList<Playlist> getAllPlaylists() throws PlaylistDAOException{
-        ArrayList<Playlist> allPlaylists = playlistDAO.getAllPlaylists();
-        return allPlaylists == null ? new ArrayList<>() : allPlaylists;
-    }
-
-    /**
      * Method that gets all the adds a song into a playlist.
      * @return true if is added successful, otherwise false.
      * @throws PlaylistDAOException if there is an error adding the song.
      */
-    public boolean addSongToPlaylist(int playlistID, int songID, int order) throws PlaylistDAOException{
+    public boolean addSongToPlaylist(int playlistID, int songID, int order) throws PlaylistDAOException {
         return playlistDAO.addSongToPlaylist(playlistID, songID, order);
     }
 
     /**
-     * Method that deletes a song into a playlist
+     * Method that deletes a song from a playlist
      * @param playlistID the id of the playlist
      * @param songID the id of the song
-     * @return true if the song has correctly deleted to the database and false if not
-     * @throws PlaylistDAOException if there is an error deleting the song from the playlist.
+     * @throws PlaylistDAOException if there is an error deleting the song from the playlist
      */
     public void deleteSongFromPlaylist(int playlistID, int songID) throws PlaylistDAOException {
         playlistDAO.deleteSongFromPlaylist(playlistID, songID);
@@ -128,7 +123,6 @@ public class PlaylistManager {
      * Method that creates a playlist in the database
      * @param playlistName the name of the new playlist
      * @param currentUser the current user of the database
-     * @return true if the song has correctly deleted to the database and false if not
      * @throws PlaylistDAOException if there is an error creating the playlist.
      */
     public void createPlaylist(String playlistName, String currentUser) throws PlaylistDAOException {
@@ -140,7 +134,7 @@ public class PlaylistManager {
      * Method that checks if the current jComboBox song is in the actual playlist
      * @return True in case the song is inside the playlist, otherwise false
      */
-    public boolean isSongInsidePlaylist(int songId, ArrayList<ArrayList<String>> songs){
+    public boolean isSongInsidePlaylist(int songId, ArrayList<ArrayList<String>> songs) {
         if(songs != null){
             for (ArrayList<String> song : songs) {
                 if (songId == Integer.parseInt(song.get(SongManager.SONG_ID_ATTRIBUTE_INDEX))) {
@@ -156,7 +150,7 @@ public class PlaylistManager {
      * Method that gets the songs order from a playlist
      * @param id unique playlistId
      * @return Arraylist with the playlist order songs.
-     * @throws PlaylistDAOException
+     * @throws PlaylistDAOException if an error occurs when finding songs in playlist
      */
     public ArrayList<Integer> getPlaylistSongsOrder(int id) throws PlaylistDAOException {
         return playlistDAO.getSongOrderByPlaylistId(id);
@@ -180,24 +174,12 @@ public class PlaylistManager {
     }
 
     /**
-     * Deletes the song from all the playlists which contain it
-     * @param song an integer representing the song to delete
+     * This method will swap the two given songs order in which they appear when queried
+     * @param idPlaylist unique identifier of the playlist
+     * @param idSong1 unique identifier of the first song
+     * @param idSong2 unique identifier of the second song
+     * @throws PlaylistDAOException if there is a problem with the database system
      */
-    public void removeSongFromPlaylists(int song) {
-        try {
-            ArrayList<Playlist> playlists = playlistDAO.getAllPlaylists();
-            for (Playlist p : playlists) {
-                if (p.containsSong(song)) {
-                    p.removeSong(song);
-                    playlistDAO.updatePlaylist(p);
-                }
-            }
-        } catch (PlaylistDAOException e) {
-            //
-        }
-    }
-
-    //TODO: add comment
     public void swapSongsOrder(int idPlaylist, int idSong1, int idSong2) throws PlaylistDAOException {
         playlistDAO.swapSongsOrder(idPlaylist,idSong1,idSong2);
     }

@@ -17,13 +17,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-//TODO: add class comment
+/**
+ * Public controller for the playlist details view
+ */
 public class PlaylistDetailController implements ActionListener, MouseListener {
-    private PlayerViewListener listener;
-    private PlaylistDetailView playlistDetailView;
-    private UserManager userManager;
-    private SongManager songManager;
-    private PlaylistManager playlistManager;
+    private final PlayerViewListener listener;
+    private final PlaylistDetailView playlistDetailView;
+    private final UserManager userManager;
+    private final SongManager songManager;
+    private final PlaylistManager playlistManager;
     private ArrayList<ArrayList<String>> mySongs;
     private ArrayList<ArrayList<String>> allSongs;
     private ArrayList<String> actualPlaylist;
@@ -31,9 +33,8 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
     private ArrayList<Integer> songsOrder;
 
     /**
-     * Constructor method to set up the PlaylistDetailController
+     * Constructor method for the PlaylistDetailController
      */
-    //TODO: update comment
     public PlaylistDetailController(PlayerViewListener listener, PlaylistDetailView playlistDetailView,
                                     UserManager userManager,SongManager songManager, PlaylistManager playlistManager) {
         this.listener = listener;
@@ -155,6 +156,10 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
         }
     }
 
+    /**
+     * Override method for the mouse clicked event
+     * @param e event
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         int tableCol = playlistDetailView.getSelectedCol();
@@ -167,21 +172,21 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        //Not used
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
+        //Not used
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-
+        //Not used
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+        //Not used
     }
 }

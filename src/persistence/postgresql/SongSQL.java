@@ -112,35 +112,6 @@ public class SongSQL implements SongDAO {
     }
 
     /**
-     * This method will return one instance of the class {@link Song} if the identifier provided matches with any
-     * value stored in the database.
-     * @param songID identifier of the song
-     * @return instance of {@link Song} with the values retrieved from the database
-     * @throws SongDAOException if the query fails to execute correctly or the database connection can't be opened.
-     */
-    @Override
-    public Song getSongByID(int songID) throws SongDAOException {
-        try {
-            Connection c = DBConfig.getInstance().openConnection();
-
-            String selectSongSQL = "SELECT * FROM " + DBConstants.TABLE_SONG + " WHERE id_song = ?";
-            PreparedStatement selectSongSTMT = c.prepareStatement(selectSongSQL);
-            selectSongSTMT.setInt(1, songID);
-            ResultSet rs = selectSongSTMT.executeQuery();
-
-            Song song = null;
-            if (rs.next()) {
-                song = getSongFromResultSet(rs);
-            }
-
-            c.close();
-            return song;
-        } catch (SQLException e) {
-            throw  new SongDAOException(e.getMessage());
-        }
-    }
-
-    /**
      * This method will query the database and return all the songs that match the given parameter.
      * @param playlistID identifier to query the songs
      * @return List of Songs with all the data from the database
@@ -188,30 +159,6 @@ public class SongSQL implements SongDAO {
         }
     }
 
-    /**
-     * This method will query the database and return all the songs that match the given parameter.
-     * @param authorName identifier to query the songs
-     * @return List of Songs with all the data from the database
-     * @throws SongDAOException if the query fails to execute correctly or the database connection
-     * can't be opened.
-     */
-    @Override
-    public ArrayList<Song> getSongsByAuthorName(String authorName) throws SongDAOException {
-        try {
-            Connection c = DBConfig.getInstance().openConnection();
-            ArrayList<Song> songs = new ArrayList<>();
-
-            String selectSongsSQL = "SELECT * FROM " + DBConstants.TABLE_SONG
-                    + " WHERE " + DBConstants.SONG_COL_AUTHOR + " = ?";
-
-            PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
-            selectSongsSTMT.setString(1, authorName);
-            return getSongs(c, songs, selectSongsSTMT);
-        } catch (SQLException e) {
-            throw new SongDAOException(e.getMessage());
-        }
-    }
-
     @Override
     public ArrayList<Song> getAllSongs() throws SongDAOException {
         try {
@@ -221,30 +168,6 @@ public class SongSQL implements SongDAO {
             String selectSongsSQL = "SELECT * FROM " + DBConstants.TABLE_SONG;
 
             PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
-            return getSongs(c, songs, selectSongsSTMT);
-        } catch (SQLException e) {
-            throw new SongDAOException(e.getMessage());
-        }
-    }
-
-    /**
-     * This method will query the database and return all the songs that match the given parameter.
-     * @param title identifier to query the songs
-     * @return List of Songs with all the data from the database
-     * @throws SongDAOException if the query fails to execute correctly or the database connection
-     * can't be opened.
-     */
-    @Override
-    public ArrayList<Song> getSongsByTitle(String title) throws SongDAOException {
-        try {
-            Connection c = DBConfig.getInstance().openConnection();
-            ArrayList<Song> songs = new ArrayList<>();
-
-            String selectSongsSQL = "SELECT * FROM " + DBConstants.TABLE_SONG
-                    + " WHERE " + DBConstants.SONG_COL_TITLE + " = ?";
-
-            PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
-            selectSongsSTMT.setString(1, title);
             return getSongs(c, songs, selectSongsSTMT);
         } catch (SQLException e) {
             throw new SongDAOException(e.getMessage());
@@ -270,91 +193,6 @@ public class SongSQL implements SongDAO {
             PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
             selectSongsSTMT.setString(1, album);
             return getSongs(c, songs, selectSongsSTMT);
-        } catch (SQLException e) {
-            throw new SongDAOException(e.getMessage());
-        }
-    }
-
-    /**
-     * This method will query the database and return all the songs that match the given parameter.
-     * @param genre identifier to query the songs
-     * @return List of Songs with all the data from the database
-     * @throws SongDAOException if the query fails to execute correctly or the database connection
-     * can't be opened.
-     */
-    @Override
-    public ArrayList<Song> getSongsByGenre(Genre genre) throws SongDAOException {
-        try {
-            Connection c = DBConfig.getInstance().openConnection();
-            ArrayList<Song> songs = new ArrayList<>();
-
-            String selectSongsSQL = "SELECT * FROM " + DBConstants.TABLE_SONG
-                    + " WHERE " + " UPPER( " + DBConstants.SONG_COL_GENRE + ") = ?";
-
-            PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
-            selectSongsSTMT.setString(1, String.valueOf(genre));
-            return getSongs(c, songs, selectSongsSTMT);
-        } catch (SQLException e) {
-            throw new SongDAOException(e.getMessage());
-        }
-    }
-
-    /**
-     * This method will return all the songs that match their title, author name, album name or genre type with the
-     * key String given in the function parameters.
-     * @param key String key containing the value to search.
-     * @return List of {@link Song} if the query finds matches or null if the query doesn't find any matching song.
-     * @throws SongDAOException if the query fails to execute correctly or the database connection can't be opened.
-     */
-    @Override
-    public ArrayList<Song> getSongsByKeyword(String key) throws SongDAOException {
-        try {
-            Connection c = DBConfig.getInstance().openConnection();
-            ArrayList<Song> songs = new ArrayList<>();
-
-            String selectSongsSQL = "SELECT * FROM " + DBConstants.TABLE_SONG
-                    + " WHERE " + DBConstants.SONG_COL_AUTHOR + " ILIKE ? OR " + DBConstants.SONG_COL_GENRE + " ILIKE ? OR " +
-                    DBConstants.SONG_COL_ALBUM + " ILIKE ? OR " + DBConstants.SONG_COL_TITLE + " ILIKE ?";
-
-            PreparedStatement selectSongsSTMT = c.prepareStatement(selectSongsSQL);
-            selectSongsSTMT.setString(1, "%" + key + "%");
-            selectSongsSTMT.setString(2, "%" + key + "%");
-            selectSongsSTMT.setString(3, "%" + key + "%");
-            selectSongsSTMT.setString(4, "%" + key + "%");
-            return getSongs(c, songs, selectSongsSTMT);
-        } catch (SQLException e) {
-            throw new SongDAOException(e.getMessage());
-        }
-    }
-
-    /**
-     * This method will update the values of the given {@link Song} and overwrite everything. Please note that values
-     * that you don't wish to updated must be passed as well as the function will overwrite everything from the row.
-     * @param song instance of {@link Song} containing the updated values
-     * @return true (1) the song has been updated correctly or false (2) if the given song doesn't exist in the
-     * database.
-     * @throws SongDAOException if the query fails to execute correctly or the database can't be opened
-     */
-    @Override
-    public boolean updateSong(Song song) throws SongDAOException {
-        try {
-            Connection c = DBConfig.getInstance().openConnection();
-
-            String updateSongSQL = "UPDATE " + DBConstants.TABLE_SONG + " SET " +
-                    DBConstants.SONG_COL_TITLE + " = ?, " + DBConstants.SONG_COL_ALBUM + " = ?, " +
-                    DBConstants.SONG_COL_GENRE + " = ?, " + DBConstants.SONG_COL_PATH + " = ?, " +
-                    DBConstants.SONG_COL_AUTHOR + " = ? WHERE " + DBConstants.COL_ID_SONG + " = ?";
-            PreparedStatement updateSongSTMT = c.prepareStatement(updateSongSQL);
-            updateSongSTMT.setString(1, song.getTitle());
-            updateSongSTMT.setString(2, song.getAlbum());
-            updateSongSTMT.setString(3, String.valueOf(song.getGenre()));
-            updateSongSTMT.setString(4, song.getImagePath());
-            updateSongSTMT.setString(5, song.getAuthor());
-            updateSongSTMT.setInt(6, song.getId());
-            int count = updateSongSTMT.executeUpdate();
-
-            c.close();
-            return count > 0;
         } catch (SQLException e) {
             throw new SongDAOException(e.getMessage());
         }

@@ -131,6 +131,10 @@ public class JImagePanel extends JPanel implements MouseListener {
         this.primaryIcon = image;
     }
 
+    /**
+     * Override method that is called everytime the panel is clicked and send s action performed event
+     * @param e
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         showSecondary = !showSecondary;
@@ -140,20 +144,28 @@ public class JImagePanel extends JPanel implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        //Do nothing here
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
+        //Do nothing here
     }
 
+    /**
+     * Override method that is called everytime the mouse enters the panel
+     * @param e
+     */
     @Override
     public void mouseEntered(MouseEvent e) {
         showHover = true;
         repaint();
     }
 
+    /**
+     * Override method that is called everytime the mouse exits the panel
+     * @param e
+     */
     @Override
     public void mouseExited(MouseEvent e) {
         showHover = false;

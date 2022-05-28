@@ -3,6 +3,10 @@ package presentation.views;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Public class for the main view. This class is the only frame instance of the graphical interface, and it's
+ * the base frame where all the views are displayed and discarded
+ */
 public class MainView extends JFrame {
 
     //Card Layout which occupies the entire Frame

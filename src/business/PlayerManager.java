@@ -145,12 +145,28 @@ public class PlayerManager {
     }
 
     /**
-     * This method will return the instance of {@link Song} that is being currently played in the player.
-     * @return instance of {@link Song}
+     * This method gets the attributes of the song that is being currently played in the player
+     * @return an ArrayList of String containing the attributes of the current song
      */
-    public Song getCurrentSongAttributes() {
-        if (songs.size() > 0) return songs.get(currentSongIndex);
-        else return null;
+    public ArrayList<String> getCurrentSongAttributes() {
+        if (songs.size() > 0) {
+            ArrayList<String> attributes = new ArrayList<>();
+            Song s = songs.get(currentSongIndex);
+
+            attributes.add(Integer.toString(SongManager.SONG_ID_ATTRIBUTE_INDEX, s.getId()));
+            attributes.add(SongManager.SONG_TITLE_ATTRIBUTE_INDEX, s.getTitle());
+            attributes.add(SongManager.SONG_ALBUM_ATTRIBUTE_INDEX, s.getAlbum());
+            attributes.add(SongManager.SONG_AUTHOR_ATTRIBUTE_INDEX, s.getAuthor());
+            attributes.add(SongManager.SONG_DURATION_ATTRIBUTE_INDEX, Integer.toString(s.getDuration()));
+            attributes.add(SongManager.SONG_USER_ATTRIBUTE_INDEX, s.getUser());
+            attributes.add(SongManager.SONG_GENRE_ATTRIBUTE_INDEX, String.valueOf(s.getGenre()));
+            attributes.add(SongManager.SONG_IMAGE_ATTRIBUTE_INDEX, s.getImagePath());
+
+            return attributes;
+        }
+        else {
+            return null;
+        }
     }
 
     /**
@@ -158,7 +174,7 @@ public class PlayerManager {
      * @return true if the index was generated correctly, false if the current song is the last of the playlist and
      * therefore no more indexes can be generated
      */
-    public boolean generateNextIndex(){
+    public boolean generateNextIndex() {
         if(randomSong){
             trail.push(currentSongIndex);
             Random rand = new Random();
@@ -184,21 +200,21 @@ public class PlayerManager {
     /**
      * Toggles the random song flag
      */
-    public void toggleRandom(){
+    public void toggleRandom() {
         randomSong = !randomSong;
     }
 
     /**
      * Toggles the loop playlist flag
      */
-    public void toggleLoopPlaylist(){
+    public void toggleLoopPlaylist() {
         repeatPlaylist = !repeatPlaylist;
     }
 
     /**
      * This method will resume the song thread, and it's timer thread
      */
-    public void resumeSong(){
+    public void resumeSong() {
         if (player != null) {
             player.start();
             songTimer.start();
@@ -258,7 +274,6 @@ public class PlayerManager {
         if (trail == null) return false;
         try {
             if (trail.size() >= 1) {
-                //trail.pop();
                 currentSongIndex = trail.pop();
                 return true;
             } else {
@@ -299,7 +314,7 @@ public class PlayerManager {
     /**
      * This method is called to clear all values from the instance from RAM
      */
-    public void clearData(){
+    public void clearData() {
         killSong();
         this.songs = new ArrayList<>();
         this.currentSongIndex = 0;
@@ -319,5 +334,16 @@ public class PlayerManager {
             return -1;
         }
         return songs.get(currentSongIndex).getId();
+    }
+
+    /**
+     * This method return the current song location in seconds
+     * @return integer
+     */
+    public int getCurrentSongSecond() {
+        if (player != null){
+            return (int)(player.getMicrosecondPosition()/1000000L);
+        }
+        return 0;
     }
 }

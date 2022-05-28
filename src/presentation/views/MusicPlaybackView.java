@@ -90,6 +90,9 @@ public class MusicPlaybackView extends JPanel {
         add(rightSideControls(), BorderLayout.EAST);
     }
 
+    /*
+    Method that adds the music control buttons on top of the slider
+     */
     private Component controlsPane(){
         JPanel controls = new JPanel();
         controls.setOpaque(false);
@@ -125,6 +128,9 @@ public class MusicPlaybackView extends JPanel {
         return controls;
     }
 
+    /*
+    Method that adds the music progress slider
+     */
     private Component musicSliderPane(){
         JPanel musicProgress = new JPanel();
         musicProgress.setLayout(new FlowLayout());
@@ -150,6 +156,9 @@ public class MusicPlaybackView extends JPanel {
         return musicProgress;
     }
 
+    /*
+    Method that adds the components for the song details
+     */
     private Component coverImagePane(){
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel.setOpaque(false);
@@ -191,6 +200,9 @@ public class MusicPlaybackView extends JPanel {
         return panel;
     }
 
+    /*
+    This method will set up the right side controls for the music playback controller
+     */
     private Component rightSideControls(){
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panel.setOpaque(false);

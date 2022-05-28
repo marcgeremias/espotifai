@@ -32,6 +32,7 @@ public class SongDetailView extends JPanel {
     public static final String BTN_DELETE_SONG = "BTN DELETE SONG";
 
     private static final String FETCHING_LYRICS_PLACEHOLDER = "Fetching the lyrics... This might take a while!";
+    private static final String DELETE_SONG_DIALOG_TITLE = "Delete song";
 
     private JTable table;
     private JPanel tableSong;
@@ -206,6 +207,9 @@ public class SongDetailView extends JPanel {
         return buttonPanel;
     }
 
+    /*
+    Method that adds the delete button component to the layout
+     */
     private Component deleteSongButton() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
@@ -346,7 +350,7 @@ public class SongDetailView extends JPanel {
     }
 
     /**
-     * Creates a JComboBox from which to pick a playlist to add in a song
+     * Updates a JComboBox from which to pick a playlist to add in a song
      * @param allPlaylists an ArrayList of an ArrayList of String containing all the playlists
      */
     public void showPlaylists(ArrayList<ArrayList<String>> allPlaylists) {
@@ -395,9 +399,8 @@ public class SongDetailView extends JPanel {
 
     /**
      * Method that shows an error message dialog when the lyrics didn't fetch correctly
-     * @param message the message of the error we are going to display
      */
-    public void lyricsError(String message) {
+    public void lyricsError() {
         textArea.setText("Error loading lyrics");
     }
 
@@ -414,8 +417,6 @@ public class SongDetailView extends JPanel {
     public void disableDeleteSongButton() {
         deleteSongButton.setVisible(false);
     }
-
-    private final String DELETE_SONG_DIALOG_TITLE = "Delete song";
 
     /**
      * Opens a dialog to confirm song deletion

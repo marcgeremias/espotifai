@@ -122,7 +122,7 @@ public class SongDetailController implements ActionListener, LyricsListener {
     }
 
     @Override
-    public void notifyError(String message) {
-        songDetailView.lyricsError(message);
+    public void notifyError() {
+        songDetailView.lyricsError();
     }
 }

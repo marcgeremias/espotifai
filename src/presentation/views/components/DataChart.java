@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * Public class for the data chart component for the creation of custom graphics
+ */
 public class DataChart extends JComponent {
     private final Integer DATA_X = 300;
     private final Integer TEXT_X = 200;

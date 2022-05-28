@@ -14,18 +14,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-//TODO: add class comment
+/**
+ * Public class that implements and manages all logic related to songs
+ */
 public class SongManager {
-    private static int NUMBER_OF_GENRES = 16;
+    private static final int NUMBER_OF_GENRES = 16;
 
-    private SongDAO songDAO;
-    private PlaylistManager playlistManager;
-    private PlayerManager playerManager;
+    private final SongDAO songDAO;
+    private final PlayerManager playerManager;
 
-    //TODO: add comment
-    public SongManager(SongDAO songDAO, PlaylistManager playlistManager, PlayerManager playerManager) {
+    /**
+     * Constructor for the songManager instance
+     * @param songDAO data access object for the song business entity
+     * @param playerManager player manager
+     */
+    public SongManager(SongDAO songDAO, PlayerManager playerManager) {
         this.songDAO = songDAO;
-        this.playlistManager = playlistManager;
         this.playerManager = playerManager;
     }
 
@@ -35,7 +39,7 @@ public class SongManager {
      * @param songTitle song title.
      * @param songAuthor song author.
      */
-    public void getLyrics(LyricsListener lyricsListener, String songTitle, String songAuthor){
+    public void getLyrics(LyricsListener lyricsListener, String songTitle, String songAuthor) {
         LyricsLoader lyricsLoader = new LyricsLoader(lyricsListener, songTitle, songAuthor);
         lyricsLoader.start();
     }
@@ -73,6 +77,7 @@ public class SongManager {
             if (songs != null) {
                 for (Song s : songs) {
                     ArrayList<String> attributes = new ArrayList<>();
+
                     attributes.add(SONG_ID_ATTRIBUTE_INDEX, Integer.toString(s.getId()));
                     attributes.add(SONG_TITLE_ATTRIBUTE_INDEX, s.getTitle());
                     attributes.add(SONG_ALBUM_ATTRIBUTE_INDEX, s.getAlbum());
@@ -186,7 +191,10 @@ public class SongManager {
      * @param genre an item in the {@link Genre} enumeration
      * @param author a String containing the name of the author of the song
      * @param path a String containing the path to the song image
-     * @param user an instance of {@link User} representing the user that adds the song
+     * @param user a String containing the name of the user that adds the song
+     * @throws SongDAOException if song could not be added
+     * @throws UnsupportedAudioFileException if MP3 file is corrupted
+     * @throws IOException if there is an error when adding the song
      */
     public void addSong(File file, File image, String title, String album, Genre genre, String author, String path, String user) throws SongDAOException, UnsupportedAudioFileException, IOException {
         // Extract song duration from file
@@ -203,82 +211,44 @@ public class SongManager {
         songDAO.createSong(song, file, image);
     }
 
-    //TODO: add comment
+    /**
+     * Public method that returns the cover image associated with a song
+     * @param songID unique identifier of the song
+     * @return BufferedImage if song id matches, null otherwise
+     */
     public BufferedImage getCoverImage(int songID) {
         return songDAO.downloadCoverImage(songID);
     }
 
-    //TODO: remove method if unused
-    public int[] getNumberOfSongsByGenre() throws SongDAOException{
-        int i = 0;
-        int[] data = new int[NUMBER_OF_GENRES];
-
-        for (Genre genre : Genre.values()){
-            ArrayList<Song> array = songDAO.getSongsByGenre(genre);
-            data[i] = array == null ? 0 : array.size();
-            i++;
-        }
-
-        return data;
-    }
-
-    //TODO: add comment
-    public int[] getNumberOfSongs() throws SongDAOException{
+    /**
+     * This method will calculate the number of songs per genre and return the count
+     * @return list from 0 to 15 containing integer values representing how many songs it found for each genre
+     * @throws SongDAOException if it is no possible to retrieve songs from the database system
+     */
+    public int[] getNumberOfSongs() throws SongDAOException {
         int[] data = new int[NUMBER_OF_GENRES];
         ArrayList<Song> songs = songDAO.getAllSongs();
         if (songs != null) {
-            for (int i = 0; i < songs.size(); i++) {
-                switch (songs.get(i).getGenre()) {
-                    case ROCK:
-                        data[0]++;
-                        break;
-                    case POP:
-                        data[1]++;
-                        break;
-                    case RAP:
-                        data[2]++;
-                        break;
-                    case TRAP:
-                        data[3]++;
-                        break;
-                    case DEMBOW:
-                        data[4]++;
-                        break;
-                    case DISCO:
-                        data[5]++;
-                        break;
-                    case RB:
-                        data[6]++;
-                        break;
-                    case SOUL:
-                        data[7]++;
-                        break;
-                    case COUNTRY:
-                        data[8]++;
-                        break;
-                    case REGGAE:
-                        data[9]++;
-                        break;
-                    case TECHNO:
-                        data[10]++;
-                        break;
-                    case BLUES:
-                        data[11]++;
-                        break;
-                    case JAZZ:
-                        data[12]++;
-                        break;
-                    case METAL:
-                        data[13]++;
-                        break;
-                    case PUNK:
-                        data[14]++;
-                        break;
-                    case SWING:
-                        data[15]++;
-                        break;
-                    default:
-                        break;
+            for (Song song : songs) {
+                switch (song.getGenre()) {
+                    case ROCK -> data[0]++;
+                    case POP -> data[1]++;
+                    case RAP -> data[2]++;
+                    case TRAP -> data[3]++;
+                    case DEMBOW -> data[4]++;
+                    case DISCO -> data[5]++;
+                    case RB -> data[6]++;
+                    case SOUL -> data[7]++;
+                    case COUNTRY -> data[8]++;
+                    case REGGAE -> data[9]++;
+                    case TECHNO -> data[10]++;
+                    case BLUES -> data[11]++;
+                    case JAZZ -> data[12]++;
+                    case METAL -> data[13]++;
+                    case PUNK -> data[14]++;
+                    case SWING -> data[15]++;
+                    default -> {
+                    }
                 }
             }
         }
@@ -304,7 +274,6 @@ public class SongManager {
     public boolean deleteSong(int song) {
         try {
             songDAO.deleteSong(song);
-            //playlistManager.removeSongFromPlaylists(song);
             return true;
         } catch (SongDAOException e) {
             return false;
@@ -312,8 +281,9 @@ public class SongManager {
     }
 
     /**
-     * This method will start a thread that will delete all related
-     * @param currentUser String containing unique identifier of current user
+     * This method will start a thread that will delete anything related to the user
+     * @param currentUser a String containing unique identifier of current user
+     * @throws SongDAOException when DAO could not access songs
      */
     public void deleteAllSongsFromUser(String currentUser) throws SongDAOException{
         ArrayList<Song> songs = songDAO.getSongsByUserID(currentUser);
