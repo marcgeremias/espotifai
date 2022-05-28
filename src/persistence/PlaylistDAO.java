@@ -31,23 +31,6 @@ public interface PlaylistDAO {
     ArrayList<Playlist> getAllPlaylists() throws PlaylistDAOException;
 
     /**
-     * This method will search all the matches in the storage system given the title of the album. If the title
-     * slightly matches the value inputed so far it will also include the playlist.
-     * For example:
-     * Playlist name: Mambo
-     * Title = "a" will return playlist Mambo
-     * Title = "ma" will return playlist Mambo alos
-     * And so on...
-     *
-     * @param title   String containing the filter to search the playlist.
-     * @param userDAO DataAccessObject of {@link business.entities.User} to reconstruct playlist object.
-     * @param songDAO DataAccessObject of {@link business.entities.Song} to reconstruct playlist object.
-     * @return (1) List of {@link Playlist} or <b>null</b>
-     * @throws PlaylistDAOException if there is an error storing the data.
-     */
-    ArrayList<Playlist> getPlaylistsByTitle(String title, UserDAO userDAO, SongDAO songDAO) throws PlaylistDAOException;
-
-    /**
      * This method will create a link between a song and a playlist. <b>Note</b> that the same song can be added
      * multiple times to the playlist, so it's the interface responsibility to make sure that a song is not added
      * twice unless user wishes to do so.
@@ -68,25 +51,6 @@ public interface PlaylistDAO {
      * @throws PlaylistDAOException if there is an error storing the data.
      */
     boolean deleteSongFromPlaylist(int playlistID, int songID) throws PlaylistDAOException;
-
-    /**
-     * This method will replace the existing playlist with the new values. <b>Note</b> that ALL values will
-     * be overwritten so its important to make sure that the values we do not wish to change remain the same.
-     *
-     * @param playlist instance of {@link Playlist} containing the new values to persist
-     * @return (1) true if the playlist is updated correctly, (2) false otherwise.
-     * @throws PlaylistDAOException if there is an error storing the data.
-     */
-    boolean updatePlaylist(Playlist playlist) throws PlaylistDAOException;
-
-    /**
-     * This method will delete the playlist from the storage system given its unique identifier.
-     *
-     * @param playlistID unique identifier of playlist.
-     * @return (1) true if the playlist is deleted correctly, (2) false otherwise.
-     * @throws PlaylistDAOException if there is an error storing the data.
-     */
-    boolean deletePlaylist(int playlistID) throws PlaylistDAOException;
 
     /**
      * This method will return the playlists of a user.

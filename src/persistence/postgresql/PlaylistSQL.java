@@ -73,35 +73,6 @@ public class PlaylistSQL implements PlaylistDAO {
     }
 
     /**
-     * This method will return all the playlists found with matching String given in the function parameters.
-     * @param title key String with the value to query the playlist
-     * @param userDAO DataAccessObject for reconstructing the User (owner of playlist) in the Playlist object
-     * @param songDAO DataAccessObject for reconstructing the List of Song in the Playlist object
-     * @return (1) List of {@link Playlist} or (2) <b>null</b>.
-     * @throws PlaylistDAOException if the query fails to execute or the database connection can't be opened.
-     */
-    @Override
-    public ArrayList<Playlist> getPlaylistsByTitle(String title, UserDAO userDAO, SongDAO songDAO) throws PlaylistDAOException {
-        try {
-            Connection c = DBConfig.getInstance().openConnection();
-            ArrayList<Playlist> playlists = new ArrayList<>();
-
-            String selectPlaylistsSQL = "SELECT * FROM " + DBConstants.TABLE_PLAYLIST +
-                    " WHERE " + DBConstants.PLAYLIST_COL_TITLE + " ILIKE ?";
-            PreparedStatement selectPlaylistSTMT = c.prepareStatement(selectPlaylistsSQL);
-            selectPlaylistSTMT.setString(1, "%" + title + "%");
-            ResultSet rs1 = selectPlaylistSTMT.executeQuery();
-        /*
-         |   Col 1      |   Col 2   |   Col 3   |
-         | id_playlist  |   title   | id_owner  |
-         */
-            return getPlaylists(c, playlists, rs1);
-        } catch (SQLException e) {
-            throw new PlaylistDAOException(e.getMessage());
-        }
-    }
-
-    /**
      * This method will create a link between a song and a playlist. <b>Note</b> this method will not check if the
      * song is already linked in the database, it is VERY IMPORTANT to control on upper layer if the song is already
      * in the playlist.
@@ -147,57 +118,6 @@ public class PlaylistSQL implements PlaylistDAO {
             deleteSongSTMT.setInt(1, playlistID);
             deleteSongSTMT.setInt(2, songID);
             int count = deleteSongSTMT.executeUpdate();
-
-            c.close();
-            return count > 0;
-        } catch (SQLException e) {
-            throw new PlaylistDAOException(e.getMessage());
-        }
-    }
-
-    /**
-     * Given the Playlist object, it updates the current values in the database with the new values overriding every
-     * field.
-     * @param playlist Instance of {@link Playlist} with the new values to be persisted on the database
-     * @return (1) true if the query is executed correctly or (2) false if the query fails.
-     * @throws PlaylistDAOException if the query fails to execute or the database connection can't be opened.
-     */
-    @Override
-    public boolean updatePlaylist(Playlist playlist) throws PlaylistDAOException {
-        try {
-            Connection c = DBConfig.getInstance().openConnection();
-
-            String updatePlaylistSQL = "UPDATE " + DBConstants.TABLE_PLAYLIST +
-                    " SET " + DBConstants.PLAYLIST_COL_TITLE + " = ?, " + DBConstants.COL_ID_NICKNAME + " = ? " +
-                    "WHERE " + DBConstants.COL_ID_PLAYLIST + " = ?";
-            PreparedStatement updatePlaylistSTMT = c.prepareStatement(updatePlaylistSQL);
-            updatePlaylistSTMT.setString(1, playlist.getName());
-            updatePlaylistSTMT.setString(2, playlist.getOwner());
-            updatePlaylistSTMT.setInt(3, playlist.getId());
-            int count = updatePlaylistSTMT.executeUpdate();
-
-            c.close();
-            return count > 0;
-        } catch (SQLException e) {
-            throw new PlaylistDAOException(e.getMessage());
-        }
-    }
-
-    /**
-     * Deletes the playlist given by the params. Cascade will be executed automatically.
-     * @param playlistID unique identifier of playlist.
-     * @return (1) true if the playlist is deleted correctly or (2) false otherwise.
-     * @throws PlaylistDAOException if the query fails to execute or the database connection can't be opened.
-     */
-    @Override
-    public boolean deletePlaylist(int playlistID) throws PlaylistDAOException {
-        try {
-            Connection c = DBConfig.getInstance().openConnection();
-
-            String deletePlaylistSQL = "DELETE FROM " + DBConstants.TABLE_PLAYLIST + " WHERE " + DBConstants.COL_ID_PLAYLIST + " = ?";
-            PreparedStatement deletePlaylistSTMT = c.prepareStatement(deletePlaylistSQL);
-            deletePlaylistSTMT.setInt(1, playlistID);
-            int count = deletePlaylistSTMT.executeUpdate();
 
             c.close();
             return count > 0;

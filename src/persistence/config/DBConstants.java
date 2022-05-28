@@ -1,5 +1,8 @@
 package persistence.config;
 
+/**
+ * Public class that contains global attirbutes for other classes to use
+ */
 public class DBConstants {
 
     public static final String TABLE_USER = "public.\"user\"";

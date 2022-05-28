@@ -52,36 +52,6 @@ public class UserSQL implements UserDAO {
         }
     }
 
-    /**
-     * Gets the user matching the given identifier in the params. Note that the identifier is a String and
-     * it corresponds to a unique value in the database.
-     * @param userID String identifier of the user we want to retrieve
-     * @return instance of {@link User} matching the given identifier
-     * @throws UserDAOException if the query fails to execute correctly
-     */
-    @Override
-    public User getUserByID(String userID) throws UserDAOException {
-        try {
-            Connection c = DBConfig.getInstance().openConnection();
-
-            String selectUserSQL = "SELECT * FROM " + DBConstants.TABLE_USER + " WHERE " + DBConstants.COL_ID_NICKNAME + " = ?";
-            PreparedStatement selectUserSTMT = c.prepareStatement(selectUserSQL);
-            selectUserSTMT.setString(1, userID);
-            ResultSet rs = selectUserSTMT.executeQuery();
-        /*
-        |   Col 1       |   Col 2   |   Col 3   |
-        | id_nickname   |   mail    | password  |
-         */
-            User user = null;
-            if (rs.next()) {
-                user = new User(rs.getString(1), rs.getString(2), rs.getString(3));
-            }
-            c.close();
-            return user;
-        } catch (SQLException e) {
-            throw new UserDAOException(e.getMessage());
-        }
-    }
 
     /**
      * Gets all users saved on the database.
@@ -113,36 +83,6 @@ public class UserSQL implements UserDAO {
         }
     }
 
-    /**
-     * Given a new instance of a {@link User}, it updates the values in the database corresponding to the identifier of
-     * the instance with the new values. <b>Note</b> that ALL fields of the user table will be afected so it's important
-     * to make sure that values that you do not wish to change are passed correctly as well.
-     * @param user instance of {@link User} with the new values to update.
-     * @return true if the query was successful or false if nickname is incorrect
-     * @throws UserDAOException if the query fails to execute correctly or the database connection failed.
-     */
-    @Override
-    public boolean updateUser(User user) throws UserDAOException {
-        try {
-            Connection c = DBConfig.getInstance().openConnection();
-
-            String updateUserSQL = "UPDATE " + DBConstants.TABLE_USER + " SET " + DBConstants.COL_ID_NICKNAME + " = ?," +
-                    DBConstants.USER_COL_MAIL + " = ?, " + DBConstants.USER_COL_PASSWORD + " = crypt(?, gen_salt(?)) " +
-                    "WHERE " + DBConstants.COL_ID_NICKNAME + " = ?";
-            PreparedStatement updateUserSTMT = c.prepareStatement(updateUserSQL);
-            updateUserSTMT.setString(1, user.getName());
-            updateUserSTMT.setString(2, user.getEmail());
-            updateUserSTMT.setString(3, user.getPassword());
-            updateUserSTMT.setString(4, ENCRYPTION_TYPE);
-            updateUserSTMT.setString(5, user.getName());
-            int count = updateUserSTMT.executeUpdate();
-
-            c.close();
-            return count > 0;
-        } catch (SQLException e) {
-            throw new UserDAOException(e.getMessage());
-        }
-    }
 
     /**
      * This method will delete all relations in the database of the given the identifier of the user.
