@@ -70,7 +70,7 @@ public class PlayerController implements PlayerViewListener {
         sideMenuController = new SideMenuController(this, sideMenuView, userManager, playlistManager, songManager);
         sideMenuView.registerController(sideMenuController);
 
-        AddSongView addSongView = new AddSongView(songManager.getAuthors());
+        AddSongView addSongView = new AddSongView();
         addSongController = new AddSongController(this, addSongView, userManager, songManager);
         addSongView.registerController(addSongController);
 
@@ -132,6 +132,7 @@ public class PlayerController implements PlayerViewListener {
                 // We need to register the controller every time due to the dynamic JTable
                 break;
             case PlayerView.ADD_SONG_VIEW:
+                addSongController.initView();
                 break;
             case PlayerView.SONG_DETAIL_VIEW:
                 //System.out.println("SONG DETAIL VIEW");

@@ -73,6 +73,7 @@ public class PlayerManager {
             trail.push(i);
         }
 
+        this.songs = new ArrayList<>();
         for (ArrayList<String> strings : songsStr) {
             this.songs.add(new Song(
                     Integer.parseInt(strings.get(SongManager.SONG_ID_ATTRIBUTE_INDEX)),
@@ -138,7 +139,9 @@ public class PlayerManager {
      */
     public void setPlaybackFrame(int sliderPos) {
         //player.setFramePosition(playerHandle, sliderPos * 1000000L);
-        player.setMicrosecondPosition(sliderPos * 1000000L);
+        if (player != null) {
+            player.setMicrosecondPosition(sliderPos * 1000000L);
+        }
     }
 
     /**
@@ -252,6 +255,7 @@ public class PlayerManager {
      * @return true if a previous song was found and loaded correctly, false otherwise
      */
     public boolean setPreviousSongIndex() {
+        if (trail == null) return false;
         try {
             if (trail.size() >= 1) {
                 //trail.pop();
@@ -271,7 +275,7 @@ public class PlayerManager {
      * @return true if the lists match, false otherwise
      */
     public boolean isSamePlaylist(ArrayList<ArrayList<String>> songs) {
-        if (this.songs.size() > 0) {
+        if (this.songs.size() > 0 && this.songs.size() == songs.size()) {
             for (int i = 0; i < this.songs.size(); i++) {
                 if (this.songs.get(i).getId() != Integer.parseInt(songs.get(i).get(SongManager.SONG_ID_ATTRIBUTE_INDEX))) {
                     return false;
@@ -310,6 +314,7 @@ public class PlayerManager {
      * @return an integer representing the song
      */
     public int getCurrentSong() {
+        if (player == null) return -1;
         if (songs.isEmpty() || !player.isRunning()) {
             return -1;
         }
