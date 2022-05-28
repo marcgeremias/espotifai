@@ -207,25 +207,20 @@ public class SongManager {
         songDAO.createSong(song, file, image);
     }
 
-    //TODO: add comment
+    /**
+     * Public method that returns the cover image associated with a song
+     * @param songID unique identifier of the song
+     * @return BufferedImage if song id matches, null otherwise
+     */
     public BufferedImage getCoverImage(int songID) {
         return songDAO.downloadCoverImage(songID);
     }
 
-    //TODO: remove method if unused
-    public int[] getNumberOfSongsByGenre() throws SongDAOException{
-        int i = 0;
-        int[] data = new int[NUMBER_OF_GENRES];
-
-        for (Genre genre : Genre.values()){
-            ArrayList<Song> array = songDAO.getSongsByGenre(genre);
-            data[i] = array == null ? 0 : array.size();
-            i++;
-        }
-
-        return data;
-    }
-
+    /**
+     * This method will calculate the number of songs per genre and return the count
+     * @return list from 0 to 15 containing integer values representing how many songs it found for each genre
+     * @throws SongDAOException if it is no possible to retrieve songs from the database system
+     */
     public int[] getNumberOfSongs() throws SongDAOException{
         int[] data = new int[NUMBER_OF_GENRES];
         ArrayList<Song> songs = songDAO.getAllSongs();
@@ -275,7 +270,6 @@ public class SongManager {
     public boolean deleteSong(int song) {
         try {
             songDAO.deleteSong(song);
-            //playlistManager.removeSongFromPlaylists(song);
             return true;
         } catch (SongDAOException e) {
             return false;

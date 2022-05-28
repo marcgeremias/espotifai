@@ -11,7 +11,8 @@ import static presentation.views.MainView.LOGO_IMAGE_PATH;
 
 public class SignUpView extends JPanel {
 
-    //TODO: add private static constants for all final values
+    private static final Color DEFAULT_LABEL_BG = new Color(76, 76, 76);
+    private static final Color DEFAULT_ERROR_LABEL_BG = new Color(220, 60, 25);
 
     // Buttons connected with an Action Listener and their constants
     private JButton joinButton;
@@ -238,7 +239,7 @@ public class SignUpView extends JPanel {
      */
     public void incorrectUsername() {
         incorrectInput.setText("This username is not valid. Try another one.");
-        usernameField.setBackground(new Color(220, 60, 25));
+        usernameField.setBackground(DEFAULT_ERROR_LABEL_BG);
         incorrectInput.setVisible(true);
     }
 
@@ -247,7 +248,7 @@ public class SignUpView extends JPanel {
      */
     public void incorrectEmail() {
         incorrectInput.setText("This email is not valid. Try another one.");
-        emailField.setBackground(new Color(220, 60, 25));
+        emailField.setBackground(DEFAULT_ERROR_LABEL_BG);
         incorrectInput.setVisible(true);
     }
 
@@ -257,7 +258,7 @@ public class SignUpView extends JPanel {
     public void incorrectPassword() {
         incorrectInput.setText("The password must have minimum 8 characters and contain a capital letter," +
                 " minuscule letter and a number. Try again.");
-        passwordField.setBackground(new Color(220, 60, 25));
+        passwordField.setBackground(DEFAULT_ERROR_LABEL_BG);
         incorrectInput.setVisible(true);
     }
 
@@ -266,7 +267,7 @@ public class SignUpView extends JPanel {
      */
     public void incorrectConfirmPassword() {
         incorrectInput.setText("The confirming password does not match with the password introduced. Try again.");
-        confirmPasswordField.setBackground(new Color(220, 60, 25));
+        confirmPasswordField.setBackground(DEFAULT_ERROR_LABEL_BG);
         incorrectInput.setVisible(true);
     }
 
@@ -274,10 +275,10 @@ public class SignUpView extends JPanel {
      * Method called when all credentials are correct, to revert the possible previous incorrect messages
      */
     public void resetIncorrectInputs() {
-        usernameField.setBackground(new Color(76, 76, 76));
-        emailField.setBackground(new Color(76, 76, 76));
-        passwordField.setBackground(new Color(76, 76, 76));
-        confirmPasswordField.setBackground(new Color(76, 76, 76));
+        usernameField.setBackground(DEFAULT_LABEL_BG);
+        emailField.setBackground(DEFAULT_LABEL_BG);
+        passwordField.setBackground(DEFAULT_LABEL_BG);
+        confirmPasswordField.setBackground(DEFAULT_LABEL_BG);
         incorrectInput.setVisible(false);
     }
 

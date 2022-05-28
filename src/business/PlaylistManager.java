@@ -7,10 +7,16 @@ import persistence.PlaylistDAOException;
 
 import java.util.ArrayList;
 
+/**
+ * Public class that manages all the logic and management of the playlist instance
+ */
 public class PlaylistManager {
-    private PlaylistDAO playlistDAO;
+    private final PlaylistDAO playlistDAO;
 
-    //TODO: add comment
+    /**
+     * Public constructor for the playlist manager
+     * @param playlistDAO data access object for the playlist instance
+     */
     public PlaylistManager(PlaylistDAO playlistDAO) {
         this.playlistDAO = playlistDAO;
     }
@@ -180,24 +186,12 @@ public class PlaylistManager {
     }
 
     /**
-     * Deletes the song from all the playlists which contain it
-     * @param song an integer representing the song to delete
+     * This method will swap the two given songs order in which they appear when queried
+     * @param idPlaylist unique identifier of the playlist
+     * @param idSong1 unique identifier of the first song
+     * @param idSong2 unique identifier of the second song
+     * @throws PlaylistDAOException if there is a problem with the database system
      */
-    public void removeSongFromPlaylists(int song) {
-        try {
-            ArrayList<Playlist> playlists = playlistDAO.getAllPlaylists();
-            for (Playlist p : playlists) {
-                if (p.containsSong(song)) {
-                    p.removeSong(song);
-                    playlistDAO.updatePlaylist(p);
-                }
-            }
-        } catch (PlaylistDAOException e) {
-            //
-        }
-    }
-
-    //TODO: add comment
     public void swapSongsOrder(int idPlaylist, int idSong1, int idSong2) throws PlaylistDAOException {
         playlistDAO.swapSongsOrder(idPlaylist,idSong1,idSong2);
     }

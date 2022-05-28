@@ -10,6 +10,9 @@ import java.awt.*;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+/**
+ * Public class for home view graphic interface
+ */
 public class HomeView extends JPanel {
 
     private JTable table;
@@ -18,6 +21,9 @@ public class HomeView extends JPanel {
 
     private static final String[] column = {"Name", "Owner"};
 
+    /**
+     * Public constructor for the home view graphic interface
+     */
     public HomeView() {
         this.setLayout(new BorderLayout());
         this.setBackground(Color.DARK_GRAY);
@@ -92,7 +98,6 @@ public class HomeView extends JPanel {
      * Method that fills the JTable with the other playlists of the other users in the JTable
      * @param othersPlaylists an arraylist of songs that are currently in the system
      */
-    //TODO: fix encapsulation
     public void fillTable(ArrayList<ArrayList<String>> othersPlaylists) {
         String[][] data = new String[othersPlaylists.size()][2];
 

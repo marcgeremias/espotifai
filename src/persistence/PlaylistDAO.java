@@ -21,16 +21,6 @@ public interface PlaylistDAO {
      */
     boolean createPlaylist(Playlist playlist) throws PlaylistDAOException;
 
-    /**
-     * This method will search the system for a playlist stored with the matching identifier given in parameters.
-     *
-     * @param playlistID unique identifier for the playlist
-     * @param userDAO    DataAccessObject of {@link business.entities.User} to reconstruct playlist object.
-     * @param songDAO    DataAccessObject of {@link business.entities.Song} to reconstruct playlist object.
-     * @return (1) instance of {@link Playlist} or (2) <b>null</b>.
-     * @throws PlaylistDAOException if there is an error storing the data.
-     */
-    Playlist getPlaylistByID(int playlistID, UserDAO userDAO, SongDAO songDAO) throws PlaylistDAOException;
 
     /**
      * This method will return all playlists stored in the system.
