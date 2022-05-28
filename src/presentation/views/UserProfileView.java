@@ -41,12 +41,16 @@ public class UserProfileView extends JPanel {
         this.add(center(), BorderLayout.CENTER);
     }
 
+    /**
+     * Method that shows the username in the screen.
+     * @param username: String with the representation of the name of the user.
+     */
     public void setUsername(String username){
         this.username.setText(username);
         repaint();
     }
 
-    /**
+    /*
      * Method that creates a margin in the top of the window
      * @return A container with the panel of the top margin (without opacity)
      */
@@ -58,7 +62,7 @@ public class UserProfileView extends JPanel {
         return upMargin;
     }
 
-    /**
+    /*
      * Method that creates a margin in the bottom of the window
      * @return A container with the panel of the bottom margin (without opacity)
      */
@@ -70,7 +74,7 @@ public class UserProfileView extends JPanel {
         return downMargin;
     }
 
-    /**
+    /*
      * Method to configure all the center components and containers of the User Profile view
      * @return the JPanel with all the center of the User Profile view
      */
@@ -97,7 +101,7 @@ public class UserProfileView extends JPanel {
         return center;
     }
 
-    /**
+    /*
      * Method that sets the user's name in the User Profile View
      * @return A panel containing the user's name
      */
@@ -115,7 +119,7 @@ public class UserProfileView extends JPanel {
         return panelUsername;
     }
 
-    /**
+    /*
      * Method that sets the title of the menu inside the User Profile view
      * @return A panel containing the title of the section of the view
      */
@@ -133,7 +137,7 @@ public class UserProfileView extends JPanel {
         return panelTitleSettings;
     }
 
-    /**
+    /*
      * Method that displays the image of the user in the User Profile view
      * @return A panel containing the image specified
      */

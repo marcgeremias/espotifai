@@ -171,6 +171,10 @@ public class SideMenuView extends JPanel {
         return additionPanel;
     }
 
+    /*
+     * Method that returns a panel containing the information of all the playlists available
+     * @return A panel containing the information of all the playlists available
+     */
     private Component playlistSection() {
         JPanel playlistJPanel = new JPanel();
         playlistJPanel.setLayout(new BoxLayout(playlistJPanel, BoxLayout.Y_AXIS));
