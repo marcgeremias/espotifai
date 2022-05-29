@@ -286,7 +286,6 @@ public class SongSQL implements SongDAO {
     /**
      * This method will delete all instance in the filesystem containing the given unique identifier
      * @param songID integer containing unique identifier of the song to delete
-     * @throws SongDAOException if there is an error deleting file from dropbox
      */
     @Override
     public void deleteFilesystem(int songID) {
