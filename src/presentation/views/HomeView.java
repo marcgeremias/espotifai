@@ -88,7 +88,8 @@ public class HomeView extends JPanel {
     }
 
     /**
-     * Method to adds the listener to the song list view JTable columns to acceding or reproducing songs
+     * Method to add the listener to the song list view JTable columns to acceding or reproducing songs
+     * @param mouseListener an instance of MouseListener
      */
     public void registerMouseController(MouseListener mouseListener) {
         table.addMouseListener(mouseListener);
@@ -96,7 +97,7 @@ public class HomeView extends JPanel {
 
     /**
      * Method that fills the JTable with the other playlists of the other users in the JTable
-     * @param othersPlaylists an arraylist of songs that are currently in the system
+     * @param othersPlaylists an ArrayList of an ArrayList of String containing the playlists
      */
     public void fillTable(ArrayList<ArrayList<String>> othersPlaylists) {
         String[][] data = new String[othersPlaylists.size()][2];

@@ -9,20 +9,28 @@ import presentation.views.SongListView;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+/**
+ * Public controller that controls a list of all the songs in the system
+ */
 public class SongListController implements KeyListener, MouseListener {
 
     private SongListView songListView;
     private PlayerViewListener listener;
-    private UserManager userManager;
     private SongManager songManager;
     private PlaylistManager playlistManager;
     private ArrayList<ArrayList<String>> currentSongs;
 
-    public SongListController(PlayerViewListener listener, SongListView songListView, UserManager userManager,
+    /**
+     * Creates an instance of SongListController
+     * @param listener an instance of PlayerViewListener
+     * @param songListView an instance of SongListView
+     * @param songManager an instance of SongManager
+     * @param playlistManager an instance of PlaylistManager
+     */
+    public SongListController(PlayerViewListener listener, SongListView songListView,
                               SongManager songManager, PlaylistManager playlistManager) {
         this.listener = listener;
         this.songListView = songListView;
-        this.userManager = userManager;
         this.songManager = songManager;
         this.playlistManager = playlistManager;
     }
@@ -35,6 +43,10 @@ public class SongListController implements KeyListener, MouseListener {
     public void keyPressed(KeyEvent e) {
     }
 
+    /**
+     * Applies a filter depending on the pressed key
+     * @param e an instance of KeyEvent
+     */
     @Override
     public void keyReleased(KeyEvent e) {
         // We filter the view every time a key is typed
@@ -50,6 +62,10 @@ public class SongListController implements KeyListener, MouseListener {
         songListView.fillTable(currentSongs);
     }
 
+    /**
+     * Either plays the song or shows its details when clicked
+     * @param e an instance of MouseEvent
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         // Single click

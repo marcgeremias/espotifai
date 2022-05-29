@@ -10,24 +10,35 @@ import presentation.views.PlayerView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Public controller to control the creation of playlists
+ */
 public class CreatePlaylistController implements ActionListener {
 
     private PlayerViewListener listener;
     private CreatePlaylistView createPlaylistView;
     private UserManager userManager;
-    private SongManager songManager;
     private PlaylistManager playlistManager;
 
-    public CreatePlaylistController(PlayerViewListener listener, CreatePlaylistView createPlaylistView, UserManager userManager,
-                                    SongManager songManager, PlaylistManager playlistManager) {
+    /**
+     * Creates a new instance of CreatePlaylistController
+     * @param listener an instance of PlayerViewListener
+     * @param createPlaylistView an instance of CreatePlaylistView
+     * @param userManager an instance of UserManager
+     * @param playlistManager an instance of PlaylistManager
+     */
+    public CreatePlaylistController(PlayerViewListener listener, CreatePlaylistView createPlaylistView,
+                                    UserManager userManager, PlaylistManager playlistManager) {
         this.listener = listener;
         this.createPlaylistView = createPlaylistView;
         this.userManager = userManager;
-        this.songManager = songManager;
         this.playlistManager = playlistManager;
     }
 
-
+    /**
+     * Decides which action to execute
+     * @param e an instance of ActionEvent
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {

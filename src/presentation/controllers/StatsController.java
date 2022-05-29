@@ -5,16 +5,18 @@ import persistence.SongDAOException;
 import presentation.views.StatsView;
 import presentation.views.components.DataChart;
 
+/**
+ * Public controller that controls the statistics
+ */
 public class StatsController {
 
     private StatsView statsView;
     private SongManager songManager;
-    private DataChart dataChart;
 
     /**
      * Public method that creates a new constructor which links with the Statistics view
-     * @param statsView
-     * @param songManager
+     * @param statsView an instance of StatsView
+     * @param songManager an instance of SongManager
      */
     public StatsController(StatsView statsView, SongManager songManager) {
         this.statsView = statsView;

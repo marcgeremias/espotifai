@@ -2,7 +2,6 @@ package presentation.controllers;
 
 import business.PlayerManager;
 import business.SongManager;
-import business.entities.Song;
 import persistence.SongDAOException;
 import presentation.views.MusicPlaybackView;
 import presentation.views.components.SliderListener;

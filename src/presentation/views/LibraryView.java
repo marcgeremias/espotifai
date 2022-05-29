@@ -99,7 +99,7 @@ public class LibraryView extends JPanel {
     }
 
     /**
-     * Method to adds the listener to the song list view JTable columns to acceding or reproducing songs
+     * Method to add the listener to the song list view JTable columns to acceding or reproducing songs
      */
     public void registerMouseController(MouseListener mouseListener) {
         table.addMouseListener(mouseListener);

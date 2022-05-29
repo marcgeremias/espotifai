@@ -20,8 +20,8 @@ public class SongUnloader extends Thread{
 
     /**
      * Public constructor for the SongUnloader Thread
-     * @param songs
-     * @param songDAO
+     * @param songs an ArrayList of Songs
+     * @param songDAO an instance of SongDAO
      */
     public SongUnloader(ArrayList<Song> songs, SongDAO songDAO){
         this.songs = songs;

@@ -12,6 +12,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Public controller to control the creation of new songs
+ */
 public class AddSongController implements ActionListener {
 
     private PlayerViewListener listener;
@@ -21,6 +24,13 @@ public class AddSongController implements ActionListener {
     private File songFile;
     private File imageFile;
 
+    /**
+     * Creates an instance of AddSongController
+     * @param listener an instance of PlayerViewListener
+     * @param addSongView an instance of AddSongView
+     * @param userManager an instance of UserManager
+     * @param songManager an instance of SongManager
+     */
     public AddSongController(PlayerViewListener listener, AddSongView addSongView, UserManager userManager,
                           SongManager songManager) {
         this.listener = listener;
@@ -37,6 +47,10 @@ public class AddSongController implements ActionListener {
     private final String UNSUPPORTED_AUDIO_FILE_ERROR = "Unsupported audio file";
     private final String CREATE_SONG_ERROR = "Error creating song";
 
+    /**
+     * Decides which action to execute
+     * @param e an instance of ActionEvent
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
@@ -154,6 +168,9 @@ public class AddSongController implements ActionListener {
         }
     }
 
+    /**
+     * Initializes the view
+     */
     public void initView(){
         addSongView.setAuthors(songManager.getAuthors());
     }

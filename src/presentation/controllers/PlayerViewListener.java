@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import business.entities.Playlist;
 
 public interface PlayerViewListener {
-
+    /**
+     * Gets the attributes of song to display them
+     * @param song an ArrayList of String containing the attributes
+     */
     void showSongDetails(ArrayList<String> song);
 
     /**
      * This method will pass a String containing a key identifier for a card in order to switch the card layout.
-     * @param card
+     * @param card a String containing the view to display
      */
     void changeView(String card);
 
@@ -28,6 +31,10 @@ public interface PlayerViewListener {
      */
     void playSong(ArrayList<ArrayList<String>> songs, int index);
 
+    /**
+     * Gets the attributes of a playlist to display them
+     * @param playlist an ArrayList of String containing the attributes
+     */
     void showPlaylistDetails(ArrayList<String> playlist);
 
     /**

@@ -38,8 +38,6 @@ public class PlaylistDetailView extends JPanel {
     public static final String BTN_MOVE_UP = "BTN MOVE UP";
     public static final String BTN_MOVE_DOWN = "BTN MOVE DOWN";
 
-    private PlayerViewListener listener;
-
     private JButton deleteSong;
     private JComboBox<String> jSelectSong;
     private JButton addSong;
@@ -75,8 +73,7 @@ public class PlaylistDetailView extends JPanel {
     /**
      * Constructor method to set up the view
      */
-    public PlaylistDetailView(PlayerViewListener listener) {
-        this.listener = listener;
+    public PlaylistDetailView() {
         this.setLayout(new BorderLayout());
         this.setBackground(PlayerView.CENTER_BACKGROUND_COLOR);
         this.add(titleLabel(), BorderLayout.NORTH);
@@ -146,7 +143,6 @@ public class PlaylistDetailView extends JPanel {
         return panelPlaylistModify;
     }
 
-
     /*
      * Method that configures all the center side of the view
      */
@@ -174,8 +170,6 @@ public class PlaylistDetailView extends JPanel {
 
         table.setRowHeight(40);
         resizeColumnWidth(table);
-        //table.getColumnModel().getColumn(0).setResizable(false);
-        // Creating and personalizing JTable
         tableSongs.setOpaque(false);
 
         table.setShowGrid(false);
@@ -212,7 +206,7 @@ public class PlaylistDetailView extends JPanel {
 
     /**
      * Method used to fill the jTable playlist songs
-     * @param mySongs Songs from the actual playlist
+     * @param mySongs an ArrayList of an ArrayList of String with the songs from the actual playlist
      * @param playlistSelected Actual playlist selected
      */
     public void fillTable(ArrayList<ArrayList<String>> mySongs, ArrayList<String> playlistSelected) {

@@ -22,6 +22,9 @@ public class MainView extends JFrame {
     private static final int DEFAULT_WIDTH = 1280;
     private static final int DEFAULT_HEIGHT = 720;
 
+    /**
+     * Creates an instance of MainView
+     */
     public MainView() {
         cardManager = new CardLayout();
         this.setLayout(cardManager);

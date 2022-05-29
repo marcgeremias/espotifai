@@ -46,14 +46,14 @@ public class PlayerView extends JPanel {
 
     /**
      * Method called to associate all the views that are included in the card layout
-     * @param defaultView
-     * @param songListView
-     * @param libraryView
-     * @param addSongView
-     * @param songDetailView
-     * @param playlistDetailView
-     * @param userProfileView
-     * @param createPlaylistView
+     * @param defaultView an instance of DefaultView
+     * @param songListView an instance of SongListView
+     * @param libraryView an instance of LibraryView
+     * @param addSongView an instance of AddSongView
+     * @param songDetailView an instance of SongDetailView
+     * @param playlistDetailView an instance of PlaylistDetailView
+     * @param userProfileView an instance of UserProfileView
+     * @param createPlaylistView an instance of CreatePlaylistView
      */
     public void initCardLayout(DefaultView defaultView, SongListView songListView, LibraryView libraryView,
                                AddSongView addSongView, SongDetailView songDetailView,

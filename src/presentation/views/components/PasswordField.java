@@ -9,8 +9,8 @@ import java.awt.*;
 public class PasswordField extends JPanel {
     /**
      * Public constructor for the class that sets all the custom attributes by default
-     * @param placeHolder
-     * @param passField
+     * @param placeHolder a String containing the placeholder
+     * @param passField an instance of PlaceholderPasswordField
      */
     public PasswordField(String placeHolder, PlaceholderPasswordField passField) {
         //Using own Field classes

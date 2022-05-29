@@ -14,6 +14,9 @@ import presentation.views.*;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+/**
+ * Public controller that manages the different views
+ */
 public class PlayerController implements PlayerViewListener {
 
     private final PlayerView playerView;
@@ -58,16 +61,16 @@ public class PlayerController implements PlayerViewListener {
 
         // We need to make the view an attribute due to a dynamic JTable
         SongListView songListView = new SongListView();
-        songListController = new SongListController(this, songListView, userManager, songManager, playlistManager);
+        songListController = new SongListController(this, songListView, songManager, playlistManager);
         songListView.registerKeyController(songListController);
         songListView.registerMouseController(songListController);
 
         LibraryView libraryView = new LibraryView();
-        libraryController = new LibraryController(this, libraryView, userManager, songManager, playlistManager);
+        libraryController = new LibraryController(this, libraryView, userManager, playlistManager);
         libraryView.registerMouseController(libraryController);
 
         SideMenuView sideMenuView = new SideMenuView();
-        sideMenuController = new SideMenuController(this, sideMenuView, userManager, playlistManager, songManager);
+        sideMenuController = new SideMenuController(this);
         sideMenuView.registerController(sideMenuController);
 
         AddSongView addSongView = new AddSongView();
@@ -78,7 +81,7 @@ public class PlayerController implements PlayerViewListener {
         songDetailController = new SongDetailController(this, songDetailView, userManager, songManager, playlistManager);
         songDetailView.registerController(songDetailController);
 
-        PlaylistDetailView playlistDetailView = new PlaylistDetailView(this);
+        PlaylistDetailView playlistDetailView = new PlaylistDetailView();
         playlistDetailController = new PlaylistDetailController(this, playlistDetailView, userManager, songManager, playlistManager);
         playlistDetailView.registerController(playlistDetailController);
         playlistDetailView.registerMouseController(playlistDetailController);
@@ -92,7 +95,7 @@ public class PlayerController implements PlayerViewListener {
         musicPlaybackView.registerController(musicPlaybackController);
 
         CreatePlaylistView createPlaylistView = new CreatePlaylistView();
-        createPlaylistController = new CreatePlaylistController(this, createPlaylistView, userManager, songManager, playlistManager);
+        createPlaylistController = new CreatePlaylistController(this, createPlaylistView, userManager, playlistManager);
         createPlaylistView.registerController(createPlaylistController);
 
         this.playerView.setContents(musicPlaybackView, sideMenuView);
@@ -101,6 +104,10 @@ public class PlayerController implements PlayerViewListener {
         this.playerView.changeView(PlayerView.DEFAULT_VIEW);
     }
 
+    /**
+     * Displays the attributes of a song
+     * @param song an ArrayList of String containing the attributes
+     */
     @Override
     public void showSongDetails(ArrayList<String> song) {
         songDetailController.initView(song);
@@ -108,6 +115,10 @@ public class PlayerController implements PlayerViewListener {
         playerView.changeView(PlayerView.SONG_DETAIL_VIEW);
     }
 
+    /**
+     * Changes the current view
+     * @param card a String containing the view to display
+     */
     @Override
     public void changeView(String card) {
         initCard(card);
@@ -149,6 +160,9 @@ public class PlayerController implements PlayerViewListener {
         }
     }
 
+    /**
+     * Logs out the current user
+     */
     @Override
     public void logout() {
         userManager.logOutUser();
@@ -158,23 +172,38 @@ public class PlayerController implements PlayerViewListener {
         playerView.changeView(DefaultView.HOME_VIEW);
     }
 
+    /**
+     * Plays a song
+     * @param songs list of {@link Song} with all the songs in the playlist
+     * @param index index representing the position of the song to be played in the playback interface
+     */
     @Override
     public void playSong(ArrayList<ArrayList<String>> songs, int index) {
         musicPlaybackController.initSongPlaylist(songs, index);
     }
 
+    /**
+     * Initializes the homeView
+     */
     public void initHomeView() {
         defaultController.initCard();
         playerView.revalidate();
         playerView.changeView(PlayerView.DEFAULT_VIEW);
     }
 
+    /**
+     * Displays the attributes of a playlist
+     * @param playlistId an ArrayList of String containing the attributes
+     */
     @Override
     public void showPlaylistDetails(ArrayList<String> playlistId) {
         playerView.changeView(PlayerView.PLAYLIST_DETAIL_VIEW);
         playlistDetailController.initView(playlistId);
     }
 
+    /**
+     * Deletes all data from a user and the user itself
+     */
     @Override
     public void delete() {
         try {
@@ -189,6 +218,9 @@ public class PlayerController implements PlayerViewListener {
         }
     }
 
+    /**
+     * Clears reproductor when song deleted
+     */
     @Override
     public void songWasDeleted() {
         playerManager.clearData();

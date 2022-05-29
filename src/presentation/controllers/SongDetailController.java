@@ -12,6 +12,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * Public controller to control the details of a {@link business.entities.Song}
+ */
 public class SongDetailController implements ActionListener, LyricsListener {
     private PlayerViewListener listener;
     private SongDetailView songDetailView;
@@ -21,6 +24,14 @@ public class SongDetailController implements ActionListener, LyricsListener {
     private ArrayList<String> currentSong;
     private ArrayList<ArrayList<String>> allPlaylists;
 
+    /**
+     * Creates an instance of SongDetailController
+     * @param listener an instance of PlayerViewListener
+     * @param songDetailView an instance of SongDetailView
+     * @param userManager an instance of UserManager
+     * @param songManager an instance of SongManager
+     * @param playlistManager an instance of PlaylistManager
+     */
     public SongDetailController(PlayerViewListener listener, SongDetailView songDetailView, UserManager userManager,
                              SongManager songManager, PlaylistManager playlistManager) {
         this.listener = listener;
@@ -62,6 +73,11 @@ public class SongDetailController implements ActionListener, LyricsListener {
 
     private final String DELETE_SONG_CONFIRMATION_MSG = "Are you sure you want to permanently delete the song?";
     private final String ERROR_DELETE_SONG_MSG = "Cannot delete this song!";
+
+    /**
+     * Decides which action to execute
+     * @param e an instance of ActionEvent
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
@@ -116,11 +132,18 @@ public class SongDetailController implements ActionListener, LyricsListener {
         }
     }
 
+    /**
+     * Notifies that the lyrics are downloaded
+     * @param lyrics a String containing the lyrics
+     */
     @Override
     public void notifyLyricsDone(String lyrics) {
         songDetailView.setSongLyrics(lyrics);
     }
 
+    /**
+     * Notifies an error when downloading lyrics
+     */
     @Override
     public void notifyError() {
         songDetailView.lyricsError();

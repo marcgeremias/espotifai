@@ -85,7 +85,7 @@ public class LoginController implements ActionListener, KeyEventDispatcher {
 
     /**
      * Method that manages key press to log in with enter key
-     * @param e event
+     * @param e an instance of KeyEvent
      * @return false
      */
     @Override

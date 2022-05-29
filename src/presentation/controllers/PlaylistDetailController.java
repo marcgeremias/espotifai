@@ -48,7 +48,7 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
     /**
      * Method that initializes the playlistView by getting all current songs of the system
      * and passing them to the JTable of all songs in the system
-     * @param actualPlaylist
+     * @param actualPlaylist an ArrayList of String containing the attributes of the playlist
      */
     public void initView(ArrayList<String> actualPlaylist) {
         this.actualPlaylist = actualPlaylist;
@@ -79,7 +79,7 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
 
     /**
      * Method of the interface ActionListener that does all the appropriate actions when a button is pressed
-     * @param e the action event
+     * @param e an instance of ActionEvent
      */
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -158,7 +158,7 @@ public class PlaylistDetailController implements ActionListener, MouseListener {
 
     /**
      * Override method for the mouse clicked event
-     * @param e event
+     * @param e an instance of MouseEvent
      */
     @Override
     public void mouseClicked(MouseEvent e) {

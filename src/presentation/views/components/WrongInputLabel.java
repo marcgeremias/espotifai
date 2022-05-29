@@ -9,8 +9,8 @@ import java.awt.*;
 public class WrongInputLabel {
     /**
      * This method sets the default styles for a JLabel error message
-     * @param inputMessage
-     * @return
+     * @param inputMessage an instance of JLabel
+     * @return an instance of JLabel
      */
     public static JLabel wrongInputLabel(JLabel inputMessage) {
         inputMessage.setFont(new Font("Cascadia Code ExtraLight", Font.PLAIN, 13));

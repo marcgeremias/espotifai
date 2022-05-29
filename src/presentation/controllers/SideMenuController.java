@@ -1,33 +1,30 @@
 package presentation.controllers;
 
-import business.PlaylistManager;
-import business.SongManager;
-import business.UserManager;
-import presentation.views.MainView;
 import presentation.views.PlayerView;
 import presentation.views.SideMenuView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Public controller to control the components of the side menu
+ */
 public class SideMenuController implements ActionListener {
 
     private PlayerViewListener listener;
-    private SideMenuView sideMenuView;
-    private UserManager userManager;
-    private SongManager songManager;
-    private PlaylistManager playlistManager;
 
-    public SideMenuController(PlayerViewListener listener, SideMenuView sideMenuView,
-                              UserManager userManager, PlaylistManager playlistManager,
-                              SongManager songManager) {
+    /**
+     * Creates a new instance of SideMenuController
+     * @param listener an instance of PlayerViewListener
+     */
+    public SideMenuController(PlayerViewListener listener) {
         this.listener = listener;
-        this.sideMenuView = sideMenuView;
-        this.userManager = userManager;
-        this.playlistManager = playlistManager;
-        this.songManager = songManager;
     }
 
+    /**
+     * Decides which action to execute
+     * @param e an instance of ActionEvent
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         // We change to the button clicked view

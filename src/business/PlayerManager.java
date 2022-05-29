@@ -236,15 +236,13 @@ public class PlayerManager {
      */
     public void killSong() {
         if (player != null) {
-            //if (player.isRunning()) {
-                player.stop();
-                player.close();
-                player.flush();
-                player.drain();
-                player = null;
-                songTimer.stop();
-                songTimer = null;
-            //}
+            player.stop();
+            player.close();
+            player.flush();
+            player.drain();
+            player = null;
+            songTimer.stop();
+            songTimer = null;
         }
     }
 

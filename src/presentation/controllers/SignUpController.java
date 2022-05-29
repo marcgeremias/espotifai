@@ -7,12 +7,21 @@ import presentation.views.SignUpView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SingUpController implements ActionListener {
+/**
+ * Public controller that controls the creation of a new {@link business.entities.User}
+ */
+public class SignUpController implements ActionListener {
     private SignUpView signUpView;
     private MainViewListener listener;
     private UserManager userManager;
 
-    public SingUpController(MainViewListener listener, SignUpView signUpView, UserManager userManager) {
+    /**
+     * Creates an instance of SignUpController
+     * @param listener an instance of MainViewListener
+     * @param signUpView an instance of SignUpView
+     * @param userManager an instance of UserManager
+     */
+    public SignUpController(MainViewListener listener, SignUpView signUpView, UserManager userManager) {
         this.listener = listener;
         this.signUpView = signUpView;
         this.userManager = userManager;

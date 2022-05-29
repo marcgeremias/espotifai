@@ -11,30 +11,32 @@ import presentation.views.StatsView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Public controller to switch between views
+ */
 public class DefaultController implements ActionListener {
 
-    private PlayerViewListener listener;
     private DefaultView defaultView;
-    private UserManager userManager;
-    private SongManager songManager;
-    private PlaylistManager playlistManager;
-
     private HomeController homeController;
     private StatsController statsController;
 
     // We need to make the view an attribute due to a dynamic JTable
     private HomeView homeView;
 
+    /**
+     * Creates an instance of DefaultController
+     * @param listener an instance of PlayerViewListener
+     * @param defaultView an instance of DefaultView
+     * @param userManager an instance of UserManager
+     * @param songManager an instance of SongManager
+     * @param playlistManager an instance of PlaylistManager
+     */
     public DefaultController(PlayerViewListener listener, DefaultView defaultView, UserManager userManager,
                              SongManager songManager, PlaylistManager playlistManager) {
         this.defaultView = defaultView;
-        this.userManager = userManager;
-        this.songManager = songManager;
-        this.playlistManager = playlistManager;
-        this.listener = listener;
 
         homeView = new HomeView();
-        homeController = new HomeController(listener, homeView, userManager, songManager, playlistManager);
+        homeController = new HomeController(listener, homeView, userManager, playlistManager);
 
         StatsView statsView = new StatsView();
         statsController = new StatsController(statsView, songManager);
@@ -44,6 +46,10 @@ public class DefaultController implements ActionListener {
         defaultView.changeView(DefaultView.HOME_VIEW);
     }
 
+    /**
+     * Decides which action to execute
+     * @param e an instance of ActionEvent
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()){
@@ -59,19 +65,11 @@ public class DefaultController implements ActionListener {
         }
     }
 
-    /*
-     * Method that initializes all the data needed when accessing into a view
-     * @param card the ID of the card of the view we are initializing
+    /**
+     * Initializes homeView
      */
     public void initCard() {
-           // case DefaultView.HOME_VIEW:
-                homeController.initView();
-                // We need to register the controller every time due to the dynamic JTable
-                homeView.registerMouseController(homeController);
-             //   break;
-            //case DefaultView.STATS_VIEW:
-              //  break;
-
+        homeController.initView();
+        homeView.registerMouseController(homeController);
     }
-
 }

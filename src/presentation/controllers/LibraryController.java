@@ -10,21 +10,29 @@ import presentation.views.LibraryView;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+/**
+ * Public controller to control the user's playlists
+ */
 public class LibraryController implements MouseListener {
 
     private PlayerViewListener listener;
     private LibraryView libraryView;
     private UserManager userManager;
-    private SongManager songManager;
     private PlaylistManager playlistManager;
     private ArrayList<ArrayList<String>> myPlaylists;
 
-    public LibraryController(PlayerViewListener listener, LibraryView libraryView, UserManager userManager,
-                             SongManager songManager, PlaylistManager playlistManager) {
+    /**
+     * Creates an instance of LibraryController
+     * @param listener an instance of PlayerViewListener
+     * @param libraryView an instance of LibraryView
+     * @param userManager an instance of UserManager
+     * @param playlistManager an instance of PlaylistManager
+     */
+    public LibraryController(PlayerViewListener listener, LibraryView libraryView,
+                             UserManager userManager, PlaylistManager playlistManager) {
         this.listener = listener;
         this.libraryView = libraryView;
         this.userManager = userManager;
-        this.songManager = songManager;
         this.playlistManager = playlistManager;
     }
 
@@ -44,6 +52,10 @@ public class LibraryController implements MouseListener {
         libraryView.fillTable(myPlaylists);
     }
 
+    /**
+     * Displays the playlist when clicked
+     * @param e an instance of MouseEvent
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         // The user clicked more than once

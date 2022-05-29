@@ -124,6 +124,8 @@ public class LoginView extends JPanel {
 
     /**
      * Method to add the listener to the Login view buttons
+     * @param controller an instance of ActionListener
+     * @param listener an instance of KeyEventDispatcher
      */
     public void registerController(ActionListener controller, KeyEventDispatcher listener) {
         // Action listener for Create Account button

@@ -104,8 +104,8 @@ public class DefaultView extends JPanel {
 
     /**
      * This method is called to initialize the card layout
-     * @param homeView
-     * @param statsView
+     * @param homeView an instance of HomeView
+     * @param statsView an instance of StatsView
      */
     public void initCardLayout (HomeView homeView, StatsView statsView){
         centerPane.add(homeView, HOME_VIEW);

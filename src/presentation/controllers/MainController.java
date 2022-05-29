@@ -4,16 +4,13 @@ import business.PlayerManager;
 import business.PlaylistManager;
 import business.SongManager;
 import business.UserManager;
-import business.entities.Song;
 import presentation.views.*;
-import presentation.views.components.PlaceholderPasswordField;
-import presentation.views.components.PlaceholderTextField;
-
-import javax.swing.*;
-import java.awt.*;
 
 import static presentation.views.MainView.CARD_PLAYER;
 
+/**
+ * Public controller that switches between the principal views
+ */
 public class MainController implements MainViewListener {
 
     private MainView mainView;
@@ -22,7 +19,7 @@ public class MainController implements MainViewListener {
     private PlaylistManager playlistManager;
     private PlayerManager playerManager;
     private LoginController loginController;
-    private SingUpController signUpController;
+    private SignUpController signUpController;
     private PlayerController playerController;
 
     /**
@@ -51,7 +48,7 @@ public class MainController implements MainViewListener {
 
         // Defining signup view and controller
         SignUpView signUpView = new SignUpView();
-        signUpController = new SingUpController(this, signUpView, userManager);
+        signUpController = new SignUpController(this, signUpView, userManager);
         signUpView.registerController(signUpController);
 
         // Defining player view
@@ -66,6 +63,10 @@ public class MainController implements MainViewListener {
         mainView.changeView(MainView.CARD_LOG_IN);
     }
 
+    /**
+     * Changes the current view
+     * @param card the name put on the card layout that referes to a specific view
+     */
     @Override
     public void changeView(String card) {
         initViews(card);
