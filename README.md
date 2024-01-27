@@ -1,17 +1,17 @@
 ![logo_image](res/images/logo.jpeg)
 # Espotifai
-Aquest és el resultat del projecte final de DPOO del grup C12 del curs 2021-22.
+This is the result of the final project for Object-Oriented Design and Programming (DPOO) by group C12 in the academic year 2021-22.
 
-## Requeriments del sistema
+## System Requirements
 IntelliJ IDEA 2021.2.1 (Ultimate Edition).
 
-Per poder executar el programa, és necessari tenir instal·lat l'IDE IntelliJ amb l'SDK 17.
+To run the program, it is necessary to have IntelliJ IDE installed with SDK 17.
 
-## Llibreries
-Per poder executar el programa sense cap problema, cal tenir totes les llibreries de la carpeta [libs](res/libs) al project structure.
+## Libraries
+To run the program without any issues, make sure to have all the libraries from the [libs](res/libs) folder in the project structure.
 
-## Instruccions d'ús
-Per poder executar l’aplicació, l’usuari haurà de compilar i executar el programa, i acte seguit s’obrirà una pestanya en la qual apareixerà la primera vista de l’aplicació (en aquest cas, el Login on l’usuari podrà iniciar el seu compte en el sistema). Una vegada fet tot això i amb l’usuari ja registrat o iniciat, es podrà executar qualsevol funcionalitat de l’aplicació que es desitgi.
+## Usage Instructions
+To run the application, the user needs to compile and execute the program. Afterward, a tab will open displaying the initial view of the application (in this case, the login page where the user can start their account in the system). Once this is done, with the user already registered or logged in, any desired functionality of the application can be executed.
 
 # Authors
 - Armand Daussà Baize
